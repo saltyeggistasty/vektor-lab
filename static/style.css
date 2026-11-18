@@ -1,0 +1,2325 @@
+html{background:#0d0b08}
+/* 3 tema: gold (default), light, black */
+:root,[data-theme="gold"]{
+  --bg:#17100a; --bg2:#22170e; --card:#2b1d12; --line:#4a3320; --input:#150e07;
+  --gold:#e0b04a; --gold2:#c8912f; --caramel:#a8662a; --cream:#f5e8c9; --muted:#b8a27c;
+  --on-accent:#1b1008; --err:#e57a5a; --head:rgba(23,16,10,.58); --glow:#3a2511; --shadow:rgba(0,0,0,.35);
+}
+[data-theme="light"]{
+  /* backdrop diturunkan kecerahannya + krem lebih saturated: sebelumnya
+     nyaris putih (V 97-100%, S 6-13%) -> tiap transisi fade panel ke
+     latar sehelter gini kerasa kilat singkat. Sekarang V ~93%, S ~21%. */
+  --bg:#eedfb9; --bg2:#f8f0da; --card:#fdf8ec; --line:#d3ba86; --input:#ffffff;
+  --gold:#8a5a0c; --gold2:#b8821e; --caramel:#c98a2e; --cream:#2a1a0b; --muted:#6b5636;
+  --on-accent:#ffffff; --err:#b3361a; --head:rgba(248,240,218,.66); --glow:#eed9a0; --shadow:rgba(90,60,10,.15);
+}
+[data-theme="black"]{
+  --bg:#000; --bg2:#000; --card:#000; --line:#8a8a8a; --input:#000;
+  --gold:#ffc83d; --gold2:#ffb000; --caramel:#ff9500; --cream:#ffffff; --muted:#e0e0e0;
+  --on-accent:#000; --err:#ff6a4d; --head:rgba(0,0,0,.72); --glow:#000; --shadow:rgba(0,0,0,0);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;color:var(--cream);
+  background:radial-gradient(1200px 600px at 80% -10%,var(--glow) 0%,transparent 60%),var(--bg);min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;
+  border-bottom:1px solid var(--line);background:var(--head);backdrop-filter:blur(8px);
+  position:fixed;left:0;right:0;top:0;z-index:40;transform:translateY(-110%);
+  transition:transform .32s ease}
+/* :focus-visible saja (bukan :focus-within) — klik mouse di tombol tema
+   tidak lagi menahan bar; hanya navigasi keyboard yang boleh mengangkat HUD */
+body.hud-show header, header:has(:focus-visible) {transform:none}
+.logo{font-size:1.5rem;font-weight:700;color:var(--gold)}
+.logo span{color:var(--cream);font-weight:600;font-size:1.1rem;margin-left:4px}
+nav{display:flex;gap:6px}
+.tab{background:transparent;border:1px solid transparent;color:var(--muted);padding:8px 18px;border-radius:999px;cursor:pointer;font-size:.95rem}
+.tab:hover{color:var(--cream)}
+.tab.active{background:linear-gradient(135deg,var(--gold),var(--caramel));color:var(--on-accent);font-weight:600}
+main{max-width:1300px;margin:0 auto;padding:24px}
+.panel-wrap{display:none;gap:20px}
+.panel-wrap.active{display:grid;grid-template-columns:minmax(300px,420px) 1fr;align-items:start}
+.card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:16px;
+  padding:20px;box-shadow:0 10px 30px var(--shadow)}
+h2{margin:0 0 14px;font-size:1.1rem;color:var(--gold);letter-spacing:.3px}
+label{display:block;font-size:.82rem;color:var(--muted);margin:10px 0 4px}
+input,select{width:100%;padding:9px 11px;border-radius:9px;border:1px solid var(--line);background:var(--input);
+  color:var(--cream);font:inherit;font-family:ui-monospace,Consolas,monospace;font-size:.92rem;margin-top:3px}
+input:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 25%,transparent)}
+.row{display:flex;gap:8px;align-items:end;margin-top:6px}
+.row>*{flex:1}
+.chk{display:flex;align-items:center;gap:8px;flex:2;margin:0}
+.chk input{width:auto;margin:0;accent-color:var(--gold)}
+.hidden{display:none!important}
+.primary{margin-top:16px;width:100%;padding:11px;border:0;border-radius:10px;cursor:pointer;font-weight:700;font-size:1rem;
+  color:var(--on-accent);background:linear-gradient(135deg,var(--gold),var(--gold2) 60%,var(--caramel));transition:.15s}
+.primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.hint{font-size:.78rem;color:var(--muted);margin:12px 0 0;line-height:1.5}
+code{background:var(--input);border:1px solid var(--line);padding:1px 6px;border-radius:5px;color:var(--gold)}
+.muted{color:var(--muted)}
+.err{color:var(--err)}
+.res-label{color:var(--gold);font-weight:700;font-size:1.05rem;margin-bottom:6px}
+.expr{font-family:ui-monospace,Consolas,monospace;background:var(--input);border:1px solid var(--line);
+  border-radius:10px;padding:10px 14px;margin:6px 0;overflow-x:auto;white-space:pre}
+table.mat{border-collapse:separate;border-spacing:6px}
+table.mat td{background:var(--input);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-family:ui-monospace,Consolas,monospace}
+.sub{margin-top:14px;color:var(--muted);font-size:.85rem}
+.plot{padding:8px;min-height:640px}
+#plot{width:100%;height:620px}
+@media(max-width:900px){.panel-wrap.active{grid-template-columns:1fr}}
+
+.theme{display:flex;gap:4px;padding:3px;border:1px solid var(--line);border-radius:999px}
+.theme button{border:0;background:transparent;color:var(--muted);padding:6px 12px;border-radius:999px;cursor:pointer;font-size:.82rem}
+.theme button.active{background:var(--gold);color:var(--on-accent);font-weight:700}
+.hleft{display:flex;align-items:center;gap:26px}
+.hright{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+[data-theme="black"] .card{border-width:2px}
+[data-theme="black"] input,[data-theme="black"] select,[data-theme="black"] math-field{border-width:2px}
+
+/* ==================== MATHLIVE MATH-FIELD ==================== */
+math-field {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--input);
+  color: var(--cream);
+  font-size: 1.15rem;
+  margin-top: 3px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+math-field:focus-within {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 25%, transparent);
+}
+math-field::part(virtual-keyboard-toggle) {
+  display: none;
+}
+
+/* ==================== RESULT MATH RENDERING ==================== */
+/* tint gold via color-mix: TETAP KELIHATAN di tema hitam murni (bg2=#000) */
+.math-res-box {
+  background: color-mix(in srgb, var(--gold) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold) 18%, transparent);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 0 0 12px;
+  overflow-x: auto;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.math-res-box .katex-display {
+  margin: 0;
+}
+.katex {
+  color: var(--cream);
+  font-size: 1.15em;
+}
+
+/* ==================== FLOATING KEYPAD TOGGLE BUTTON ==================== */
+.keypad-toggle-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, var(--card), var(--bg2));
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px var(--shadow), 0 0 12px color-mix(in srgb, var(--gold) 20%, transparent);
+  transition: transform .15s, background .15s, color .15s;
+  backdrop-filter: blur(10px);
+}
+.keypad-toggle-btn:hover {
+  transform: translateY(-2px);
+  background: var(--gold);
+  color: var(--on-accent);
+}
+.keypad-toggle-btn.active {
+  background: var(--gold);
+  color: var(--on-accent);
+}
+
+/* ==================== DESMOS MATH KEYPAD DRAWER ==================== */
+.math-keypad {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  width: min(880px, calc(100vw - 32px));
+  background: color-mix(in srgb, var(--card) 92%, black);
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -8px 36px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  z-index: 100;
+  transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), opacity .25s;
+  overflow: hidden;
+}
+.math-keypad.collapsed {
+  transform: translateX(-50%) translateY(105%);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.keypad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: color-mix(in srgb, var(--card) 60%, transparent);
+  border-bottom: 1px solid var(--line);
+}
+.keypad-tabs {
+  display: flex;
+  gap: 6px;
+}
+.kp-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.kp-tab:hover {
+  color: var(--cream);
+}
+.kp-tab.active {
+  background: color-mix(in srgb, var(--gold) 20%, transparent);
+  color: var(--gold);
+  border-color: color-mix(in srgb, var(--gold) 40%, transparent);
+  font-weight: 600;
+}
+.keypad-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.active-field-indicator {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.active-field-indicator strong {
+  color: var(--gold);
+  font-family: ui-monospace, monospace;
+}
+.keypad-close-btn {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.keypad-close-btn:hover {
+  color: var(--cream);
+  background: color-mix(in srgb, var(--cream) 10%, transparent);
+}
+
+.keypad-body {
+  padding: 12px 14px 16px;
+}
+.kp-panel {
+  display: none;
+}
+.kp-panel.active {
+  display: block;
+}
+
+/* Keypad Grid layout (Desmos style) */
+.kp-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+}
+.kbtn {
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg2);
+  color: var(--cream);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: background .1s, transform .05s, border-color .1s;
+}
+.kbtn:hover {
+  background: color-mix(in srgb, var(--gold) 15%, var(--bg2));
+  border-color: color-mix(in srgb, var(--gold) 40%, var(--line));
+}
+.kbtn:active {
+  transform: scale(0.96);
+}
+.kbtn.var {
+  font-style: italic;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.15rem;
+  color: var(--gold);
+  background: color-mix(in srgb, var(--gold) 10%, var(--input));
+}
+.kbtn.num {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+.kbtn.op {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--cream);
+}
+.kbtn.fn {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.kbtn.fn:hover {
+  color: var(--cream);
+}
+.kbtn.const {
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--gold);
+}
+.kbtn.action.del {
+  background: color-mix(in srgb, var(--err) 20%, var(--bg2));
+  color: var(--err);
+  font-size: 1.1rem;
+}
+.kbtn.action.clear {
+  background: color-mix(in srgb, var(--err) 15%, var(--bg2));
+  color: var(--err);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+.kbtn.nav {
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+.kbtn.submit {
+  grid-column: span 2;
+  background: linear-gradient(135deg, var(--gold), var(--caramel));
+  color: var(--on-accent);
+  font-weight: 700;
+  font-size: 0.92rem;
+  border: 0;
+}
+.kbtn.submit:hover {
+  filter: brightness(1.1);
+}
+
+/* Functions Category Layout */
+.fn-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.fn-group h4 {
+  margin: 0 0 6px;
+  font-size: 0.8rem;
+  color: var(--gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.fn-subgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.fn-subgrid .kbtn {
+  height: 38px;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 768px) {
+  .kp-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .kbtn.submit {
+    grid-column: span 5;
+  }
+}
+
+/* ==================== TAB FISIKA (MONTE CARLO FLUX) ==================== */
+.pstack, .pcol { display: grid; gap: 20px; align-content: start; min-width: 0; }
+.pcol { min-height: 0; }
+
+.sect { border-top: 1px dashed var(--line); margin-top: 16px; padding-top: 4px; }
+.sect h3 {
+  margin: 10px 0 2px; font-size: .86rem; font-weight: 700;
+  color: var(--gold); letter-spacing: .3px;
+  display: flex; align-items: center; gap: 6px;
+}
+.sect h3 .help-tip { margin-left: 2px; }
+.lbl { color: var(--muted); font-size: .82rem; }
+
+textarea {
+  width: 100%; padding: 9px 11px; border-radius: 9px; border: 1px solid var(--line);
+  background: var(--input); color: var(--cream); font: inherit; font-size: .9rem;
+  margin-top: 3px; resize: vertical; line-height: 1.5;
+}
+textarea:focus { outline: none; border-color: var(--gold);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 25%, transparent); }
+
+/* tanda tanya helper */
+.help-tip {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; padding: 0; margin-left: 6px; border-radius: 50%;
+  border: 1px solid var(--gold); color: var(--gold); background: transparent;
+  cursor: help; font-size: .78rem; font-weight: 700; line-height: 1;
+  vertical-align: middle; transition: .15s;
+}
+.help-tip:hover { background: var(--gold); color: var(--on-accent); }
+.row .help-tip { flex: 0 0 auto; align-self: end; }
+
+.help-pop {
+  position: fixed; z-index: 300; width: min(380px, calc(100vw - 24px));
+  background: color-mix(in srgb, var(--card) 96%, black);
+  border: 1px solid var(--gold); border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.5), 0 0 18px color-mix(in srgb, var(--gold) 22%, transparent);
+  padding: 12px 14px; font-size: .86rem; line-height: 1.6; color: var(--cream);
+}
+.help-pop .hp-h {
+  display: flex; justify-content: space-between; align-items: center;
+  color: var(--gold); font-weight: 700; margin-bottom: 6px;
+}
+.help-pop .hp-x {
+  background: transparent; border: 0; color: var(--muted); cursor: pointer;
+  font-size: .95rem; padding: 2px 6px; border-radius: 6px;
+}
+.help-pop .hp-x:hover { color: var(--cream); background: color-mix(in srgb, var(--cream) 10%, transparent); }
+.help-pop code { font-size: .8em; }
+
+/* kartu AI */
+.ai-summary {
+  margin-top: 10px; padding: 10px 12px; border-radius: 10px;
+  background: color-mix(in srgb, var(--gold) 8%, var(--input));
+  border: 1px solid color-mix(in srgb, var(--gold) 35%, var(--line));
+  font-size: .84rem; line-height: 1.6;
+}
+.ai-summary p { margin: 6px 0 0; }
+
+/* hasil statistik */
+.pstat-lead { font-size: 1.4rem; margin: 6px 0 12px; }
+.pstat-lead .katex { font-size: 1em; }
+.pstat-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px; margin-top: 6px;
+}
+.pstat {
+  background: var(--input); border: 1px solid var(--line); border-radius: 12px;
+  padding: 10px 12px;
+}
+.pstat.big { border-color: color-mix(in srgb, var(--gold) 55%, var(--line));
+  background: color-mix(in srgb, var(--gold) 7%, var(--input)); }
+.pstat-k { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 4px; }
+.pstat-v { font-size: 1.02rem; font-weight: 700; color: var(--cream);
+  font-family: ui-monospace, Consolas, monospace; overflow-wrap: anywhere; }
+.pstat.big .pstat-v .katex { font-size: 1.05em; }
+
+.pstat-note { margin-top: 12px; font-size: .8rem; color: var(--muted); line-height: 1.6; }
+.pill {
+  display: inline-block; padding: 3px 10px; border-radius: 999px;
+  font-size: .72rem; font-weight: 700;
+}
+.pill.ok { background: color-mix(in srgb, #3ecf8e 18%, var(--input));
+  color: #3ecf8e; border: 1px solid color-mix(in srgb, #3ecf8e 45%, transparent); }
+.pill.warn { background: color-mix(in srgb, var(--err) 15%, var(--input));
+  color: var(--err); border: 1px solid color-mix(in srgb, var(--err) 40%, transparent); }
+
+table.sterm { border-collapse: collapse; margin-top: 6px; font-size: .78rem; width: 100%; }
+table.sterm td { border-bottom: 1px solid var(--line); padding: 3px 8px; text-align: left; }
+table.sterm td:last-child { color: var(--gold); font-weight: 600; text-align: right; }
+
+#ppplot { width: 100%; height: 560px; }
+@media(max-width:900px){ #ppplot { height: 460px; } }
+/* ============ LOADING SCREEN ============ */
+#loadScreen {
+  position: fixed; inset: 0; z-index: 9999;
+  display: grid; place-items: end center; overflow: hidden;
+  padding-bottom: 6vh;
+  background:
+    radial-gradient(1100px 500px at 22% 38%, rgba(190,130,40,.28), transparent 65%),
+    radial-gradient(1000px 520px at 78% 62%, rgba(120,60,180,.30), transparent 62%),
+    radial-gradient(700px 380px at 60% 18%, rgba(60,110,190,.14), transparent 70%),
+    #0d0903;
+  transition: opacity .8s ease;
+}
+#loadScreen.done { opacity: 0; pointer-events: none; }
+/* bintang statis murah: muncul selama gambar belum selesai decode */
+#loadScreen::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1.4px 1.4px at 12% 22%, rgba(255,255,255,.85), transparent 55%),
+    radial-gradient(1.1px 1.1px at 33% 68%, rgba(255,255,255,.6), transparent 55%),
+    radial-gradient(1.6px 1.6px at 47% 13%, rgba(255,255,255,.9), transparent 55%),
+    radial-gradient(1.1px 1.1px at 62% 44%, rgba(255,255,255,.55), transparent 55%),
+    radial-gradient(1.5px 1.5px at 74% 77%, rgba(255,255,255,.8), transparent 55%),
+    radial-gradient(1.1px 1.1px at 87% 30%, rgba(255,255,255,.6), transparent 55%),
+    radial-gradient(1.4px 1.4px at 92% 60%, rgba(255,255,255,.75), transparent 55%),
+    radial-gradient(1px 1px at 7% 55%, rgba(255,255,255,.5), transparent 55%),
+    radial-gradient(1.2px 1.2px at 55% 86%, rgba(255,255,255,.65), transparent 55%);
+  background-size: 100% 100%;
+}
+/* vignette: radial ellipse, gelapnya fokus menjaga teks tetap terbaca
+   (diturunkan ke 40% per request — menu lebih terang di tepi) */
+#loadScreen::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.4) 100%);
+}
+.ls-slide {
+  position: absolute; inset: 0; opacity: 0;
+  transition: opacity 1.4s ease;
+  background: #0d0903;
+}
+.ls-slide.on { opacity: 1; }
+/* parallax murni geser horizontal, TANPA zoom lebih dalam.
+   Jangkar TOP: cover-crop mengambil dari bawah saja, sehingga
+   persamaan yang di-bake di bagian atas art tidak pernah terpotong */
+.ls-slide img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center top;
+  transform: scale(1.06);
+  transform-origin: center top;
+  will-change: transform;
+  animation: lsDriftR 16s ease-in-out infinite alternate;
+}
+.ls-slide.drift-l img { animation-name: lsDriftL; }
+.ls-slide.fit-contain img { object-fit: contain; background: #0d0903; }
+@keyframes lsDriftR {
+  from { transform: scale(1.06) translateX(1.8%); }
+  to   { transform: scale(1.06) translateX(-1.8%); }
+}
+@keyframes lsDriftL {
+  from { transform: scale(1.06) translateX(-1.8%); }
+  to   { transform: scale(1.06) translateX(1.8%); }
+}
+.ls-center {
+  position: relative; z-index: 2; text-align: center;
+  display: grid; gap: 8px; justify-items: center;
+  padding: 22px 34px; max-width: min(760px, 92vw);
+  border-radius: 20px;
+  /* scrim tipis hanya di belakang teks, art tidak tertutup */
+  background: radial-gradient(closest-side, rgba(8,5,2,.42), rgba(8,5,2,.22) 72%, transparent);
+}
+.ls-brand {
+  color: #ffd257; font-weight: 700; letter-spacing: .12em;
+  font-size: .95rem; opacity: 1;
+  text-shadow: 0 1px 5px rgba(0,0,0,.6);
+}
+.ls-title {
+  color: #f6efe0; font-weight: 800; font-size: clamp(.95rem, 1.9vw, 1.45rem);
+  line-height: 1.2;
+  text-shadow: 0 1px 4px rgba(0,0,0,.95), 0 2px 18px rgba(0,0,0,.85), 0 0 34px rgba(0,0,0,.55);
+}
+.ls-sub {
+  color: #d9c8a0; font-size: clamp(.85rem, 1.9vw, .98rem); line-height: 1.55;
+  max-width: min(640px, 88vw);
+  text-shadow: 0 1px 5px rgba(0,0,0,.95), 0 2px 12px rgba(0,0,0,.8);
+}
+.ls-sub .katex { color: #fff; font-size: 1.02em; }
+/* kredit artist: slot bekas judul slide, di bawah brand (ref layout) */
+.ls-artist {
+  color: #ffffff; font-weight: 600;
+  font-size: clamp(.95rem, 1.8vw, 1.15rem);
+  text-shadow: 0 1px 4px rgba(0,0,0,.95), 0 2px 14px rgba(0,0,0,.85);
+}
+.ls-artist:empty { display: none; }
+.ls-eq { color: #ffd257; font-size: 1.05rem; }
+.ls-eq .katex { color: #ffd257; }
+.ls-eq:empty { display: none; }
+.ls-barwrap {
+  width: min(560px, 80vw); height: 6px; margin-top: 6px;
+  background: rgba(255,255,255,.14); border-radius: 9px; overflow: hidden;
+  box-shadow: 0 1px 8px rgba(0,0,0,.35);
+}
+.ls-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, #c8912f, #ffd978);
+  border-radius: 9px; transition: width .3s ease;
+}
+.ls-status { color: #bfae88; font-size: .82rem; text-shadow: 0 1px 8px rgba(0,0,0,.9); }
+.ls-credit {
+  position: absolute; right: 14px; bottom: 10px; z-index: 2;
+  color: #ffffff; font-size: .85rem; opacity: .95;
+  text-shadow: 0 1px 8px rgba(0,0,0,.9);
+}
+.ls-credit:empty { display: none; }
+
+/* ---- collapsible (details.adv) + kartu hasil merge ---- */
+details.adv {
+  border: 1px dashed var(--line);
+  border-radius: 9px;
+  padding: 4px 10px 8px;
+  margin-top: 10px;
+  background: inherit;
+}
+details.adv > summary {
+  cursor: pointer; list-style: none; display: flex; align-items: center;
+  gap: 6px; font-weight: 700; color: var(--gold); font-size: .92rem;
+  padding: 6px 0;
+  user-select: none;
+}
+details.adv > summary::-webkit-details-marker { display: none; }
+details.adv > summary .chev {
+  margin-left: auto; flex: none;
+  display: inline-block; width: 8px; height: 8px;
+  border: solid var(--muted); border-width: 0 2px 2px 0;
+  transform: rotate(-45deg);          /* tertutup: panah kanan */
+  transition: transform .25s ease;
+}
+details.adv[open] > summary .chev { transform: rotate(45deg); } /* terbuka: panah bawah */
+details.adv.ai-card { background: linear-gradient(180deg, var(--card), var(--bg2)); }
+/* kartu hasil merge: plot di atas, statistik menyatu di bawah */
+.card.plot > h2 { margin: 14px 12px 4px; }
+.card.plot #physStatBody { padding: 0 12px 16px; }
+.card.plot #physInterp { margin: 0 12px 12px; }
+/* tombol Keyboard disembunyikan (native math-field editing sudah cukup) */
+#keypadToggle { display: none !important; }
+
+/* ============ PHYSICS WAR STORIES ============ */
+/* Tab Fisika dipecah dua: #physMenu (pilih bidang) & #physLab (lab lama,
+   dibungkus display:contents supaya grid dua kolom .panel-wrap tetap fungsi) */
+#physLab { display: contents; }
+#physLab.hidden { display: none !important; }
+
+/* serve cover art dua peran: kartu (tajam) + latar (blurred) */
+/* fullscreen bleed: menu menjangkari viewport (header sudah HUD global) */
+body.warfs main { max-width: none; margin: 0; padding: 0; }
+.wmenu { grid-column: 1 / -1; position: relative; overflow: hidden; background: var(--bg2);
+  height: 100vh; min-height: 500px; }
+.wm-bg { position: absolute; inset: 0; background-size: cover; background-position: center;
+opacity: 0; transition: opacity .45s ease; filter: blur(11px) brightness(1.5) saturate(1.2);
+  /* brightness 1.5: dark mode cover art lebih terang, konsisten dgn light (ronde 40) */
+  transform: scale(1.12); }
+.wm-bg.on { opacity: 1; }
+.wm-scrim { position: absolute; inset: 0;
+  background: radial-gradient(130% 95% at 50% 16%, transparent 38%, rgba(3,5,9,.24) 100%); }
+/* backlight MATHEMATIKA: satu kelimr lembut di atas latar blur, di belakang
+   semua kartu — pudar ke nol jauh sebelum tepi, jadi tidak ada batas terpotong */
+#mathMenu .wm-scrim {
+  background:
+    radial-gradient(120% 92% at 50% 64%, rgba(224,176,74,.15), transparent 76%),
+    radial-gradient(130% 95% at 50% 16%, transparent 38%, rgba(3,5,9,.24) 100%); }
+.wm-inner { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column;
+  padding: 30px 38px 20px; gap: 22px; }
+
+.wm-brand { font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif; font-stretch: 82%;
+  font-weight: 700; font-size: clamp(1.7rem, 3.4vw, 2.6rem); letter-spacing: .05em;
+  color: var(--cream); line-height: 1; text-shadow: 0 2px 24px rgba(0,0,0,.55); }
+.wm-back {
+  border: 0; background: transparent; cursor: pointer; padding: 0;
+  margin: 40px 10px 2px 0;               /* turun ke y±70: menggantikan baris
+                                           teks series yang dihapus — keluar
+                                           dr zona trigger HUD bar (64px) */
+  font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif; font-stretch: 82%;
+  font-weight: 700; font-size: clamp(1.7rem, 3.4vw, 2.6rem); line-height: 1;
+  /* --cream adaptif per tema: terang = tinta gelap (latar menu terang),
+     emas/hitam = krem terang (latar foto gelap) */
+  color: var(--cream); text-shadow: 0 2px 24px rgba(0,0,0,.18);
+  transition: color .18s ease, transform .18s ease;
+}
+.wm-back:hover { color: var(--gold, #e0b04a); transform: translateX(-4px); }
+.wm-back:active { transform: translateX(-2px) scale(.96); }
+
+/* ============ bar kategori fisika (Klasik / Moderen / Semua) ============
+   Tab ala garis bawah emas: aktif = teks cream + strip emas. Bar ini cuma
+   relevan di lapis payung — auto-sembunyi saat lapis alat terbuka. */
+.wm-head { display: flex; align-items: center; gap: 30px; }
+.wm-cat { display: flex; gap: 30px; min-width: 0; margin-top: 40px; }
+.cat-btn {
+  background: none; border: 0; padding: 4px 2px 10px; cursor: pointer;
+  font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif; font-stretch: 88%;
+  font-weight: 600; font-size: clamp(1rem, 2.3vw, 1.55rem); letter-spacing: .02em;
+  white-space: nowrap; color: var(--muted); position: relative;
+  transition: color .16s ease;
+}
+.cat-btn::after {
+  content: ""; position: absolute; left: 0; right: 4px; bottom: 0; height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(224,176,74,.9), rgba(250,226,140,.45));
+  opacity: 0; transform: scaleX(.55); transform-origin: left center;
+  transition: opacity .18s ease, transform .22s ease;
+}
+.cat-btn:hover { color: var(--cream); }
+.cat-btn.active { color: var(--cream); }
+.cat-btn.active::after { opacity: 1; transform: scaleX(1); }
+/* kartu di luar kategori aktif */
+.wtile.cat-off { display: none; }
+/* bar kategori nyembunyi pas lapis payung fisika gak lagi tampil */
+#physMenu .wm-inner:has(#physUmb.hidden) .wm-cat { visibility: hidden; }
+
+@media (max-width: 900px) {
+  .wm-head { flex-wrap: wrap; gap: 10px 16px; }
+  .wm-cat { gap: 18px; margin-top: 30px; }
+}
+
+/* deretan kartu vertikal — scroll horizontal tipis kalau kartu melimpah */
+.wm-grid { display: flex; gap: 10px; overflow-x: auto; flex: 1; align-items: stretch;
+  padding: 6px 2px 10px; scrollbar-width: thin; overflow-anchor: none;
+  /* anchor scroll bikin scrollLeft bergeser sendiri saat layer tampil */
+  scrollbar-color: rgba(224, 176, 74, .55) transparent; }
+.wm-grid::-webkit-scrollbar { height: 6px; }
+.wm-grid::-webkit-scrollbar-track { background: rgba(255, 255, 255, .05); border-radius: 3px; }
+.wm-grid::-webkit-scrollbar-thumb { background: rgba(224, 176, 74, .55); border-radius: 3px; }
+.wm-grid::-webkit-scrollbar-thumb:hover { background: rgba(250, 226, 140, .8); }
+
+/* glow golden SHAPELESS yang MELUBER KELUAR dr panel kartu: layer terpisah
+   (::after) ukurannya lebih besar dr zona kartu. TANPA filter blur (mahal,
+   bikin FPS drop) — kelembutan datang dr gradien yang fade-nya SELESAI
+   sebelum tepi layer, jadi gak ada garis potong tapi murah dipaint.
+   Hanya gold & black: di light mode batas kartu sudah jelas sendiri. */
+[data-theme="gold"] .wmenu::after, [data-theme="black"] .wmenu::after {
+  content: ""; position: absolute; z-index: 1; pointer-events: none;
+  left: -6%; right: -6%; bottom: -5%; top: 10%;
+  transform: translateZ(0);   /* layer sendiri: hover kartu gak bikin repaint */
+  background:
+    radial-gradient(70% 24% at 50% 21%,
+      rgba(224, 176, 74, .5), transparent 70%),
+    radial-gradient(36% 22% at 50% 92%,
+      rgba(224, 176, 74, .18), transparent 70%);
+}
+[data-theme="gold"] .wm-grid .wtile, [data-theme="black"] .wm-grid .wtile {
+  box-shadow: 0 0 0 1px rgba(224, 176, 74, .14), 0 6px 30px rgba(0, 0, 0, .32);
+}
+/* hover jangan bikin gelap-nya menenggelamkan glow celah di sekitarnya */
+[data-theme="gold"] .wm-grid .wtile:hover, [data-theme="black"] .wm-grid .wtile:hover {
+  box-shadow: 0 0 0 1px rgba(224, 176, 74, .3), 0 10px 42px rgba(0, 0, 0, .4);
+}
+[data-theme="black"] .wmenu::after {
+  background:
+    radial-gradient(70% 24% at 50% 21%,
+      rgba(255, 200, 61, .4), transparent 70%),
+    radial-gradient(36% 22% at 50% 92%,
+      rgba(255, 200, 61, .14), transparent 70%);
+}
+[data-theme="black"] .wm-grid .wtile {
+  box-shadow: 0 0 0 1px rgba(255, 200, 61, .12), 0 6px 30px rgba(0, 0, 0, .32);
+}
+
+.wtile { position: relative; /* tinggi = stretch ngisi menu, LEBAR dihitung
+     dr aspect-ratio (height x 0.615) => di zoom berapa pun kartu penuh
+     tinggi, penuh ruang, dan BENTUKNYA KONSISTEN — gak ada space kosong
+     di bawah (fullscreen 50-75% zoom, ronde 36) */
+  flex: 0 0 auto; width: auto; min-width: 0; border: 0; padding: 0; margin: 0;
+  background: var(--bg2); border-radius: 2px; overflow: hidden; cursor: pointer; text-align: left;
+  transition: transform .22s ease, box-shadow .22s ease;
+  /* bayangan netral: dalam, tanpa halo emas yang "kepotong" bentuk tile */
+  box-shadow: 0 0 0 1px rgba(255,255,255,.05), 0 18px 48px rgba(0,0,0,.55); }
+.wm-grid .wtile { aspect-ratio: 123 / 200; /* tinggi stretch dari menu,
+     lebar otomatis = tinggi x 0.615 (rasio asli cover art) */
+  /* rasio kartu DIKUNCI (0.615 ~ rasio asli cover art 600x960): di zoom
+     berapa pun bentuk kartu konsisten, gak ramping, art gak kepotong —
+     dulu tinggi nge-stretch ikutin tinggi menu = di zoom rendah kartu
+     jadi pilar super ramping (ronde 35) */
+}
+.wtile > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  object-position: center;   /* cover art selalu ter-center di segala ukuran kartu */
+  transition: filter .25s ease; }
+/* vignette bawah kartu (di atas art, di bawah caption) — biar judul gak nabrak
+   cover art; berlaku otomatis untuk main card & tools card */
+.wtile::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  /* vignette zona judul SAJA: kuat di ~20% bawah, habis di tengah kartu —
+     cover art di atas gak ikut digelapin (ronde 32: user lapor kartu dim) */
+  background: linear-gradient(to top,
+    rgba(3,5,9,.85) 0%, rgba(3,5,9,.6) 10%, rgba(3,5,9,.34) 20%,
+    rgba(3,5,9,.14) 32%, rgba(3,5,9,.04) 42%, transparent 52%); }
+/* semua kartu TERANG — hanya kartu terkunci yang sengaja redup */
+.wtile:hover { transform: translateY(-8px); z-index: 3;
+  box-shadow: 0 26px 60px rgba(0,0,0,.6); }
+/* hover 1 kartu -> kartu lainnya di grid yang sama memudar near-transparan */
+
+.wt-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; flex-direction: column;
+  align-items: center; gap: 7px; padding: 30px 10px 18px; color: var(--cream);
+  background: linear-gradient(transparent, rgba(3,5,9,.55));
+  transition: background .22s ease, color .22s ease, box-shadow .22s ease; }
+.wt-eyebrow { font-size: .6rem; letter-spacing: .32em; text-indent: 0; text-transform: uppercase;
+  color: var(--gold); opacity: .9;
+  /* eyebrow kepanjangan sering jadi 2 baris: shrink-to-fit flex item tadi
+     bikin baris kedua align kiri = teks "miring". text-align center bikin
+     semua baris rata tengah di dalam lebar itemnya sendiri */
+  text-align: center; }
+.wt-title { font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif; font-stretch: 88%;
+  font-weight: 700; font-size: 1.02rem; letter-spacing: .14em; text-indent: .14em;
+  text-transform: uppercase; white-space: normal; line-height: 1.18;
+  /* rata tengah konsisten, termasuk saat judul 2 baris */
+  text-align: center; width: 94%; margin: 0 auto; }
+.wt-sub { font-size: .66rem; letter-spacing: .34em; text-indent: .34em; text-transform: uppercase;
+  color: var(--muted); }
+/* titik kecil di bawah cards DIHAPUS (request: biar clean) */
+.wt-dot { display: none; }
+
+/* kartu PAYUNG + alat: tanpa eyebrow emas, judul diperbesar (boleh 2 baris) */
+.wtile:not(.locked) .wt-eyebrow { display: none; }
+/* lapis alat: kartu sedikit ditengah biar gak nanggung di kiri */
+.wm-grid-tools { justify-content: flex-start; }
+/* center TANPA jebakan overflow-2-arah: justify-center + konten lebih
+   lebar dr kontainer = overflow ke DUA sisi, kartu pertama terpotong kiri
+   dan gak bisa dicapai scroll. margin-auto = tetap center saat muat,
+   full-reach saat overflow (ronde 40) */
+.wm-grid-tools > .wtile:first-child { margin-left: auto; }
+.wm-grid-tools > .wtile:last-child { margin-right: auto; }
+
+/* hover = panel caption putih ala kartu pertama Under No Flag */
+.wtile:hover .wt-cap, .wtile:focus-visible .wt-cap { background: #f2efe7; color: #141820;
+  box-shadow: 0 8px 30px rgba(0,0,0,.35); }
+.wtile:hover .wt-eyebrow, .wtile:focus-visible .wt-eyebrow { color: #8a6410; }
+.wtile:hover .wt-title, .wtile:focus-visible .wt-title { color: #141820; }
+.wtile:hover .wt-sub, .wtile:focus-visible .wt-sub { color: #6a6152; }
+.wtile:hover .wt-dot, .wtile:focus-visible .wt-dot { background: #141820; border-color: #141820; }
+
+/* kartu terkunci: redup + rangka, ikon gembok menggantikan titik indikator */
+.wtile.locked > img { filter: brightness(.5) saturate(.7); }
+.wtile.locked .wt-dot { display: none; }
+.wt-lock { display: grid; place-items: center; width: 26px; height: 26px; margin-top: 3px;
+  border: 1px solid currentColor; border-radius: 50%; opacity: .85; }
+.wtile.locked .wt-cap { background: linear-gradient(transparent, rgba(3,5,9,.88)); }
+.wtile.locked:hover .wt-cap, .wtile.locked:focus-visible .wt-cap { background: #f2efe7; color: #141820; }
+
+/* (kartu CSS-art kuantum dihapus — sekarang pakai foto cover qm_card) */
+
+.wtile.shake { animation: wtile-shake .34s ease; }
+@keyframes wtile-shake { 20% { transform: translateX(-7px); } 45% { transform: translateX(6px); }
+  70% { transform: translateX(-4px); } 100% { transform: none; } }
+
+/* kaki layar: hint konsol + status dinamis */
+.wm-foot { display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  color: var(--muted); font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; }
+.wm-hints { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.wm-kbd { display: inline-block; border: 1px solid var(--line); border-radius: 5px;
+  padding: 2px 8px; font-size: .62rem; letter-spacing: .18em; color: var(--cream); }
+.wm-tag { white-space: nowrap; opacity: .75; }
+
+/* lab lama: penanda bidang + tombol kembali ke menu */
+.wt-back { display: block; margin: -4px 0 10px; padding: 6px 14px; font-size: .8rem;
+  letter-spacing: .12em; background: transparent; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 999px; cursor: pointer; transition: all .2s ease; }
+.wt-back:hover { color: var(--cream); border-color: var(--gold); }
+/* turunkan SELURUH panel kiri (card) keluar zona trigger HUD bar (~64px atas)
+   — bukan cuma tombolnya, biar gak ada "dahi" ruang kosong di dalam card */
+#tool .card, #calc .card, #graph .card { margin-top: 36px; }
+.wt-cattag { margin: -6px 0 10px; font-size: .66rem; letter-spacing: .34em; text-transform: uppercase;
+  color: var(--caramel); }
+
+/* ---- Nabla Lab: panel tool generik (#tool) ---- */
+#toolForm textarea { width: 100%; min-height: 64px; resize: vertical; }
+
+/* ---- matrix builder (mbuild): grid sel klik-ketik ---- */
+.mx-build { display: flex; flex-direction: column; gap: 10px; }
+.mx-rows { display: flex; flex-direction: column; gap: 6px; }
+.mx-row { display: flex; gap: 6px; }
+.mx-cell { width: 72px; text-align: center; padding: 9px 6px;
+  background: var(--bg2); color: var(--cream); border: 1px solid var(--line);
+  border-radius: 4px; font-size: .95rem; font-family: inherit; }
+.mx-cell:focus { border-color: var(--gold); outline: none; }
+.mx-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.mx-btn { padding: 4px 12px; font-size: .74rem; background: transparent;
+  color: var(--muted); border: 1px solid var(--line); border-radius: 999px;
+  cursor: pointer; transition: all .2s ease; }
+.mx-btn:hover { color: var(--cream); border-color: var(--gold); }
+/* frame graph tool diberi border di SEMUA tema (var adaptif) + padding
+   biar canvas plotly gak nempel border */
+#toolPlot, #plot { border: 1px solid var(--line); border-radius: 10px;
+  padding: 8px; background: var(--bg2); }
+/* div dalam plotly: tanpa padding, 100% tinggi -> plotly ukur pas,
+   gak ada svg yang nyembur nimpa bar note */
+#toolPlot .plot-inner { height: 100%; }
+#toolCanvas { width: 100%; height: 440px; display: block; border-radius: 8px; }
+#toolCanvas.hidden { display: none; }
+
+/* slider live untuk graphers */
+.rng-wrap { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+.rng-wrap input[type="range"] { flex: 1; padding: 0; border: 0;
+  background: transparent; accent-color: var(--gold); }
+.rng-val { min-width: 56px; text-align: right; color: var(--gold);
+  font-family: ui-monospace, Consolas, monospace; font-size: .88rem; }
+/* output field ala referensi: hasil tampil menonjol di field bertint gold —
+   color-mix bikin field terlihat di SEMUA tema termasuk hitam murni */
+.lab-rows { display: flex; flex-direction: column; gap: 10px; }
+/* panel hint/note diturunkan dikit pas plot 3D aktif — biar gak nempel
+   (apalagi nimpa) pinggir bawah plot. Layout sama utk semua tema. */
+#toolPlot:not(.hidden) ~ #toolResult .lab-rows,
+#toolCanvas:not(.hidden) ~ #toolResult .lab-rows { margin-top: 14px; }
+.lab-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.lab-k { flex: 0 0 auto; min-width: 120px; font-size: .8rem; letter-spacing: .06em;
+  color: var(--muted); text-transform: uppercase; }
+.lab-v { flex: 1 1 220px; min-width: 0; overflow-x: auto; font-size: 1.28rem;
+  color: var(--cream);
+  background: color-mix(in srgb, var(--gold) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold) 18%, transparent);
+  border-radius: 10px; padding: 12px 16px; }
+.lab-v .katex { font-size: 1.3em; }
+.lab-v .katex-display { margin: 0; }               /* bunuh margin vertikal KaTeX */
+.lab-row:not(:has(.lab-k)) .lab-v { text-align: center; }
+/* select teks di menu card dimatikan: drag-scroll horizontal gak boleh
+   ikut menyeleksi judul/caption card */
+.wmenu, #fieldSel { -webkit-user-select: none; user-select: none; }
+#toolResultCard { overflow: hidden; }
+
+@media (max-width: 900px) {
+  /* zoom-friendly: tinggi card FLUID (dulu height:auto bikin tile kolaps
+     jadi selebar caption = "card ilang" di zoom 175-200%) */
+  .wmenu { height: auto; }
+  .wm-inner { padding: 22px 18px 16px; gap: 16px; }
+  .wtile { flex: 0 0 clamp(170px, 26vw, 246px); min-width: 0; }
+  .wm-grid .wtile { width: 100%; max-width: 560px; margin: 0 auto;
+    height: auto; aspect-ratio: 123 / 200; }
+  .wm-foot { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* ---- handphone (<= 600px): kartu ramping, tinggi dibatasi biar gak
+   jadi pita super tinggi (grid menu = 100vh, tile stretch penuh) ---- */
+@media (max-width: 600px) {
+  .wm-inner { padding: 12px 10px 8px; gap: 10px; }
+  .wm-back { margin: 14px 4px 0 0; }
+  .wtile { flex: 0 0 100%; width: 100%; max-width: 560px; margin: 0 auto; }
+  /* lapis alat: tinggi tetap proporsional layar, gak ngikutin 100vh */
+  .wm-grid { align-items: flex-start; }
+  .wm-grid .wtile { height: auto; aspect-ratio: 123 / 200; }
+  .wt-cap { padding: 16px 6px 10px; gap: 4px; }
+  .wt-title { font-size: .8rem; letter-spacing: .08em; text-indent: .08em; }
+  .wt-sub { font-size: .54rem; letter-spacing: .24em; text-indent: .24em; }
+  .wm-foot { font-size: .58rem; }
+  .wm-hints { display: none; }          /* hint keyboard gak relevan di HP */
+  /* panel tool/kalkulator: padding & tipografi hemat ruang */
+  .card { padding: 14px 12px; border-radius: 12px; }
+  .card h2 { font-size: 1rem; }
+  .lab-row { gap: 8px; }
+  #toolPlot { max-height: 46vh; }
+}
+
+/* ---- adaptasi tema: war menu mengikuti light theme ---- */
+/* light = latar blurikut dr gambar, BUKAN glow overexposed: brightness
+   ditahan (dulu 2.8 = pict bakar), saturasi malah diangkat biar warna
+   art tetap hidup di atas dasar krem --bg2 */
+[data-theme="light"] .wm-bg { filter: blur(13.2px) brightness(1.7) saturate(1.15); }
+[data-theme="light"] .wm-bg.on { opacity: .26; }
+[data-theme="light"] .wm-scrim, [data-theme="light"] #mathMenu .wm-scrim {
+  background: linear-gradient(180deg, rgba(248,240,218,.62) 0%, rgba(248,240,218,.22) 100%); }
+[data-theme="light"] .wtile.locked > img { filter: brightness(.72) saturate(.8); }
+[data-theme="light"] .wtile { box-shadow: 0 0 0 1px rgba(20,14,6,.14), 0 14px 40px rgba(30,20,8,.2); }
+[data-theme="light"] .wtile:hover { box-shadow: 0 22px 54px rgba(30,20,8,.3), 0 0 0 1px rgba(20,14,6,.25); }
+/* caption: band gelap solid di bawah tiap kartu -> terbaca di atas art apa pun */
+[data-theme="light"] .wt-cap { color: #f2e5c7; }
+[data-theme="light"] .wt-sub { color: #c8b090; }
+[data-theme="light"] .wt-eyebrow, [data-theme="light"] .wm-foot .wm-tag { color: #d8a01c; }
+
+/* ==================== FIELD SELECT (pilih bidang studi) ====================
+   Seamless ala Battlefield: layar dua sisi TANPA border/gambar — tidak
+   kasat mata sampai kursor menuju sisi itu; art + caption memudar masuk. */
+.fsel { grid-column: 1 / -1; position: relative; overflow: hidden; background: var(--bg2);
+  height: 100vh; min-height: 500px; }
+.fsel-cols { display: flex; height: 100%; gap: 0; }
+
+.fs-side { position: relative; flex: 1 1 0; min-width: 0; border: 0; margin: 0; padding: 0;
+  background: transparent; overflow: hidden; cursor: pointer; text-align: left;
+  outline: none; transition: flex-grow .55s cubic-bezier(.2,.7,.2,1); }
+.fs-side:hover, .fs-side:focus-visible { flex-grow: 1.3; }
+
+/* idle: benar-benar tak kasat mata */
+.fs-art { position: absolute; inset: 0; background-size: cover; background-position: center;
+  opacity: 0; filter: brightness(.55) saturate(1.05); transform: scale(1.08);
+  transition: opacity .5s ease, transform .65s ease, filter .4s ease; }
+.fs-side:hover .fs-art, .fs-side:focus-visible .fs-art { opacity: 1;
+  transform: scale(1.13); filter: brightness(.95) saturate(1.18); }
+.fs-scrim { position: absolute; inset: 0; opacity: 0; transition: opacity .5s ease;
+  background: linear-gradient(180deg, rgba(4,6,10,.5) 0%, rgba(4,6,10,.16) 36%,
+    rgba(3,5,9,.86) 100%); }
+.fs-side:hover .fs-scrim, .fs-side:focus-visible .fs-scrim { opacity: 1; }
+
+/* pembatas di persis tengah: nyaris tak terlihat, pudar saat salah satu sisi terungkap */
+.fsel-divider { position: absolute; left: 50%; top: 22%; bottom: 22%; width: 1px; z-index: 2;
+  background: linear-gradient(transparent, rgba(233,200,140,.2), transparent);
+  transition: opacity .45s ease; pointer-events: none; }
+.fsel:has(.fs-side:hover) .fsel-divider { opacity: 0; }
+[data-theme="light"] .fsel-divider {
+  background: linear-gradient(transparent, rgba(20,14,6,.16), transparent); }
+/* light: cover field select TANPA overexposure — brightness nyaris netral,
+   saturasi diangkat (art lebih kaya warna, gak pudar ke putih) */
+[data-theme="light"] .fs-side:hover .fs-art { filter: brightness(1.03) saturate(1.2); }
+[data-theme="light"] .fs-scrim {
+  background: linear-gradient(180deg, rgba(4,6,10,.16) 0%, rgba(4,6,10,.06) 36%,
+    rgba(3,5,9,.68) 100%); }
+
+.fs-cap { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column;
+  align-items: center; gap: 8px; padding: 34px 18px 7vh; color: #f2e5c7;
+  text-shadow: 0 2px 18px rgba(0,0,0,.75); z-index: 2; opacity: 0; transform: translateY(14px);
+  transition: opacity .45s ease .08s, transform .45s ease .08s; }
+.fs-side:hover .fs-cap, .fs-side:focus-visible .fs-cap { opacity: 1; transform: none; }
+.fs-num { font-size: .58rem; letter-spacing: .42em; text-indent: .42em; text-transform: uppercase;
+  color: #d8a01c; }
+.fs-side[data-tab="physics"] .fs-num { color: #9cc0f0; }
+.fs-name { font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif; font-stretch: 84%;
+  font-weight: 700; font-size: clamp(1.4rem, 3vw, 2.2rem); letter-spacing: .16em;
+  text-indent: .16em; text-transform: uppercase; line-height: 1; }
+.fs-sub { font-size: clamp(.56rem, 1vw, .72rem); letter-spacing: .3em; text-indent: .3em;
+  text-transform: uppercase; color: #cbb894; }
+.fs-cta { margin-top: 7px; font-size: .62rem; letter-spacing: .34em; text-indent: .34em;
+  text-transform: uppercase; color: #e0b04a; opacity: 0; transform: translateY(8px);
+  transition: opacity .3s ease .14s, transform .3s ease .14s; }
+.fs-side:hover .fs-cta, .fs-side:focus-visible .fs-cta { opacity: 1; transform: none; }
+.fs-side[data-tab="physics"]:hover .fs-cta { color: #9cc0f0; }
+
+/* teks atas: kecil, tenang, overlay tipis */
+.fs-topfade { position: absolute; top: 0; left: 0; right: 0; z-index: 3; text-align: center;
+  padding: 22px 16px 34px; pointer-events: none;
+  background: linear-gradient(180deg, rgba(3,5,9,.6) 0%, rgba(3,5,9,.3) 52%, transparent 100%);
+  color: var(--cream); }
+[data-theme="light"] .fs-topfade {
+  background: linear-gradient(180deg, rgba(248,240,218,.85) 0%, rgba(248,240,218,.4) 52%,
+    transparent 100%); color: var(--cream); }
+.fsel-kicker { letter-spacing: .5em; text-indent: .5em; text-transform: uppercase;
+  font-weight: 300; font-size: clamp(.5rem, .85vw, .66rem); opacity: .78; }
+.fsel-title { margin: 7px 0 0; font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif;
+  font-stretch: 86%; font-weight: 700; letter-spacing: .3em; text-indent: .3em;
+  line-height: 1.05; font-size: clamp(.8rem, 1.55vw, 1.02rem); }
+.fsel-title span { color: var(--gold); }
+.fsel-sub { margin-top: 7px; font-size: clamp(.52rem, .9vw, .66rem); opacity: .72;
+  letter-spacing: .14em; }
+/* light theme: sub di atas backdrop foto = teks gelap + glow terang,
+   kebaca di area terang maupun gelap (ronde 40: dulu hitam gak keliatan) */
+[data-theme="light"] .fsel-sub { color: #241c10; opacity: 1;
+  text-shadow: 0 1px 10px rgba(255,250,235,.95), 0 0 18px rgba(255,250,235,.85); }
+
+@media (max-width: 900px) {
+  .fsel { height: auto; }
+  .fsel-cols { flex-direction: column; }
+  .fs-side { min-height: 240px; }
+  .fsel-divider { display: none; }
+}
+
+/* ==================== TRANSISI (GSAP — card swipe saja) ====================
+   Gak ada overlay & gak fullscreen: cuma panel-card yang beranimasi oleh
+   GSAP — card lama diswap keluar kiri. Pop-up zoom landing (scale .9->1)
+   DIMATIKAN demi performa: dua animasi fullscreen bareng decode gambar
+   bikin patah-patah. Semua transform murni -> compositor GPU. */
+
+/* ==================== LANGUAGE SELECT (overlay sebelum loading screen) ====================
+   Backdrop berganti-ganti per bahasa (cross-fade) dengan folder asset
+   language_select_backdrop/. FOTO TAJAM — TANPA blur; dim & vignette
+   biarkan teks tetap terbaca. Fakta negara di bawah memutari 7 bahasa
+   dengan transisi fade halus. */
+#langSel { position: fixed; inset: 0; z-index: 9000; display: none;
+  background: var(--bg2); overflow: hidden;
+  transition: background-color .6s ease; }
+#langSel.active { display: block; }
+/* mode dark boot: sebelum ada bahasa di-preview, layar gelap total —
+   panggung buat manifesto anti-A.I (teks typewriter golden) */
+#langSel.mani-dark { background: #05070b; }
+#langSel.fade-out { opacity: 0; transition: opacity .3s ease; pointer-events: none; }
+
+#langSel .lmenu { position: absolute; inset: 0; }
+
+#langSel .wm-bg { position: absolute; inset: -6%; background-size: cover;
+  background-position: center; opacity: 0; will-change: transform, opacity;
+  transition: opacity .9s ease;
+  /* RESET dari .wm-bg generik (war menu): foto bahasa HARUS tajam, tanpa blur */
+  filter: none; transform: scale(1.15); }
+#langSel .wm-bg.on { opacity: 1; }
+
+/* ---------- video backdrop bahasa INDONESIA (FULLSCREEN) ----------
+   Pengganti foto statis Elang Jawa: pas item Bahasa Indonesia di-hover,
+   panel pemilih bahasa DISEMBUNYIKAN (mode .vid-focus di bawah) dan
+   video main FULLSCREEN di TENGAH layar. Gerak mouse = panel balik.
+   UKURAN BOX VIDEO DIHITUNG JS EKSPLISIT (fitVideoBox di i18n.js):
+   width/height/left/top inline = persis rasio frame vs layar -> frame
+   GAK mungkin kepotong di zoom/ukuran layar apa pun. Nilai di bawah
+   cuma default pra-JS. */
+#langSel .l-video { position: absolute; inset: 0; background: #000;
+  opacity: 0; pointer-events: none; transition: opacity .45s ease; }
+#langSel .l-video.on { opacity: 1; }
+
+/* mode FOKUS video: panel pemilih bahasa (label, tombol, dropdown list)
+   mundur halus & gak nangkep hover/klik sama sekali */
+#langSel .l-widget { transition: opacity .4s ease, transform .4s ease; }
+#langSel.vid-focus .l-widget { opacity: 0; pointer-events: none;
+  transform: translateY(-10px); }
+/* LIGHT THEME: gak ada pengecualian buat foto backdrop — sama seperti
+   gold/black (opacity 0 off, 1 on). Dulu ada rule opacity .62 yang bikin
+   dasar cream bocor tembus foto = look milky/low-contrast kayak ada
+   overlay. Scrim cream di bawah tetap jadi sentuhan style light. */
+
+/* vignette lembut di tepi — TANPA blur (foto tetap tajam) */
+#langSel .l-vig { position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(115% 92% at 50% 42%,
+    rgba(0, 0, 0, 0) 52%, rgba(0, 0, 0, .34) 100%); }
+
+/* scrim: rendah di atas + gelap di bawah (pangkalan teks fakta) */
+#langSel .l-scrim { position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(0, 0, 0, .30) 0%, rgba(0, 0, 0, .06) 26%, rgba(0, 0, 0, .10) 58%,
+    rgba(0, 0, 0, .40) 82%, rgba(0, 0, 0, .68) 100%); }
+
+/* ---------- manifesto anti-A.I (boot, dark backdrop) ----------
+   Teks golden glowing besar di tengah, diketik ulang berganti bahasa
+   (typewriter) walau user belum hover apa pun. Mundur (fade) begitu
+   ada bahasa di-preview. */
+#langSel .l-manifesto { position: absolute; inset: 0; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 8vw; text-align: center; pointer-events: none;
+  transition: opacity .5s ease, padding .3s ease; }
+#langSel .l-manifesto.out { opacity: 0; }
+/* baris judul/preview: SATU ALUR flex dgn teks utama (bukan absolute) —
+   otomatis ikut geser ke kanan saat dropdown kebuka, persis perilaku teks
+   utama. Golden glowing + format sama dgn teks utama, ukuran lebih kecil.
+   Tanpa blink. Ganti bahasa = fade out-in via .out (setManiSub). */
+#langSel .mani-sub { display: block; margin: 0 0 48px;
+  font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif;
+  font-stretch: 92%; font-weight: 700; line-height: 1.45; letter-spacing: .04em;
+  font-size: clamp(1.1rem, 2.4vw, 1.75rem); color: #f2e394; max-width: 82vw;
+  text-shadow: 0 0 14px rgba(250, 226, 140, .38), 0 0 34px rgba(250, 226, 140, .18),
+    0 2px 10px rgba(0, 0, 0, .8);
+  transition: opacity .29s ease; }
+#langSel .mani-sub.out { opacity: 0; }
+#langSel.dd-open .mani-sub { max-width: 100%; }
+/* dropdown kebuka -> kolom teks menyempit & geser dari area dropdown,
+   jadi teks golden wrap ke bawah tanpa menyentuh daftar pilihan */
+#langSel.dd-open .l-manifesto { padding-left: 318px; padding-right: 6vw; }
+#langSel.dd-open .mani-text { max-width: 100%; }
+#langSel .mani-text { font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif;
+  font-stretch: 92%; font-weight: 700; line-height: 1.4; letter-spacing: .04em;
+  font-size: clamp(1.35rem, 3.1vw, 2.3rem); color: #f2e394; max-width: 82vw;
+  text-shadow: 0 0 18px rgba(250, 226, 140, .45), 0 0 46px rgba(250, 226, 140, .22),
+    0 2px 10px rgba(0, 0, 0, .8); }
+.mani-cursor { display: inline-block; width: 6px; height: 1em; margin-left: 5px;
+  background: #f2e394; vertical-align: -0.12em;
+  box-shadow: 0 0 10px rgba(250, 226, 140, .7);
+  animation: mani-blink 1s steps(1) infinite; }
+@keyframes mani-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+#langSel .l-inner { position: relative; z-index: 2; height: 100%;
+  display: flex; flex-direction: column; padding: 26px 38px 18px; gap: 12px; }
+
+/* ---------- widget pemilih bahasa: dropdown di KIRI ----------
+   Revamp: pilihan gak lagi nutupin backdrop di tengah. Tombol semi-
+   invisible (teks tengah + border box ala referensi HOME), klik ->
+   panel pilihan slide ke bawah; hover item = ganti backdrop + caption.
+   Widget dinaikkan cukup tinggi biar dropdown terbuka gak nabrak
+   teks caption di bawah. */
+#langSel .l-widget { position: relative; z-index: 5; margin-top: 5vh;
+  width: 264px; flex: 0 0 auto; }
+#langSel .l-pick { font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif;
+  font-stretch: 92%; font-weight: 700; font-size: 1.18rem; letter-spacing: .06em;
+  color: #fff; text-shadow: 0 2px 8px rgba(0, 0, 0, .8);
+  text-align: center; margin-bottom: 10px;
+  transition: opacity .28s ease; }
+#langSel .l-pick.out { opacity: 0; }
+
+/* tombol utama: semi-invisible — latar nyaris transparan + border terang */
+.l-dd-btn { display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 9px 14px; background: rgba(8, 12, 18, .38);
+  border: 1px solid rgba(255, 255, 255, .75); border-radius: 2px;
+  color: #fff; cursor: pointer; font-family: inherit;
+  transition: border-color .25s ease, background .25s ease; }
+.l-dd-btn:hover, .l-dd-btn:focus-visible { border-color: var(--gold); background: rgba(8, 12, 18, .5); }
+.l-dd-flag { width: 42px; height: 28px; object-fit: cover; flex: 0 0 auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .5); }
+.l-dd-name { flex: 1; text-align: center;
+  font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif; font-stretch: 92%;
+  font-weight: 600; font-size: .98rem; letter-spacing: .14em; text-indent: .14em;
+  text-transform: uppercase; color: #fff; text-shadow: 0 2px 8px rgba(0, 0, 0, .75); }
+.l-dd-chev { flex: 0 0 auto; display: inline-block; width: 8px; height: 8px;
+  border: solid currentColor; border-width: 0 2px 2px 0;
+  transform: rotate(45deg);            /* tertutup: panah bawah */
+  transition: transform .25s ease; }
+.l-dd-btn.open .l-dd-chev { transform: rotate(-135deg); } /* terbuka: panah atas */
+
+/* panel pilihan: slide ke bawah dari balik tombol */
+#langSel .l-dd { overflow: hidden; max-height: 0; opacity: 0;
+  transform: translateY(-10px);
+  transition: max-height .38s ease, opacity .3s ease, transform .3s ease; }
+#langSel .l-dd.open { max-height: 460px; opacity: 1; transform: none; }
+#langSel .l-dd-list { display: flex; flex-direction: column; gap: 6px; padding-top: 10px; }
+
+.l2-item { position: relative; display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 7px 14px; background: rgba(8, 12, 18, .38);
+  border: 1px solid rgba(255, 255, 255, .3); border-radius: 2px;
+  cursor: pointer; color: #fff; font-family: inherit; text-align: left;
+  transition: border-color .25s ease, background .25s ease; }
+.l2-item:hover, .l2-item:focus-visible { border-color: var(--gold);
+  background: rgba(8, 12, 18, .5); }
+.l2-item img { width: 42px; height: 28px; object-fit: cover; flex: 0 0 auto;
+  border-radius: 2px; box-shadow: 0 4px 12px rgba(0, 0, 0, .5); }
+.l2-item .l-name { flex: 1; text-align: center;
+  font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif; font-stretch: 92%;
+  font-weight: 600; font-size: 1.02rem; letter-spacing: .06em;
+  color: #fff; text-shadow: 0 2px 8px rgba(0, 0, 0, .75);
+  transition: color .25s ease, text-shadow .25s ease; }
+/* hover: cahaya emas dari bawah (dipertahankan dr versi lama) */
+.l2-item:hover .l-name, .l2-item:focus-visible .l-name { color: var(--gold);
+  text-shadow: 0 0 2px rgba(255, 240, 170, .55), 0 2px 12px rgba(0, 0, 0, .7); }
+.l2-item:hover img, .l2-item:focus-visible img { box-shadow: 0 4px 12px rgba(0, 0, 0, .5),
+  0 0 22px rgba(250, 226, 140, .38); }
+.l2-item.sel .l-name { color: var(--gold); }
+.l2-item.sel { border-color: var(--gold); }
+
+/* ---------- teks fakta negara (butuh #2 #3) ---------- */
+#langSel .l-factwrap { position: relative; z-index: 2; text-align: center;
+  margin-top: auto; padding: 40px 6vw 6px; }
+#langSel .l-fact { font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif;
+  font-stretch: 92%; font-weight: 700; font-size: clamp(1.05rem, 2.5vw, 1.85rem);
+  letter-spacing: .05em; color: #f2e394; margin: 0 auto; max-width: 74vw;
+  text-shadow: 0 2px 7px rgba(0, 0, 0, .85), 0 8px 30px rgba(0, 0, 0, .55);
+  transition: opacity .45s ease;
+  white-space: pre-line; }   /* \n di facts.json = baris baru (caption 2 baris) */
+#langSel .l-fact.out { opacity: 0; }
+#langSel .l-fact:empty::before { content: "\00a0"; }
+
+#langSel .l-foot { display: flex; align-items: center; gap: 12px; color: var(--muted);
+  font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; z-index: 2; }
+#langSel .l-foot .l-tag { margin-left: auto; white-space: nowrap; opacity: .75; }
+
+/* ==================== DONASI (overlay ala layar bahasa) ====================
+   Backdrop art menu_screen/don_backdrop.jpg (glow emas naik) — di-BLUR
+   biar tekstur bintik/titik di foto gak ganggu keterbacaan teks.
+   Teks & kartu memakai warna ABSOLUT (bukan var tema) karena latar
+   selalu gelap di tema apa pun.
+   Isi naskah donasi = PERSIS teks pemilik web, tanpa diterjemahkan. */
+#donSel { position: fixed; inset: 0; z-index: 9000; display: none;
+  background: var(--bg2); overflow: hidden; }
+#donSel.active { display: block; }
+#donSel .lmenu { position: absolute; inset: 0; }
+
+/* bar atas harus bisa muncul DI ATAS overlay donasi & layar bahasa
+   (header default z 40 < 9000 = tertelan overlay). Class dipasang saat
+   overlay dibuka, biar di boot layar bahasa header tetap tersembunyi */
+body.don-open header, body.ls-open header { z-index: 9100; }
+
+#donSel .wm-bg { position: absolute; inset: -6%; background-size: cover;
+  /* reset dari .wm-bg generik, lalu blur dalam — bintik-bintik backdrop
+     lenyap, warna emas tetap tembus sesuai tema */
+  filter: blur(26px) brightness(.72) saturate(1.25);
+  transform: scale(1.14); }
+#donSel .l-vig { position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(115% 92% at 50% 46%,
+    rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, .38) 100%); }
+#donSel .l-scrim { position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(0, 0, 0, .38) 0%, rgba(0, 0, 0, .14) 24%, rgba(0, 0, 0, .2) 55%,
+    rgba(0, 0, 0, .5) 82%, rgba(0, 0, 0, .74) 100%); }
+
+#donSel .d-inner { position: relative; z-index: 2; height: 100%;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 26px 38px 18px; gap: 12px; overflow-y: auto; }
+
+#donSel .d-title { font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif;
+  font-stretch: 90%; font-weight: 700; font-size: clamp(1rem, 1.8vw, 1.4rem);
+  letter-spacing: .22em; text-indent: .22em; color: #f5e8c9; margin: .4vh 0 0;
+  width: 100%; text-align: center;   /* center sejati: blok penuh, teks rata tengah */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .85), 0 0 26px rgba(250, 226, 140, .22); }
+
+/* ---------- 3 kartu koin (USDC / USDT / Monero) ----------
+   MURNI logo + teks TANPA panel/box latar — cuma glow emas menyala di
+   bawah nama koin saat hover (sama dengan bar cahaya layar bahasa).
+   Dirapat ke atas biar gak buang-buang ruang kosong */
+#donSel .d-coins { display: flex; justify-content: center; flex-wrap: wrap;
+  gap: 12px 18px; margin-top: .8vh; }
+#donSel .d-coins:hover .d-coin:not(:hover) { opacity: .34; }
+.d-coin.d-dim { opacity: .34; }
+.d-coin { position: relative; display: flex; flex-direction: column; align-items: center;
+  gap: 8px; min-width: 0; padding: 10px 12px;
+  /* SHRINK-TO-FIT: lebar kartu = isi terlebar (logo/nama). Alamat wallet
+     panjang gak boleh ikut melebarkan kartu — word-break break-all bikin
+     min-content-nya kecil, jadi aman wrap sempit saat hover */
+  background: transparent; border: 0;
+  border-radius: 10px; cursor: pointer; color: #f5e8c9; font-family: inherit;
+  transition: opacity .25s ease, transform .25s ease; }
+.d-coin:hover { transform: translateY(-3px); }
+.d-logo { width: 46px; height: 46px; filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .55)); }
+.d-coin-name { position: relative; font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif;
+  font-stretch: 90%; font-weight: 700; font-size: 1rem; letter-spacing: .16em;
+  text-indent: .16em; color: #f5e8c9; padding-bottom: 7px;
+  transition: color .25s ease, text-shadow .25s ease; }
+/* glow di bawah teks — kloning bar emas .l2-item::after (language select) */
+.d-coin-name::after { content: ""; position: absolute; left: -14%; right: -14%; bottom: 0;
+  height: 9px; opacity: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(248, 232, 140, 0) 0%,
+    rgba(248, 232, 140, .30) 18%, rgba(252, 242, 178, .92) 50%,
+    rgba(248, 232, 140, .30) 82%, rgba(248, 232, 140, 0) 100%);
+  transition: opacity .3s ease; }
+.d-coin:hover .d-coin-name, .d-coin:focus-visible .d-coin-name,
+.d-coin.d-open .d-coin-name { color: var(--gold);
+  text-shadow: 0 0 2px rgba(255, 240, 170, .55), 0 2px 12px rgba(0, 0, 0, .7); }
+.d-coin:hover .d-coin-name::after, .d-coin:focus-visible .d-coin-name::after,
+.d-coin.d-open .d-coin-name::after { opacity: 1; }
+.d-net { font-size: .74rem; letter-spacing: .3em; text-indent: .3em;
+  text-transform: uppercase; color: #b8a27c; }
+
+/* alamat wallet: TIDAK PERNAH ditampilkan — hover = cuma glow di nama koin,
+   klik = langsung salin ke clipboard. <code> tetap di DOM sebagai sumber
+   teks copy (donation.js), tapi display:none biar gak makan space & gak
+   bisa melebar-bari kartu lewat lebar intrinsiknya */
+.d-addr, .d-addr-code { display: none; }
+
+/* toast "alamat disalin" */
+#donSel .d-copytip { position: absolute; left: 50%; bottom: 92px;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(20, 26, 34, .94); border: 1px solid rgba(224, 176, 74, .5);
+  color: #f5e1a4; padding: 10px 24px; border-radius: 999px; font-size: .86rem;
+  letter-spacing: .05em; opacity: 0; pointer-events: none; z-index: 6;
+  transition: opacity .35s ease, transform .35s ease; }
+#donSel .d-copytip.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------- naskah donasi: PERSIS teks pemilik web (semua bahasa) ----------
+   diperbesar +25% + glow emas lembut, digeser naik tepat di bawah kartu
+   koin biar gak ada ruang kosong nganggur */
+#donSel .d-text { margin-top: .8vh; max-width: min(78vw, 1000px); text-align: center; }
+/* hook pembuka ala baliho: golden glow, center, persis di atas QA */
+#donSel .d-lead { font-weight: 700; color: #f2e394; font-size: 1.32rem;
+  margin: 0 auto; max-width: min(72vw, 980px);
+  text-shadow: 0 0 16px rgba(250, 226, 140, .3), 0 2px 8px rgba(0, 0, 0, .85); }
+#donSel .d-qa-q { font-weight: 700; color: #f2e394; font-size: 1.65rem;
+  text-shadow: 0 0 16px rgba(250, 226, 140, .3), 0 2px 8px rgba(0, 0, 0, .85); }
+#donSel .d-qa-a { color: #efe3c4; font-size: 1.43rem; line-height: 1.78;
+  margin: 10px auto 0; max-width: min(72vw, 980px);
+  text-shadow: 0 0 14px rgba(250, 226, 140, .16), 0 2px 7px rgba(0, 0, 0, .8); }
+#donSel .d-note { margin: 2.2vh auto 0; padding: 8px 18px;
+  border: 1px solid rgba(224, 176, 74, .35); border-left: 3px solid #e0b04a;
+  background: rgba(8, 12, 18, .62); border-radius: 8px; text-align: left;
+  display: inline-block; max-width: min(72vw, 940px); }
+#donSel .d-note-h { color: #f2e394; font-weight: 700; letter-spacing: .2em;
+  font-size: 1.28rem; text-transform: uppercase;
+  text-shadow: 0 0 14px rgba(250, 226, 140, .28), 0 2px 7px rgba(0, 0, 0, .85); }
+#donSel .d-note-b { color: #efe3c4; font-size: 1.38rem; line-height: 1.6; margin: 2px 0 0;
+  text-shadow: 0 0 12px rgba(250, 226, 140, .14), 0 2px 6px rgba(0, 0, 0, .75); }
+
+/* ---------- panel audit donasi (collapsible, arrow ke bawah) ----------
+   Pola chevron sama dengan details.adv di lab fisika: tertutup panah
+   kanan, terbuka berputar jadi panah bawah. Warna absolut + override
+   light di bawah, konsisten dengan sisa page donasi. */
+#donSel .d-audit { width: min(72vw, 940px); margin: 2.2vh auto 0;
+  border: 1px solid rgba(242, 229, 199, .4); border-radius: 12px;
+  background: #1e5255; text-align: left; padding: 4px 16px 12px; }
+#donSel .d-audit > summary { cursor: pointer; list-style: none; display: flex;
+  align-items: center; gap: 10px; padding: 10px 0; user-select: none;
+  font-weight: 700; font-size: 1.18rem; color: #f2e394;
+  text-shadow: 0 0 14px rgba(250, 226, 140, .28), 0 2px 7px rgba(0, 0, 0, .85); }
+#donSel .d-audit > summary::-webkit-details-marker { display: none; }
+#donSel .d-audit > summary .chev { margin-left: auto; flex: none;
+  display: inline-block; width: 9px; height: 9px;
+  border: solid #e0b04a; border-width: 0 2.5px 2.5px 0;
+  transform: rotate(-45deg);          /* tertutup: panah kanan */
+  transition: transform .25s ease; }
+#donSel .d-audit[open] > summary .chev { transform: rotate(45deg); } /* terbuka: panah bawah */
+
+#donSel .d-audit-in { display: flex; flex-direction: column; gap: 10px;
+  padding: 2px 2px 4px; }
+#donSel .d-aud-intro { color: #e9dbba; font-size: 1.05rem; line-height: 1.65; margin: 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, .75); }
+#donSel .d-aud-warn { color: #ffb08a; font-weight: 700; font-size: 1.05rem; margin: 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, .75); }
+#donSel .d-aud-invite { color: #e9dbba; font-size: 1.05rem; line-height: 1.65;
+  margin: 1vh 0 0; text-shadow: 0 2px 6px rgba(0, 0, 0, .75); }
+
+#donSel .d-aud-row { display: flex; gap: 20px; align-items: flex-start;
+  margin-top: 1vh; flex-wrap: wrap; }
+/* lingkaran upload foto publik (preview di dalamnya begitu dipilih) */
+#donSel .d-photo-circ { display: flex; flex-direction: column; align-items: center;
+  justify-content: center; width: 132px; height: 132px; border-radius: 50%;
+  background: rgba(242, 227, 148, .14); border: 2px dashed rgba(250, 226, 140, .55);
+  cursor: pointer; overflow: hidden; text-align: center; transition: border-color .25s ease; }
+#donSel .d-photo-circ:hover { border-color: rgba(250, 226, 140, .95); }
+#donSel .d-photo-txt { font-size: .78rem; color: #f2e394; padding: 8px; line-height: 1.4;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, .7); }
+#donSel .d-photo-circ img { position: absolute; width: 100%; height: 100%;
+  object-fit: cover; }
+#donSel .d-photo-circ { position: relative; }
+#donSel .d-photo-circ.has-photo .d-photo-txt { display: none; }
+
+#donSel .d-aud-fields { flex: 1; min-width: 260px; display: grid;
+  grid-template-columns: 1fr 1fr; gap: 16px 22px; }
+#donSel .d-aud-fields label { display: block; margin: 0; }
+#donSel .d-aud-fields label:nth-child(3) { grid-column: 1 / -1; }  /* pengalaman full */
+#donSel .d-aud-fields .lbl { display: block; font-size: .95rem; color: #f2e5c7;
+  margin-bottom: 3px; text-shadow: 0 2px 5px rgba(0, 0, 0, .45); }
+#donSel .d-aud-fields input { width: 100%; padding: 8px 2px; border-radius: 0;
+  border: 0; border-bottom: 2px solid rgba(242, 229, 199, .75);
+  background: transparent; color: #ffffff; font: inherit; font-size: 1.02rem;
+  margin: 0; }
+#donSel .d-aud-fields input:focus { outline: none;
+  border-bottom-color: #ffd257; box-shadow: none; }
+
+#donSel .d-aud-chk { display: flex; align-items: flex-start; gap: 10px;
+  margin: 1.2vh 0 0; cursor: pointer; }
+#donSel .d-aud-chk input { width: auto; margin: 4px 0 0; accent-color: #e0b04a;
+  transform: scale(1.25); }
+#donSel .d-aud-chk span { font-size: .98rem; line-height: 1.6; color: #e9dbba;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, .75); }
+
+#donSel .d-aud-send { display: block; margin: 1.6vh auto 0; padding: 12px 52px;
+  border: 0; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(135deg, #f2e394, #e0b04a); color: #201607;
+  font-family: inherit; font-weight: 700; font-size: 1.08rem; letter-spacing: .1em;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease; }
+#donSel .d-aud-send:hover { transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(250, 226, 140, .25); filter: brightness(1.05); }
+#donSel .d-aud-send:disabled { opacity: .55; cursor: wait; transform: none; }
+#donSel #auditMsg { color: #b8a27c; font-size: .95rem; text-align: center; margin: 8px 0 0; }
+#donSel #auditMsg.err { color: #ffb08a; }
+#donSel #auditMsg.ok { color: #b8e6a0; }
+
+#donSel .l-foot { display: flex; align-items: center; gap: 12px;
+  margin-top: auto; padding-top: 18px; color: #b8a27c; width: 100%; flex: 0 0 auto;
+  font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; z-index: 2; }
+#donSel .l-foot .l-tag { margin-left: auto; white-space: nowrap; opacity: .75; }
+
+
+/* ====== v2 tools: MathLive, contoh penggunaan, preview matriks ====== */
+
+/* math-field (LaTeX) di tool form: selaras dengan input/select card */
+#toolForm math-field {
+  display: block;
+  width: 100%;
+  margin-top: 3px;
+  padding: 8px 11px;
+  min-height: 46px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--input);
+  color: var(--cream);
+  font-size: 1.02rem;
+  box-sizing: border-box;
+  --caret-color: var(--gold);
+  --placeholder-color: color-mix(in srgb, var(--muted) 55%, transparent);
+}
+#toolForm math-field:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 25%, transparent);
+}
+#toolForm math-field::part(menu-toggle),
+#toolForm math-field::part(virtual-keyboard-toggle) { color: var(--muted); }
+
+/* layout 2 kolom utk tool modern (kalkulus, polinom, complex) */
+#toolForm.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 18px;
+  align-items: start;
+}
+#toolForm.grid2 > label:has(math-field),
+#toolForm.grid2 > label:has(textarea),
+#toolForm.grid2 > .hint,
+#toolForm.grid2 > .t-preview { grid-column: 1 / -1; }
+@media (max-width: 700px) {
+  #toolForm.grid2 { grid-template-columns: 1fr; column-gap: 0; }
+}
+
+/* kotak contoh penggunaan (KaTeX) */
+.use-box {
+  margin-top: 14px;
+  padding: 10px 14px 8px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--gold) 6%, transparent);
+}
+.use-h {
+  font-size: .68rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--caramel);
+  margin-bottom: 6px;
+}
+.use-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: .98rem;
+}
+.use-row + .use-row { border-top: 1px dashed color-mix(in srgb, var(--line) 70%, transparent); }
+.use-math { flex: 1 1 auto; min-width: 0; overflow-x: auto; }
+.use-math .katex { color: var(--cream); }
+
+/* tombol copy LaTeX 📋 */
+.use-copy {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-size: .85rem;
+  line-height: 1;
+  color: var(--muted);
+  transition: all .15s ease;
+}
+.use-copy:hover {
+  border-color: var(--gold);
+  color: var(--cream);
+  background: color-mix(in srgb, var(--gold) 14%, transparent);
+  transform: translateY(-1px);
+}
+
+/* preview LaTeX matriks live */
+.t-preview {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--input);
+}
+.t-preview-lbl {
+  display: block;
+  font-size: .62rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.t-preview-body { min-height: 30px; overflow-x: auto; }
+.t-preview-body .katex { font-size: 1.1em; }
+
+/* ==================== TOOL PANEL UI OVERHAUL (flat) ====================
+   Referensi layout baru: tanpa border card, input jadi underline minimal,
+   hasil tanpa kotak ganda. Berlaku utk SEMUA tool math & fisika dan semua
+   tema (murni var --card/--bg2/--line/--gold → adaptif light/dark/golden). */
+#tool > .card, #toolResultCard {
+  background: transparent; border: 0; box-shadow: none; }
+#toolResultCard h2 { font-size: 1.65rem; }          /* "Hasil" lebih besar */
+#tool .card input, #tool .card select {
+  background: transparent; border: 0; border-bottom: 1px solid var(--line);
+  border-radius: 0; padding: 10px 2px; font-size: 1rem; }
+#tool .card select { padding-right: 26px; }
+#tool .card input:focus, #tool .card select:focus {
+  border-color: var(--gold); box-shadow: none; }
+#toolForm math-field {
+  background: transparent; border: 0; border-bottom: 1px solid var(--line);
+  border-radius: 0; padding: 8px 2px; }
+#toolForm math-field:focus { border-color: var(--gold); box-shadow: none; }
+#toolForm textarea {
+  background: transparent; border: 0; border-bottom: 1px solid var(--line);
+  border-radius: 0; padding: 8px 2px; }
+#toolForm textarea:focus { border-color: var(--gold); box-shadow: none; }
+#tool .mx-cell {
+  background: transparent; border: 0; border-bottom: 1px solid var(--line);
+  border-radius: 0; width: 76px; padding: 9px 4px; font-size: 1rem; }
+#tool .t-preview { background: transparent; border: 0; padding: 4px 2px; }
+
+/* ====== catatan: dim backdrop 5 kartu fisika kini via FILE ART GELAP
+   (menu_screen/dim/dim_*.jpg) yang dipakai data-img — overlay CSS
+   ::after dibuang karena bikin kilatan versi terang saat transisi ====== */
+
+@media (max-width: 900px) {
+  #langSel .l-inner { padding: 18px 16px 12px; }
+  #langSel .l-widget { width: 230px; margin-top: 3vh; }
+  .l2-item { gap: 10px; padding: 6px 10px; }
+  .l2-item img, .l-dd-flag { width: 36px; height: 24px; }
+  .l2-item .l-name { font-size: .92rem; }
+  #langSel .l-dd.open { max-height: 380px; }
+  #langSel .l-fact { max-width: 88vw; }
+}
+
+/* ==================================================== UI PROTOTIPE PEMILIK
+   (mockup Photoshop: field input lebih bersih + kartu hasil tanpa border)
+   Berlaku utk 3 panel tool: #calc (Kalkulator Multivariabel),
+   #graph (Grafik 3D) dan #physLab (Lab Monte Carlo). Engine gak disentuh. */
+
+/* ---------- 1) input/select/textarea gaya garis-bawah ---------- */
+#calc input, #calc select, #calc textarea,
+#graph input, #graph select, #graph textarea,
+#physLab input, #physLab select, #physLab textarea {
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid var(--line);
+  border-radius: 0;
+  padding: 8px 2px;
+  transition: border-color .15s ease;
+}
+/* focus: garis bawah emas, tanpa kotak glow */
+#calc input:focus, #calc select:focus, #calc textarea:focus,
+#graph input:focus, #graph select:focus, #graph textarea:focus,
+#physLab input:focus, #physLab select:focus, #physLab textarea:focus {
+  outline: none;
+  box-shadow: none;
+  border-bottom-color: var(--gold);
+}
+/* checkbox jangan ikut-garis (kotak kecil + underline = kotor) */
+#calc input[type="checkbox"], #graph input[type="checkbox"],
+#physLab input[type="checkbox"] {
+  border: 0; padding: 0;
+  width: auto;              /* global input 100% bikin checkbox tampil barisan */
+}
+/* select tampil tenang: font clip x, arrow default cukup */
+
+/* ---------- 2) sub-box lipat (details.adv): border tipis solid ---------- */
+#physLab details.adv, #calc details.adv, #graph details.adv {
+  border: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+  border-radius: 12px;
+  padding: 4px 14px 12px;
+  margin-top: 14px;
+}
+#physLab details.adv.ai-card {
+  background: linear-gradient(180deg, var(--card), var(--bg2));
+}
+
+/* ---------- 3) kartu hasil: BERSIH, TANPA BORDER ---------- */
+#physStatBody .pstat {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 8px 10px 0;
+}
+#physStatBody .pstat.big {
+  background: transparent;
+  border: 0;
+}
+/* angka penting tetap menonjol lewat warna emas, bukan kotak */
+#physStatBody .pstat.big .pstat-v { color: var(--gold); }
+
+/* ---------- 4) dropdown <select> kebaca di SEMUA tema ----------
+   Daftar opsi popup dirender OS pakai default kotak putih: di tema
+   dark/black & gold teksnya terang -> putih di atas putih, kebaca
+   cuma pas di-hover (highlight biru). Kunci explisit warna opsi ke
+   variabel tema biar otomatis cocok di gold/light/black. */
+select option, select optgroup {
+  background: var(--bg2);
+  color: var(--cream);
+}
+/* opsi ter-highlight: emas, bukan biru default OS */
+select option:checked, select option:hover {
+  background: var(--card);
+  color: var(--gold);
+}
+
+/* ==================== DONASI FLAT TEAL (#225659) ====================
+   Referensi desain user: latar teal flat polos, form seamless underline,
+   foto upload = lingkaran tan penuh, tim "Supported by Love". */
+#donSel .wm-bg { background: #225659 !important; background-image: none !important;
+  filter: none !important; opacity: 1 !important; }
+#donSel .l-vig, #donSel .l-scrim { display: none !important; }
+[data-theme="light"] #donSel .wm-bg,
+[data-theme="black"] #donSel .wm-bg,
+[data-theme="gold"] #donSel .wm-bg {
+  background: #225659 !important; background-image: none !important;
+  filter: none !important; opacity: 1 !important; }
+/* foto upload: lingkaran tan penuh (ref), teks pindah ke bawah lingkaran */
+#donSel .d-photo-circ { background: #ecd9b8; border: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .25); }
+#donSel .d-photo-circ:hover { border: 0; box-shadow: 0 6px 20px rgba(0, 0, 0, .35); }
+#donSel .d-photo-txt { color: #225659; font-weight: 600; }
+#donSel .d-photo-hint { font-size: .72rem; color: #d9e6e2; margin-top: 6px;
+  text-align: center; text-shadow: 0 1px 4px rgba(0, 0, 0, .4); }
+/* catatan bitcoin di bawah qa_a — oranye, sedikit lebih besar */
+#donSel .d-qa-note { color: #ffb08a; font-size: 1.18rem; font-weight: 700;
+  line-height: 1.6; margin: 0 0 1.2vh;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, .45); }
+
+/* ==================== MOBILE MODE (≤900px / zoom >150%) ====================
+   War menu jadi SATU halaman vertical: Matematika di atas, Fisika di bawah.
+   Cards wrap vertikal — opsi 1 / 2 kolom lewat tombol di wm-head (mcols-2).
+   Bar atas & teks mengecil biar muat di zoom >150%. */
+@media (max-width: 900px) {
+  /* pilih bidang: math atas, fisika bawah */
+  #fieldSel .fsel-cols { flex-direction: column; height: auto; }
+  #fieldSel .fs-side { min-height: 44svh; }
+
+  .wmenu { height: auto; min-height: 100svh; }
+  .wm-inner { height: auto; min-height: 100svh; gap: 14px; }
+  .wm-grid { flex-wrap: wrap; overflow: visible; row-gap: 14px;
+    justify-content: center; padding-bottom: 12px; }
+  /* 1 kolom: card sepert lebar, tinggi proporsional (gak raksasa) */
+  .wm-grid .wtile { flex: 0 0 100%; width: 100%; max-width: 560px; margin: 0 auto;
+    height: auto; aspect-ratio: 123 / 200; }
+  /* 2 kolom: dua card portrait per baris */
+  body.mcols-2 .wm-grid .wtile { flex: 0 0 calc(50% - 6px);
+    height: auto; aspect-ratio: 123 / 200; }
+
+  /* bar atas muat di zoom >150% */
+  header { padding: 10px 12px; row-gap: 6px; flex-wrap: wrap;
+    justify-content: center; }
+  .hleft { gap: 10px; flex-wrap: wrap; justify-content: center; width: 100%; }
+  .hright { width: 100%; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .logo { font-size: 1.05rem; }
+  .logo span { font-size: .85rem; margin-left: 2px; }
+  #mainNav { gap: 4px; }
+  .tab { padding: 6px 10px; font-size: .8rem; }
+  #themeSw button { padding: 4px 8px; font-size: .68rem; }
+}
+
+/* tombol kolom: hanya tampil di mode mobile */
+.wm-cols-btn { display: none; margin-left: auto; padding: 6px 14px;
+  border: 1px solid var(--line); border-radius: 999px; background: transparent;
+  color: var(--muted); font: inherit; font-size: .8rem; cursor: pointer;
+  white-space: nowrap; transition: color .2s ease, border-color .2s ease; }
+.wm-cols-btn:hover { color: var(--cream); border-color: var(--gold); }
+@media (max-width: 900px) {
+  .wm-cols-btn { display: inline-block; }
+}
+/* lanjutan mobile: header STICKY (slotnya direserve, konten gak pernah
+   ketutup bar) TAPI auto-hide tetap jalan — transform asli tidak di-
+   override, bar nyembul turun saat mouse ke atas dan naik lagi saat
+   scroll. Graph pakai tinggi px (vh kolap saat zoom >200%), kategori wrap. */
+@media (max-width: 900px) {
+  header { position: sticky; top: 0; }
+  .wm-cat { flex-wrap: wrap; row-gap: 0; }
+  .cat-btn { white-space: normal; }
+  #toolPlot { height: 340px; max-height: none; }
+}
+/* lanjutan mobile 2: header TANPA backdrop-blur (biar fps aman saat bar
+   muncul di zoom tinggi - blur di area besar = berat di GPU lemah),
+   latar digelapkan/diterangkan per tema biar teks tetap terbaca.
+   Panel hasil MC: konten lebar (formula KaTeX & plot) = scroll di dalam
+   card, gak memaksa card melebar keluar layar. */
+@media (max-width: 900px) {
+  header { backdrop-filter: none; }
+  [data-theme="gold"] header, [data-theme="black"] header {
+    background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), var(--head); }
+  [data-theme="light"] header {
+    background: linear-gradient(rgba(255, 250, 240, .78), rgba(255, 250, 240, .78)), var(--head); }
+  .panel-wrap.active > .card { min-width: 0; max-width: 100%; }
+  #physLab .card { overflow-x: auto; }
+  .pstat-lead { overflow-x: auto; }
+  .pstat-lead .katex-display { margin: 0; }
+  .pstat-grid { grid-template-columns: 1fr; }
+  #ppplot { max-width: 100%; }
+}
+
+/* ---- donasi: teks utama TANPA blob (blob di-revert user) ----
+   Yang dipertahankan: lebar +25% (90vw/1225px, induk 97vw/1250px) biar
+   wrap lebih sedikit di desktop 100% zoom + warna teks terang.
+   Pengganti blob: drop shadow teks digelapkan & dilebarkan biar teks
+   tetap menonjol dr latar teal, plus spasi sebelum CATATAN Bitcoin. */
+#donSel .d-qa-body {
+  max-width: min(90vw, 1225px);
+  margin: 0 auto;
+}
+#donSel .d-qa-body .d-qa-a {
+  max-width: none;
+  margin: 0;
+  color: #f7e790;                  /* emas terang (permintaan user) */
+  text-shadow: 0 0 14px rgba(250, 226, 140, .16), 0 2px 7px rgba(0, 0, 0, .8);
+}
+#donSel .d-qa-body .d-qa-a + .d-qa-a {
+  margin-top: 22px;                /* pemisah antar paragraf */
+}
+#donSel .d-qa-body { margin-bottom: 26px; }  /* spasi sebelum CATATAN */
+#donSel .d-lead { max-width: min(90vw, 1225px); }
+/* induk teks donasi ikut dinaikkan — kalau tidak, lebar ketahan 1000px */
+#donSel .d-text { max-width: min(97vw, 1250px); }
+
+/* ---- donasi: jarak koin -> pertanyaan dipangkas 20% ----
+   Jarak lama = gap flex 12px + margin .d-text .8vh + margin default
+   .d-qa-q 1em (26.4px); margin qa_q dinolkan, sisanya dikompensasi. */
+#donSel .d-text { margin-top: calc(.64vh + 18.7px); }
+#donSel .d-qa-q { margin-top: 0; }
+
+/* ---- donasi: audit expand -> FULLSCREEN (transisi murni opacity/transform,
+   gak ada animasi height/blur = ringan di GPU lemah) ----
+   Saat .audit-fs dipasang: semua anak .d-inner SELAIN panel audit fade-out
+   (autohide), panel audit jadi fixed inset 0 (latarnya = teal menu yg sama,
+   jadi perpindahan posisinya gak kelihatan "lompat"). Konten masuk dengan
+   fade+slide berjenjang (.audit-fs-in dipasang 2 rAF setelahnya). */
+#donSel .d-inner > * { transition: opacity .32s ease; }
+#donSel.audit-fs .d-inner > :not(.d-audit) { opacity: 0; pointer-events: none; }
+
+#donSel.audit-fs .d-audit {
+  position: fixed; inset: 0; z-index: 30;
+  width: auto; max-width: none; margin: 0;
+  border: 0; border-radius: 0;
+  background: #225659;               /* = latar menu: snap tak terlihat */
+  padding: 26px clamp(20px, 6vw, 90px) 34px;
+  overflow-y: auto;
+}
+#donSel.audit-fs .d-audit > summary { font-size: 1.5rem; padding: 12px 0 16px;
+  max-width: 1100px; margin: 0 auto; width: 100%; }
+#donSel.audit-fs .d-audit-in { max-width: min(1100px, 92vw); margin: 0 auto; gap: 14px; }
+
+/* elemen dalam ikut membesar karena panel jadi fullscreen */
+#donSel.audit-fs .d-aud-intro, #donSel.audit-fs .d-aud-invite { font-size: 1.28rem; }
+#donSel.audit-fs .d-aud-warn { font-size: 1.28rem; }
+#donSel.audit-fs .d-aud-fields { gap: 20px 30px; }
+#donSel.audit-fs .d-aud-fields .lbl { font-size: 1.12rem; }
+#donSel.audit-fs .d-aud-fields input { font-size: 1.18rem; padding: 10px 2px; }
+#donSel.audit-fs .d-aud-chk span { font-size: 1.12rem; }
+#donSel.audit-fs .d-aud-send { font-size: 1.22rem; padding: 14px 64px; }
+#donSel.audit-fs .d-photo-circ { width: 168px; height: 168px; }
+#donSel.audit-fs .d-photo-txt { font-size: .95rem; }
+
+/* animasi masuk konten: hidden saat .audit-fs (TANPA transisi), lalu
+   .audit-fs-in (2 rAF kemudian) -> fade+slide berjenjang */
+#donSel.audit-fs:not(.audit-fs-in) .d-audit-in > * { opacity: 0;
+  transform: translateY(16px); transition: none; }
+#donSel.audit-fs-in .d-audit-in > * { opacity: 1; transform: none;
+  transition: opacity .42s ease, transform .42s ease; }
+#donSel.audit-fs-in .d-audit-in > :nth-child(2) { transition-delay: .05s; }
+#donSel.audit-fs-in .d-audit-in > :nth-child(3) { transition-delay: .09s; }
+#donSel.audit-fs-in .d-audit-in > :nth-child(n+4) { transition-delay: .13s; }
+
+@media (max-width: 900px) {
+  #donSel.audit-fs .d-audit { padding: 16px 16px 24px; }
+  #donSel.audit-fs .d-aud-intro, #donSel.audit-fs .d-aud-invite,
+  #donSel.audit-fs .d-aud-warn { font-size: 1.08rem; }
+  #donSel.audit-fs .d-audit > summary { font-size: 1.22rem; }
+}
+
+/* ==================== DOWNLOAD VERSI OFFLINE ====================
+   Panel fullscreen yang ikut TEMA (var --*) — beda dgn donasi yang
+   flat teal. Konten: kartu file + langkah install + catatan AI. */
+#dlSel { position: fixed; inset: 0; z-index: 9000; display: none;
+  background: var(--bg2); overflow: hidden; }
+#dlSel.active { display: block; }
+body.dl-open header, body.ls-open header { z-index: 9100; }
+#dlSel .dl-inner { position: relative; z-index: 2; height: 100%;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 26px 38px 18px; gap: 14px; overflow-y: auto;
+  max-width: min(97vw, 1250px); margin: 0 auto; }
+#dlSel .dl-head { display: flex; align-items: center; gap: 16px; width: 100%; }
+#dlSel .dl-title { font-family: "Bahnschrift", "Arial Narrow", Inter, sans-serif;
+  font-stretch: 90%; font-weight: 700; font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+  letter-spacing: .2em; text-indent: .2em; color: var(--gold);
+  margin: .4vh 0 0; width: 100%; text-align: center; }
+#dlSel .dl-close { margin-left: auto; flex: none; width: 40px; height: 40px;
+  border-radius: 999px; border: 1px solid var(--line); cursor: pointer;
+  background: var(--card); color: var(--cream); font-size: 1rem; }
+#dlSel .dl-close:hover { border-color: var(--gold); color: var(--gold); }
+#dlSel .dl-sub { color: var(--cream); font-size: 1.12rem; line-height: 1.6;
+  margin: 0; text-align: center; max-width: min(90vw, 900px);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, .35); }
+#dlSel .dl-card { display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  width: 100%; max-width: min(90vw, 900px); margin-top: 1.2vh;
+  padding: 16px 22px; border: 1px solid var(--line); border-radius: 14px;
+  background: var(--card); box-shadow: var(--shadow); }
+#dlSel .dl-file { display: flex; flex-direction: column; gap: 4px; flex: 1;
+  min-width: 220px; }
+#dlSel .dl-fname { font-weight: 700; color: var(--cream); font-size: 1.12rem;
+  word-break: break-all; }
+#dlSel .dl-meta { color: var(--muted); font-size: .92rem; letter-spacing: .04em; }
+#dlSel .dl-go { display: inline-block; padding: 12px 46px; border-radius: 10px;
+  cursor: pointer; text-decoration: none; text-align: center;
+  background: linear-gradient(135deg, var(--gold), var(--caramel));
+  color: var(--on-accent); font-weight: 700; font-size: 1.1rem;
+  letter-spacing: .06em; border: 0; }
+#dlSel .dl-go:hover { filter: brightness(1.06);
+  box-shadow: 0 10px 28px rgba(224, 176, 74, .25); transform: translateY(-2px); }
+#dlSel .dl-go.disabled { opacity: .45; cursor: not-allowed; transform: none;
+  box-shadow: none; pointer-events: auto; }
+#dlSel .dl-warn { color: var(--err); font-size: 1rem; margin: .6vh 0 0; }
+#dlSel .dl-steps { width: 100%; max-width: min(90vw, 900px);
+  border: 1px solid var(--line); border-radius: 14px; background: var(--card);
+  padding: 18px 24px 20px; box-shadow: var(--shadow); }
+#dlSel .dl-steps h3 { color: var(--gold); font-size: 1.08rem; margin: 10px 0 6px;
+  letter-spacing: .08em; text-transform: uppercase; }
+#dlSel .dl-steps h3:first-child { margin-top: 0; }
+#dlSel .dl-steps p, #dlSel .dl-steps li { color: var(--cream); font-size: 1.04rem;
+  line-height: 1.7; }
+#dlSel .dl-steps ol { margin: 4px 0 0; padding-left: 22px; }
+#dlSel .dl-steps li { margin: 6px 0; }
+#dlSel .l-foot { display: flex; align-items: center; gap: 12px; margin-top: auto;
+  padding-top: 18px; color: var(--muted); width: 100%; flex: 0 0 auto;
+  font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; z-index: 2; }
+#dlSel .l-foot .l-tag { margin-left: auto; white-space: nowrap; opacity: .75; }
+@media (max-width: 900px) {
+  #dlSel .dl-inner { padding: 18px 16px 14px; }
+  #dlSel .dl-card, #dlSel .dl-steps { padding: 14px 16px; }
+}
+
+/* ---- download panel: rapikan biar gak ada scrollbar janky ----
+   Konten dipadatkan agar muat di 768px tanpa scroll, scrollbar cadangan
+   dibikin tipis emas, dan seluruh isi DORONG KE BAWAH (padding-top 74px)
+   supaya tombol X jauh dari zona trigger bar atas (mousemove <64px). */
+#dlSel .dl-inner { padding: 74px 38px 16px; gap: 10px; }
+#dlSel .dl-sub { font-size: 1.02rem; line-height: 1.5; }
+#dlSel .dl-card { margin-top: .6vh; padding: 12px 20px; }
+#dlSel .dl-steps { padding: 12px 20px 14px; }
+#dlSel .dl-steps h3 { font-size: .98rem; margin: 7px 0 4px; }
+#dlSel .dl-steps p, #dlSel .dl-steps li { font-size: .98rem; line-height: 1.55; }
+#dlSel .dl-steps li { margin: 3px 0; }
+#dlSel .l-foot { padding-top: 8px; }
+#dlSel .dl-inner { scrollbar-width: thin;
+  scrollbar-color: rgba(224, 176, 74, .5) transparent; }
+#dlSel .dl-inner::-webkit-scrollbar { width: 6px; }
+#dlSel .dl-inner::-webkit-scrollbar-thumb { background: rgba(224, 176, 74, .5);
+  border-radius: 3px; }
+#dlSel .dl-inner::-webkit-scrollbar-track { background: transparent; }
+@media (max-width: 900px) {
+  #dlSel .dl-inner { padding: 70px 16px 14px; }
+}
+
+/* ---- download: layar bahasa bisa dibuka DI ATAS panel download ----
+   (z-index 9000 sama dgn #dlSel + dlSel lebih akhir di DOM = nutupin
+   langSel; saat body.dl-open, langSel dinaikkan supaya user bisa ganti
+   bahasa tanpa keluar dr menu Download). */
+body.dl-open #langSel { z-index: 9300; }
+
+/* ==================== TOMBOL MODE TAMPILAN (Mobile/Desktop) ====================
+   Menggantikan wm-tag di wm-foot: toggle layout mobile di desktop.
+   Label = mode tujuan. Paksa mobile = kolom aplikasi menyempit ke tengah
+   dengan BAR HITAM di kiri-kanan (ala layar HP), kartu portrait penuh
+   vertikal (rasio sama dgn desktop). */
+.wm-mode-btn { position: fixed; bottom: 18px; right: 18px; z-index: 8900;
+  /* forced mobile: tombol masuk ke area kolom, gak di black bar */
+  /* FIXED: selalu terlihat tanpa scroll ke bawah (ronde 40 revisi) */
+  margin: 0; padding: 7px 18px; border: 1px solid var(--line);
+  border-radius: 999px; background: transparent; color: var(--muted);
+  font: inherit; font-size: .8rem; letter-spacing: .1em; cursor: pointer;
+  white-space: nowrap; transition: color .2s ease, border-color .2s ease; }
+.wm-mode-btn:hover { color: var(--cream); border-color: var(--gold); }
+
+/* --- paksa mobile di layar lebar: kolom tengah + bar hitam --- */
+body.wm-mobile .wmenu { background: #000; height: auto; min-height: 100vh;
+  overflow-x: hidden; }   /* height auto: halaman BISA discroll ke bawah */
+/* KRITIS: scope-nya war menu SAJA — dulu body.wm-mobile .wm-bg mengenai
+   SEMUA backdrop termasuk #langSel (layar bahasa blackscreen di mobile) */
+body.wm-mobile #mathMenu .wm-bg, body.wm-mobile #physMenu .wm-bg,
+body.wm-mobile #mathMenu .wm-scrim, body.wm-mobile #physMenu .wm-scrim {
+  display: none !important;   /* war menu: hitam murni (ronde 40 revisi) */ }
+body.wm-mobile .wm-inner { max-width: min(100vw, 500px); margin: 0 auto;
+  min-height: 100vh; padding: 22px 18px 16px; gap: 16px; }
+body.wm-mobile .wm-grid { flex-wrap: wrap; overflow-x: visible; row-gap: 14px;
+  justify-content: center; padding-bottom: 12px; }
+body.wm-mobile .wm-grid .wtile { flex: 0 0 auto; width: min(100%, calc(78vh * 0.615));
+  height: auto; aspect-ratio: 123 / 200; margin: 0 auto; }
+body.wm-mobile .wm-foot { flex-direction: column; align-items: flex-start; gap: 8px; }
+/* semua panel tool/lab ikut kolom HP: hitam di sisi, konten ketengah */
+body.wm-mobile { background: #000; }
+body.wm-mobile .panel-wrap.active,
+body.wm-mobile #fieldSel { max-width: 620px; margin: 0 auto; background: #000; }
+body.wm-mobile .wm-cat { flex-wrap: wrap; row-gap: 6px; }
+body.wm-mobile .wm-mode-btn { right: max(14px, calc(50vw - 296px)); }
+body.wm-mobile .wm-head { flex-wrap: wrap; gap: 10px 16px; }
+/* bar atas dibatasi ke area view mobile — GAK tembus ke black bar */
+body.wm-mobile header { width: min(100vw, 620px); margin: 0 auto;
+  left: 0; right: 0; }
+
+
+/* ==================== MODE PAKSA MOBILE (CSS nesting) ===================
+   Seluruh aturan mobile (media <=900/768/700/600) disarang LANGSUNG di
+   dalam body.wm-mobile tanpa wrapper @media: mode paksa Mobile di
+   desktop mendapat UI mobile yang sama seperti zoom >150%, termasuk
+   tool & lab Monte Carlo. Disalin verbatim dari blok media asli. */
+body.wm-mobile {
+  /* --- blok media asli --- */
+.panel-wrap.active{grid-template-columns:1fr}
+  /* --- blok media asli --- */
+
+  .kp-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .kbtn.submit {
+    grid-column: span 5;
+  }
+
+  /* --- blok media asli --- */
+ #ppplot { height: 460px; } 
+  /* --- blok media asli --- */
+
+  .wm-head { flex-wrap: wrap; gap: 10px 16px; }
+  .wm-cat { gap: 18px; margin-top: 30px; }
+
+  /* --- blok media asli --- */
+
+  /* zoom-friendly: tinggi card FLUID (dulu height:auto bikin tile kolaps
+     jadi selebar caption = "card ilang" di zoom 175-200%) */
+  .wmenu { height: auto; }
+  .wm-inner { padding: 22px 18px 16px; gap: 16px; }
+  .wtile { flex: 0 0 clamp(170px, 26vw, 246px); min-width: 0; }
+  .wm-grid .wtile { width: 100%; max-width: 560px; margin: 0 auto;
+    height: auto; aspect-ratio: 123 / 200; }
+  .wm-foot { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+  /* --- blok media asli --- */
+
+  .wm-inner { padding: 12px 10px 8px; gap: 10px; }
+  .wm-back { margin: 14px 4px 0 0; }
+  .wtile { flex: 0 0 100%; width: 100%; max-width: 560px; margin: 0 auto; }
+  /* lapis alat: tinggi tetap proporsional layar, gak ngikutin 100vh */
+  .wm-grid { align-items: flex-start; }
+  .wm-grid .wtile { height: auto; aspect-ratio: 123 / 200; }
+  .wt-cap { padding: 16px 6px 10px; gap: 4px; }
+  .wt-title { font-size: .8rem; letter-spacing: .08em; text-indent: .08em; }
+  .wt-sub { font-size: .54rem; letter-spacing: .24em; text-indent: .24em; }
+  .wm-foot { font-size: .58rem; }
+  .wm-hints { display: none; }          /* hint keyboard gak relevan di HP */
+  /* panel tool/kalkulator: padding & tipografi hemat ruang */
+  .card { padding: 14px 12px; border-radius: 12px; }
+  .card h2 { font-size: 1rem; }
+  .lab-row { gap: 8px; }
+  #toolPlot { max-height: 46vh; }
+
+  /* --- blok media asli --- */
+
+  .fsel { height: auto; }
+  .fsel-cols { flex-direction: column; }
+  .fs-side { min-height: 240px; }
+  .fsel-divider { display: none; }
+
+  /* --- blok media asli --- */
+
+  #toolForm.grid2 { grid-template-columns: 1fr; column-gap: 0; }
+
+  /* --- blok media asli --- */
+
+  #langSel .l-inner { padding: 18px 16px 12px; }
+  #langSel .l-widget { width: 230px; margin-top: 3vh; }
+  .l2-item { gap: 10px; padding: 6px 10px; }
+  .l2-item img, .l-dd-flag { width: 36px; height: 24px; }
+  .l2-item .l-name { font-size: .92rem; }
+  #langSel .l-dd.open { max-height: 380px; }
+  #langSel .l-fact { max-width: 88vw; }
+
+  /* --- blok media asli --- */
+
+  /* pilih bidang: math atas, fisika bawah */
+  #fieldSel .fsel-cols { flex-direction: column; height: auto; }
+  #fieldSel .fs-side { min-height: 44svh; }
+
+  .wmenu { height: auto; min-height: 100svh; }
+  .wm-inner { height: auto; min-height: 100svh; gap: 14px; }
+  .wm-grid { flex-wrap: wrap; overflow: visible; row-gap: 14px;
+    justify-content: center; padding-bottom: 12px; }
+  /* 1 kolom: card sepert lebar, tinggi proporsional (gak raksasa) */
+  .wm-grid .wtile { flex: 0 0 100%; width: 100%; max-width: 560px; margin: 0 auto;
+    height: auto; aspect-ratio: 123 / 200; }
+  /* 2 kolom: dua card portrait per baris */
+  body.mcols-2 .wm-grid .wtile { flex: 0 0 calc(50% - 6px);
+    height: auto; aspect-ratio: 123 / 200; }
+
+  /* bar atas muat di zoom >150% */
+  header { padding: 10px 12px; row-gap: 6px; flex-wrap: wrap;
+    justify-content: center; }
+  .hleft { gap: 10px; flex-wrap: wrap; justify-content: center; width: 100%; }
+  .hright { width: 100%; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .logo { font-size: 1.05rem; }
+  .logo span { font-size: .85rem; margin-left: 2px; }
+  #mainNav { gap: 4px; }
+  .tab { padding: 6px 10px; font-size: .8rem; }
+  #themeSw button { padding: 4px 8px; font-size: .68rem; }
+
+  /* --- blok media asli --- */
+
+  .wm-cols-btn { display: inline-block; }
+
+  /* --- blok media asli --- */
+
+  header { position: sticky; top: 0; }
+  .wm-cat { flex-wrap: wrap; row-gap: 0; }
+  .cat-btn { white-space: normal; }
+  #toolPlot { height: 340px; max-height: none; }
+
+  /* --- blok media asli --- */
+
+  header { backdrop-filter: none; }
+  [data-theme="gold"] header, [data-theme="black"] header {
+    background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), var(--head); }
+  [data-theme="light"] header {
+    background: linear-gradient(rgba(255, 250, 240, .78), rgba(255, 250, 240, .78)), var(--head); }
+  .panel-wrap.active > .card { min-width: 0; max-width: 100%; }
+  #physLab .card { overflow-x: auto; }
+  .pstat-lead { overflow-x: auto; }
+  .pstat-lead .katex-display { margin: 0; }
+  .pstat-grid { grid-template-columns: 1fr; }
+  #ppplot { max-width: 100%; }
+
+  /* --- blok media asli --- */
+
+  #donSel.audit-fs .d-audit { padding: 16px 16px 24px; }
+  #donSel.audit-fs .d-aud-intro, #donSel.audit-fs .d-aud-invite,
+  #donSel.audit-fs .d-aud-warn { font-size: 1.08rem; }
+  #donSel.audit-fs .d-audit > summary { font-size: 1.22rem; }
+
+  /* --- blok media asli --- */
+
+  #dlSel .dl-inner { padding: 18px 16px 14px; }
+  #dlSel .dl-card, #dlSel .dl-steps { padding: 14px 16px; }
+
+  /* --- blok media asli --- */
+
+  #dlSel .dl-inner { padding: 70px 16px 14px; }
+
+}
+
+
+/* ---- mode paksa mobile: backlight emas & vignette MATI ----
+   .wmenu::after (backlight radial emas, -6% s/d +6% lebar menu) adalah
+   sumber glow yang bocor ke area bar — matikan di mode paksa. */
+body.wm-mobile .wmenu::after, body.wm-mobile .wmenu::before { display: none; }
+/* 1 Card / 2 Card tetap bekerja di mode paksa: dup rule (flex 100%)
+   menang di atas mcols-2 biasa — lawan dgn specificity lebih tinggi */
+body.wm-mobile.mcols-2 .wm-grid .wtile { flex: 0 0 calc(50% - 6px); width: auto; }
+/* ---- language screen di mode paksa mobile ----
+   backdrop #langSel HIDUP kembali (scope hide cuma war menu), konten
+   dibatasi ke kolom, dan tombol mode menggantikan hint ENTER. */
+body.wm-mobile #langSel .l-inner { max-width: 620px; margin: 0 auto; }
+body.wm-mobile #langSel .l-manifesto { left: 50%; transform: translateX(-50%);
+  right: auto; width: min(100vw, 620px); }
+body.wm-mobile #langSel .l-factwrap { left: 50%; transform: translateX(-50%);
+  width: min(100vw, 620px); }
+body.wm-mobile #langSel .l-foot { left: 50%; transform: translateX(-50%);
+  width: min(100vw, 620px); }
+/* tombol mode di layar bahasa: tampil di KEDUA mode. Desktop: inline di
+   awal .l-foot (sebelum hint ENTER) — position:static untuk NGALAHIN
+   position:fixed right punya .wm-mode-btn (dulu numpuk di NABLA WORKSPACE).
+   Mode paksa mobile: fixed pojok kiri bawah kolom, menggantikan hint
+   ENTER (kbd+hint di-hide di bawah). */
+.lang-mode-btn { display: inline-block; position: static; padding: 7px 18px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: rgba(0,0,0,.6); color: var(--cream); font: inherit;
+  font-size: .8rem; letter-spacing: .1em; cursor: pointer; }
+.lang-mode-btn:hover { color: var(--gold); border-color: var(--gold); }
+body.wm-mobile .lang-mode-btn { position: fixed;
+  bottom: 18px; left: max(14px, calc(50vw - 296px)); right: auto; z-index: 9100; }
+body.wm-mobile .lang-mode-btn:hover { color: var(--gold); border-color: var(--gold); }
+/* hint ENTER pilih bahasa di-hide di KEDUA mode (desktop & mobile) —
+   dulu cuma di mobile; hint-nya jadi redundan dengan tombol mode.
+   Span hint-nya GAK punya class .hint di HTML — target via data-i18n. */
+#langSel .l-foot .wm-kbd,
+#langSel .l-foot .hint,
+#langSel .l-foot [data-i18n="langsel.hint"] { display: none; }
+
+/* ---- mode paksa mobile: backdrop bahasa & loading screen fit kolom ----
+   Bukan imagenya yang diresize — cara browser menampilkannya: #langSel
+   SELURUHNYA dikunci ke kolom 620px + overflow hidden, jadi backdrop
+   (inset -6% + scale), vignette, scrim, DAN video Indonesia (fitVideoBox
+   ngukur rect parent) otomatis fit kolom — gak ada yang tembus ke bar
+   hitam. #loadScreen idem. */
+body.wm-mobile #langSel {
+  left: 50%; right: auto; width: min(100vw, 620px);
+  margin-left: calc(min(100vw, 620px) / -2);
+  overflow: hidden; background: #000;
+}
+body.wm-mobile #langSel .wm-bg {
+  /* scale(1.15) desktop bikin foto ke-zoom & ndaglu — di kolom: fit */
+  transform: none;
+}
+body.wm-mobile #loadScreen {
+  left: 50%; right: auto; width: min(100vw, 620px);
+  margin-left: calc(min(100vw, 620px) / -2);
+  overflow: hidden;
+}
+
+/* ==================== ABOUT US (pola #donSel, tema flat) ====================
+   Latar teal flat #225659 + teks gold #f2e394 (sama dgn layar donasi).
+   Profil tim (foto bulat dr /about_us_menu) + form kritik/lapor bug ->
+   /api/feedback. Tidak menyentuh mesin tools sama sekali. */
+#aboutSel { position: fixed; inset: 0; z-index: 9000; display: none; }
+#aboutSel.active { display: block; }
+#aboutSel .lmenu { position: absolute; inset: 0; }
+#aboutSel .wm-bg { position: absolute; inset: 0;
+  background: #225659 !important; background-image: none !important;
+  /* WAJIB: base .wm-bg punya filter brightness(1.5) — teal jadi terang
+     kalau gak di-reset. Flat #225659 PERSIS kayak layar donasi */
+  filter: none; transform: none; }
+#aboutSel .l-vig, #aboutSel .l-scrim { display: none !important; }
+body.about-open header { z-index: 9100; }
+
+#aboutSel .a-inner { position: relative; z-index: 2; height: 100%;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 74px 38px 16px; gap: 0; overflow-y: auto;
+  scrollbar-width: thin; }
+#aboutSel .a-inner::-webkit-scrollbar { width: 6px; }
+#aboutSel .a-inner::-webkit-scrollbar-thumb { background: rgba(250, 226, 140, .45);
+  border-radius: 3px; }
+#aboutSel .a-inner::-webkit-scrollbar-track { background: transparent; }
+
+/* judul "About us" DIHAPUS (request: biar simpel) — .a-team langsung
+   jadi elemen pertama .a-inner */
+
+/* ---- profil tim: foto bulat + nama/kontribusi/instansi ---- */
+#aboutSel .a-team { display: flex; justify-content: center; flex-wrap: wrap;
+  gap: 4vh 7vw; width: 100%; margin: 2.2vh 0 3.4vh; }
+#aboutSel .a-person { display: flex; align-items: center; gap: 24px; }
+#aboutSel .a-photo { display: block; width: 150px; height: 150px;
+  border-radius: 50%; overflow: hidden; flex: none;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .35); background: #ecd9b8; }
+#aboutSel .a-photo img { width: 100%; height: 100%; object-fit: cover;
+  object-position: center; display: block; user-select: none;
+  /* PNG profil punya mask bulat transparan baked di file (lingkaran foto
+     cuma ~78% lebar PNG). Scale 1.32 biar lingkaran foto NGEBLANGSUNG
+     circle cream di belakangnya — gak ada ring keliatan di tepi */
+  transform: scale(1.32); }
+#aboutSel .a-meta { display: flex; flex-direction: column; gap: 5px; }
+#aboutSel .a-name { color: #f2e394; font-weight: 700; font-size: 1.38rem;
+  line-height: 1.3; text-shadow: 0 2px 5px rgba(0, 0, 0, .26); }
+#aboutSel .a-role, #aboutSel .a-org { color: #efe3c4; font-size: 1.16rem;
+  line-height: 1.45; text-shadow: 0 1px 4px rgba(0, 0, 0, .22); }
+
+/* ---- note: naskah pemilik web ---- */
+#aboutSel .a-note { color: #f2e394; font-size: 1.26rem; line-height: 1.62;
+  text-align: center; max-width: min(92vw, 1150px); margin: 0 0 3vh;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, .28); }
+
+/* ---- form kritik / lapor bug (ala form audit donasi) ---- */
+#aboutSel #aboutForm { width: min(92vw, 900px); margin: 0 0 12px; }
+#aboutSel .a-fields { display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: 10px 26px; }
+#aboutSel .a-fields .lbl, #aboutSel .a-msglabel .lbl { display: block;
+  font-size: .95rem; color: #f2e5c7; margin-bottom: 3px; letter-spacing: .02em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .22); }
+#aboutSel .a-fields input, #aboutSel .a-fields select,
+#aboutSel .a-msglabel textarea { width: 100%; padding: 8px 2px;
+  background: transparent; border: 0;
+  border-bottom: 1px solid rgba(250, 226, 140, .42);
+  color: #fdf6df; font: inherit; font-size: 1.02rem; border-radius: 0; }
+#aboutSel .a-fields input:focus, #aboutSel .a-fields select:focus,
+#aboutSel .a-msglabel textarea:focus { outline: none;
+  border-bottom-color: rgba(250, 226, 140, .95); }
+#aboutSel .a-fields select { cursor: pointer; }
+#aboutSel .a-fields select option { background: #225659; color: #fdf6df; }
+#aboutSel .a-msglabel { display: block; margin-top: 12px; }
+#aboutSel .a-msglabel textarea { resize: vertical; min-height: 84px;
+  border: 1px solid rgba(250, 226, 140, .42); border-radius: 6px;
+  padding: 10px 12px; line-height: 1.55; margin-top: 4px; }
+#aboutSel .a-msglabel textarea:focus { border-color: rgba(250, 226, 140, .95); }
+#aboutSel .a-send { display: block; margin: 2vh auto 0; padding: 12px 52px;
+  border: 1px solid rgba(250, 226, 140, .55); border-radius: 999px;
+  background: rgba(0, 0, 0, .18); color: #f2e394; font: inherit;
+  font-weight: 700; letter-spacing: .08em; cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease; }
+#aboutSel .a-send:hover { transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .3);
+  border-color: rgba(250, 226, 140, .95); }
+#aboutSel .a-send:disabled { opacity: .55; cursor: wait; transform: none; }
+#aboutSel #aboutMsg { color: #d9e6e2; font-size: .95rem; text-align: center;
+  margin: 8px 0 0; }
+#aboutSel #aboutMsg.err { color: #ffb08a; }
+#aboutSel #aboutMsg.ok { color: #b8e6a0; }
+
+#aboutSel .l-foot { display: flex; align-items: center; gap: 12px;
+  width: 100%; margin-top: auto; padding-top: 12px;
+  color: rgba(233, 219, 186, .85); font-size: .95rem; }
+#aboutSel .l-foot .l-tag { margin-left: auto; white-space: nowrap; opacity: .75; }
+
+/* ---- layar kecil & mode paksa mobile: kolom 620px ala #langSel ---- */
+@media (max-width: 900px) {
+  #aboutSel .a-inner { padding: 64px 16px 14px; }
+  #aboutSel .a-photo { width: 110px; height: 110px; }
+  #aboutSel .a-name { font-size: 1.15rem; }
+  #aboutSel .a-role, #aboutSel .a-org { font-size: 1rem; }
+  #aboutSel .a-note { font-size: 1.06rem; }
+  #aboutSel .a-fields { grid-template-columns: 1fr; }
+}
+body.wm-mobile #aboutSel {
+  left: 50%; right: auto; width: min(100vw, 620px);
+  margin-left: calc(min(100vw, 620px) / -2);
+  overflow: hidden; background: #000;
+}
+body.wm-mobile #aboutSel .a-inner { max-width: 620px; margin: 0 auto;
+  padding: 56px 16px 12px; }
+body.wm-mobile #aboutSel .a-team { gap: 2.4vh 4vw; margin: 1.6vh 0 2.4vh; }
+body.wm-mobile #aboutSel .a-photo { width: 92px; height: 92px; }
+body.wm-mobile #aboutSel .a-person { gap: 14px; }
+body.wm-mobile #aboutSel .a-name { font-size: 1.05rem; }
+body.wm-mobile #aboutSel .a-role, body.wm-mobile #aboutSel .a-org {
+  font-size: .92rem; }
+body.wm-mobile #aboutSel .a-note { font-size: .98rem; margin-bottom: 2vh; }
+body.wm-mobile #aboutSel .a-title { font-size: 1.5rem; }
+
+/* ---- About us desktop: judul LEFT-LEANING ----
+   Dua-duanya foto di kiri blok + lebar teks beda -> midpoint foto gak
+   sama dgn center kontainer. Judul DIGESER via JS (about.js alignTitle)
+   biar center-nya persis di midpoint kedua foto — layout person tetap
+   sesuai desain referensi (foto kiri semua). */
+
+/* ---- donasi & download di mode paksa mobile: kunci ke kolom 620px ----
+   Dulu full-window (tembus ke bar hitam) — sekarang pola yang sama dgn
+   #langSel/#aboutSel: kolom + bar hitam di sisi. Header mobile wrap jadi
+   TINGGI -> padding-top 120px biar judul gak ketutup bar atas. */
+body.wm-mobile #donSel, body.wm-mobile #dlSel {
+  left: 50%; right: auto; width: min(100vw, 620px);
+  margin-left: calc(min(100vw, 620px) / -2);
+  overflow: hidden; background: #000;
+}
+body.wm-mobile #donSel .d-inner { max-width: 620px; margin: 0 auto;
+  padding: 120px 16px 14px; }
+body.wm-mobile #donSel .d-text { max-width: 100%; }
+body.wm-mobile #donSel .d-audit { width: 100%; }
+body.wm-mobile #dlSel .dl-inner { max-width: 620px; margin: 0 auto;
+  padding: 120px 16px 14px; }
+
+/* ---- About us di mode paksa mobile: rapikan ----
+   Dulu: team wrap sembarangan (foto gak segaris) + form 3 kolom 900px
+   kepotong di kolom 620px. Sekarang: person di-stack rapi (lebar sama ->
+   foto segaris), form 1 kolom selebar kolom. */
+body.wm-mobile #aboutSel .a-inner { padding: 120px 16px 14px; }
+body.wm-mobile #aboutSel .a-team { flex-direction: column;
+  align-items: center; gap: 18px; margin: 1.8vh 0 2.4vh; }
+body.wm-mobile #aboutSel .a-person { width: min(100%, 330px); }
+body.wm-mobile #aboutSel #aboutForm { width: min(100%, 556px); }
+body.wm-mobile #aboutSel .a-fields { grid-template-columns: 1fr;
+  gap: 8px 0; }
+
+/* ---- natural mobile (window <= 900): sama dgn mode paksa ---- */
+@media (max-width: 900px) {
+  #aboutSel .a-team { flex-direction: column; align-items: center;
+    gap: 18px; }
+  #aboutSel .a-person { width: min(100%, 330px); }
+  #aboutSel #aboutForm { width: min(100%, 556px); }
+}
+
+/* ---- form audit donasi fullscreen: fix mobile & scrollbar hantu ----
+   1) .d-inner tetap overflow-y:auto di belakang panel fixed -> scrollbar
+      hantu stuck (thumb gak gerak karena kontennya di-opacity-kan).
+      audit-fs = panel fixed punya scroll sendiri -> d-inner gak usah scroll.
+   2) Mode paksa mobile: panel fixed inset 0 nempel VIEWPORT = tembus ke
+      bar hitam. Dikunci ke kolom 620px (teknik sama dgn overlay lain),
+      padding-top 120px karena header mobile wrap jadi tinggi. */
+#donSel.audit-fs .d-inner { overflow: hidden; }
+body.wm-mobile #donSel.audit-fs .d-audit {
+  left: 50%; right: auto; width: min(100vw, 620px);
+  margin-left: calc(min(100vw, 620px) / -2);
+  padding: 120px 16px 24px;
+}
+body.wm-mobile #donSel.audit-fs .d-audit-in { max-width: 100%; }
+/* foto upload + fields disusun vertikal biar muat di kolom sempit */
+body.wm-mobile #donSel.audit-fs .d-aud-row { flex-direction: column;
+  align-items: center; }
+body.wm-mobile #donSel.audit-fs .d-aud-fields { grid-template-columns: 1fr;
+  width: 100%; }
+body.wm-mobile #donSel.audit-fs .d-photo-circ { width: 120px; height: 120px; }
+body.wm-mobile #donSel.audit-fs .d-aud-send { width: 100%;
+  padding: 12px 20px; box-sizing: border-box; }
+
+/* natural mobile (<= 900): penyesuaian sama biar form gak sesak */
+@media (max-width: 900px) {
+  #donSel.audit-fs .d-aud-row { flex-direction: column; align-items: center; }
+  #donSel.audit-fs .d-aud-fields { grid-template-columns: 1fr; width: 100%; }
+  #donSel.audit-fs .d-photo-circ { width: 120px; height: 120px; }
+}
+
+/* ==================== CALC GUARD (anti-spam kalkulasi) ====================
+   Pesan kecil merah di bawah tombol kalkulasi saat user spam klik dalam
+   cooldown 5 detik. Tip = position: fixed nempel di bawah tombol (aman
+   di panel scroll), z 9500 di atas semua panel tool. */
+.calc-wait-tip { position: fixed; z-index: 9500; pointer-events: none;
+  padding: 6px 14px; border-radius: 8px; background: rgba(22, 9, 9, .93);
+  border: 1px solid #ff8585; color: #ffa1a1; font-size: .85rem;
+  letter-spacing: .02em; box-shadow: 0 6px 18px rgba(0, 0, 0, .4);
+  white-space: nowrap; }
+.calc-wait-tip[hidden] { display: none; }
+
+/* ==================== TAG "CUSTOM" parameter terkunci ====================
+   Tool Integrals & Limits: operator di mathfield yang membawa nilai
+   sendiri (batas \int / \sum, titik \lim, orde \frac{d^2}{dx^2})
+   mengunci field parameter yang tumpang-tindih: input disabled +
+   label kecil "Custom" emas di samping nama parameter. */
+.custom-tag { display: inline-block; font-size: .6rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: #120b02;
+  background: linear-gradient(180deg, #f5d98a, #e0b04a); border-radius: 4px;
+  padding: 1px 7px; margin-left: 7px; vertical-align: 1px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3); }
+#toolForm input.param-custom, #toolForm select.param-custom {
+  opacity: .38; cursor: not-allowed; }

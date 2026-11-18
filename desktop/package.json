@@ -1,0 +1,52 @@
+{
+  "name": "nabla-workspace",
+  "productName": "Nabla Workspace",
+  "version": "1.0.0",
+  "description": "Nabla Workspace - Laboratorium matematika & fisika (versi desktop)",
+  "main": "main.js",
+  "author": "Nabla Workspace",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --dir"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "workspace.nabla.desktop",
+    "productName": "Nabla Workspace",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "icon.ico"
+    ],
+    "extraResources": [
+      {
+        "from": "../Nabla Workspace x64 Offline/Nabla Workspace",
+        "to": "sidecar",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "icon": "icon.ico",
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "rcedit": "^5.0.2"
+  }
+}

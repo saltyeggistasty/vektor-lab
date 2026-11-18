@@ -1,0 +1,58 @@
+========================================================
+CREDIT COVER ART TOOL CARD (menu_screen/lab_*.jpg)
+Dipakai untuk proyek personal non-komersial "Nabla Workspace".
+========================================================
+
+SUMBER: Unsplash (Unsplash License — bebas dipakai, atribusi
+tidak wajib tapi diapresiasi). Foto diambil via halaman
+unsplash.com/photos/<ID>/download.
+
+  lab_integral.jpg  — gYrYa37fAKI  papan tulis rumus (E=mc^2 dkk.)
+  lab_matrix.jpg    — photo-1526374965328  matrix code hijau (Markus Spiske)
+  lab_poly.jpg      — M6sDLz3MCmE  loop roller coaster (Jonny Gios)
+  lab_ode.jpg       — bxE-z_T87c0  kurva neon RGB di hitam (Mitchell Y)
+  lab_stats.jpg     — fiXLQXAhCfk  candlestick chart (Maxim Hopman)
+  lab_taylor.jpg    — ngssXH33ve0  busur derajat + papan tulis
+  lab_modmath.jpg   — YHICQTbKSzc  keyboard mesin Enigma
+  lab_entropy.jpg   — DGwunSOMMbk  serat optik biru (Kashish Lamba)
+  lab_es.jpg        — OgvqXGL7XO4  bola plasma (purple plasma ball)
+  lab_emind.jpg     — TqueZSSAloY  gulungan kawat tembaga (Guille B)
+  lab_thermo.jpg    — _jLUt6T_bbc  lokomotif uap
+  lab_heatexp.jpg   — oCLooaRxys0  fluida oranye menyala (George Pixel)
+  lab_qm.jpg        — oUZKyjdF9EM  model atom di latar hitam
+  lab_rel.jpg       — RVc7KCmFRdc  gerhana matahari (diamond ring)
+  lab_proj.jpg      — y8yDDSL4Dmo  Jet d'Eau, Jenewa (air melengkung)
+  lab_hydro.jpg     — -k5G3k-juS8  laut dari udara (aerial ocean)
+  lab_optics.jpg    — kBzQNk9AgOg  spektrum pelangi disersi
+  lab_shm.jpg       — d7SxBxEAOfU  newton's cradle
+
+SUMBER: Wikimedia Commons (file terkenal, lisensi CC):
+
+  lab_complex.jpg   — "Mandel zoom 00 mandelbrot set"
+                      oleh Wolfgang Beyer — CC BY-SA 3.0
+  lab_schwartz.jpg  — "Black hole - Messier 87 crop max res"
+                      oleh Event Horizon Telescope — CC BY 4.0
+
+Catatan: hanya cover card TOOLS yang diganti; cover umbrella
+(lab_umb_*.jpg) dan card utama (mc_*.jpg) tetap art placeholder
+generatif (gen_art.py).
+
+========================================================
+VERSI STYLIZE "NAGAI-FY" (menu_screen/tools_card_art/*.jpg)
+========================================================
+20 file di tools_card_art/ diolah pakai script make_tool_art.py
+(PIL + OpenCV): bilateral smoothing, posterisasi 28 warna, tint
+shadow navy / highlight peach ala Hiroshi Nagai, SATURASI 2.0,
+grain tipis. Bake 800x1280 (5:8 portrait, mendekati rasio frame
+kartu biar minim overzoom).
+
+Sumber per file (menu_screen/lab_*.jpg):
+  - 13 file = foto internet (daftar di atas)
+  - 7 file diganti art pilihan user (2026-10-27): complex
+    (bidang kompleks), modmath (cover buku Real-World
+    Cryptography), stats (permukaan gaussian 3D), taylor
+    (poster Taylor series), thermo (roket Saturn V), matrix
+    (diagram Minkowski), qm (permukaan potensial V(x)).
+Kalau mau re-tune gaya: edit parameter di make_tool_art.py lalu
+jalankan ulang. Ada file referensi video igexport-*.mp4 di
+folder tools_card_art — bukan dipakai web, cuma referensi user.

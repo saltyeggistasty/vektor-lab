@@ -1,0 +1,25 @@
+{
+  "_meta": "Tim 'Supported by Love' di menu donasi. Isi 'name' & 'roles' (array baris). 'photo' = path gambar di /menu_screen/... (opsional, kosongkan untuk lingkaran inisial). 'initial' = huruf avatar kalau tanpa foto.",
+  "team": [
+    {
+      "name": "Affif \u2022 Afip",
+      "initial": "A",
+      "photo": "",
+      "roles": [
+        "Pencetus Komitmen, Logistik",
+        "Mitra Cybersecurity Unit Perlindungan Anak & Perempuan DFM Malaysia",
+        "Indonesia, STMIK IKMI Cirebon"
+      ]
+    },
+    {
+      "name": "Muhammad Abyad \u2022 Abi",
+      "initial": "M",
+      "photo": "",
+      "roles": [
+        "Kawan Perencana dan Pengelola",
+        "Relawan Tim SAR Bencana Sumatra (Bertugas di Salareh, Agam)",
+        "Indonesia, Universitas Padjadjaran \u2022 Pengurus HIMARUS 2025 \u2022 MENWA"
+      ]
+    }
+  ]
+}

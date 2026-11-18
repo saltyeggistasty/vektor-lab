@@ -1,0 +1,13 @@
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5002
+Press CTRL+C to quit
+NABLA_URL=http://127.0.0.1:5002/
+127.0.0.1 - - [02/Nov/2026 02:11:09] "GET /api/appinfo HTTP/1.1" 200 -
+127.0.0.1 - - [02/Nov/2026 02:12:28] "GET /api/appinfo HTTP/1.1" 200 -
+127.0.0.1 - - [02/Nov/2026 02:13:47] "GET /api/appinfo HTTP/1.1" 200 -
+127.0.0.1 - - [02/Nov/2026 02:15:06] "GET /api/appinfo HTTP/1.1" 200 -
+127.0.0.1 - - [02/Nov/2026 02:16:25] "GET /api/appinfo HTTP/1.1" 200 -
+127.0.0.1 - - [02/Nov/2026 02:17:43] "GET /api/appinfo HTTP/1.1" 200 -
+127.0.0.1 - - [02/Nov/2026 02:19:02] "GET /api/appinfo HTTP/1.1" 200 -

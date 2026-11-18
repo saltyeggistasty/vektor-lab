@@ -1,0 +1,25 @@
+{
+  "openrouter_api_key": "sk-or-v1-XXXX ISIKAN KEY LU DI SINI XXXX",
+  "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "fallback_models": [
+    "nvidia/nemotron-3.5-super-vl:free",
+    "google/gemma-4-31b-it:free"
+  ],
+  "temperature": 0.3,
+  "max_tokens": 1500,
+  "timeout": 90,
+  "audit_email": {
+    "to": "email-penerima-audit@gmail.com",
+    "user": "email-gmail-pengirim@gmail.com",
+    "app_password": "XXXX APP PASSWORD GMAIL (16 huruf) XXXX",
+    "smtp_host": "smtp.gmail.com",
+    "smtp_port": 587
+  },
+  "perf": {
+    "gpu": true,
+    "igpu": false,
+    "dpr_cap": 2,
+    "backdrop_blur": true,
+    "drift": true
+  }
+}

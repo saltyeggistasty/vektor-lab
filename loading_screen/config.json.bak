@@ -1,0 +1,54 @@
+{
+  "brand": "Nabla Workspace",
+
+  "rigged": true,
+  "min_duration_ms": 40000,
+  "slide_ms": 8000,
+  "fade_ms": 3000,
+
+  "max_wait_ms": 25000,
+  "shuffle": false,
+  "status_initial": "Menyiapkan lab",
+  "status_panels": "Menyiapkan tampilan lab",
+  "status_graph": "Menghitung grafik 3D bawaan",
+  "status_physics": "Menyiapkan simulasi fisika Monte Carlo",
+  "status_tidy": "Merapikan tampilan",
+
+  "slides": [
+    {
+      "file": "NABLA1.jpg",
+      "title": "Teorema Divergensi",
+      "subtitle": "Air hanya bisa keluar dari kolam jika ada sumber di dalamnya: fluks pada permukaan tertutup membocorkan isi di baliknya.",
+      "equation": "\\nabla\\cdot\\mathbf{E}\\;=\\;\\frac{\\rho}{\\varepsilon_0}",
+      "credit": "Nabla Workspace"
+    },
+    {
+      "file": "NABLA2.png",
+      "title": "Garis Magnet Tak Pernah Puntung",
+      "subtitle": "Aurora menari karena partikel mengikuti medan yang melengkung kembali ke kutub. Tidak bercabang, tak berujung.",
+      "equation": "\\nabla\\cdot\\mathbf{B}\\;=\\;0",
+      "credit": "Nabla Workspace"
+    },
+    {
+      "file": "NABLA3.png",
+      "title": "Potensial Bumi di Atas Kota",
+      "subtitle": "Setiap butir massa di semesta menyumbang potensial: gravitasi di titikmu adalah jumlah seluruh dunia yang menekuk ruang di sekitarmu.",
+      "equation": "\\Phi(\\mathbf{r})\\;=\\;-G\\iiint_V\\frac{\\rho(\\mathbf{r}')}{|\\mathbf{r}-\\mathbf{r}'|}\\,d^3\\mathbf{r}'",
+      "credit": "Nabla Workspace"
+    },
+    {
+      "file": "NABLA4.png",
+      "title": "Jembatan Tegangan Medan",
+      "subtitle": "Menara dan kabel berdiri karena tegangan terdistribusi rapi: setiap tarikan punya arah, dan tensor menjelaskannya di tiap titik.",
+      "equation": "\\sigma_{ij}\\;=\\;\\sum_{k=1}^{3}\\sum_{l=1}^{3}Q_{ik}Q_{jl}\\,\\sigma'_{kl}",
+      "credit": "Nabla Workspace, by Afif"
+    },
+    {
+      "file": "NABLA5.png",
+      "title": "Panas Menyusup di Fajar",
+      "subtitle": "Panas tidak pernah menunggu: ia menyusup dari butir ke butir tanah, tertiup angin lembah, lalu merata seketika matahari terbit.",
+      "equation": "\\frac{\\partial T}{\\partial t}\\;+\\;\\mathbf{u}\\cdot\\nabla T\\;=\\;\\alpha\\nabla^2 T\\;+\\;\\frac{Q}{\\rho c_p}",
+      "credit": "Nabla Workspace, by Afif"
+    }
+  ]
+}

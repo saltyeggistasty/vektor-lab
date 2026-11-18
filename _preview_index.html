@@ -1,0 +1,1244 @@
+<!doctype html>
+<html lang="id" data-theme="gold">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nabla Workspace, Kalkulus Multivariabel</title>
+<link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"gold"}catch(e){}</script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<script src="/static/mathlive.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+</head>
+<body>
+<!-- ============ LOADING SCREEN (slideshow art + equation, modular via loading_screen/config.json) ============ -->
+<div id="loadScreen" class="hidden">
+  <div class="ls-slides" id="lsSlides"></div>
+  <div class="ls-center">
+    <div class="ls-brand">∇ <span id="lsBrand">Nabla Workspace</span></div>
+    <div class="ls-title" id="lsTitle">Memuat...</div>
+    <div class="ls-sub" id="lsSub"></div>
+    <div class="ls-eq" id="lsEq"></div>
+    <div class="ls-barwrap"><div class="ls-bar" id="lsBar"></div></div>
+    <div class="ls-status" id="lsStatus">Menyiapkan lab...</div>
+  </div>
+  <div class="ls-credit" id="lsCredit"></div>
+</div>
+
+<header>
+  <div class="hleft">
+    <div class="logo">∇ <span>Nabla Workspace</span></div>
+    <nav id="mainNav">
+      <button class="tab active" data-tab="math">Matematika ∫</button>
+      <button class="tab" data-tab="physics">Fisika</button>
+    </nav>
+  </div>
+  <div class="hright">
+    <button class="tab" id="langTab">🌐 Bahasa</button>
+    <button class="tab" id="donBtn">❤ Donasi</button>
+    <div class="theme" id="themeSw">
+      <button data-t="gold">Golden</button>
+      <button data-t="light">Light</button>
+      <button data-t="black">Black</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ============ LANGUAGE SELECT (sebelum loading screen) ============
+     Lapisan overlay, BUKAN panel-wrap: pemanasan loader (open/close
+     panels) menyentuh .panel-wrap di belakangnya tanpa mengganggu
+     layar bahasa ini. fieldSel tetap .active sejak boot di baliknya.
+     Revamp: pilihan bahasa jadi DROPDOWN di kiri (gak nutupin backdrop);
+     label di atas tombol auto-cycle 7 bahasa; hover item = ganti
+     backdrop + caption. Teks NABLA besar dihapus. -->
+<section id="langSel" class="lyr active">
+  <div class="lmenu">
+    <div class="wm-bg" id="langBg0"></div>
+    <div class="wm-bg" id="langBg1"></div>
+    <div class="l-vig"></div>
+    <div class="l-scrim"></div>
+    <!-- manifesto anti-A.I: teks golden typewriter di dark backdrop (boot) -->
+    <div class="l-manifesto" id="langManifesto">
+      <span class="mani-text"><span id="maniTxt"></span><span class="mani-cursor" aria-hidden="true"></span></span>
+    </div>
+    <div class="l-inner">
+      <div class="l-widget">
+        <div class="l-pick" id="langPick">Pilih Bahasa</div>
+        <button class="l-dd-btn" id="langDdBtn" type="button" aria-expanded="false">
+          <img class="l-dd-flag" id="langDdFlag" src="/menu_screen/flags/united_kingdom.jpg" alt="" draggable="false">
+          <span class="l-dd-name" id="langDdName">English</span>
+          <span class="l-dd-chev" aria-hidden="true"></span>
+        </button>
+        <div class="l-dd" id="langDd">
+          <div class="l-dd-list" id="langList"></div>
+        </div>
+      </div>
+      <div class="l-factwrap">
+        <div class="l-fact" id="langFact"></div>
+      </div>
+      <div class="l-foot">
+        <span class="wm-kbd">ENTER</span>
+        <span data-i18n="langsel.hint">pilih bahasa untuk mulai</span>
+        <span class="l-tag">Nabla Workspace</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DONASI (overlay ala layar bahasa, dibuka dari tombol bar atas) ============
+     Pilihan: USDC / USDT / Monero (logo vector inline). Hover tombol -> alamat wallet
+     terbuka (dari /donation_addresses <- address.json di root, bisa disunting pemilik).
+     Klik tombol -> alamat disalin ke clipboard. Teks berikut adalah PERSIS naskah pemilik web. -->
+<section id="donSel">
+  <div class="lmenu">
+    <div class="wm-bg on" style="background-image:url('/menu_screen/don_backdrop.jpg'); background-position:52% 68%;"></div>
+    <div class="l-vig"></div>
+    <div class="l-scrim"></div>
+    <div class="d-inner">
+      <!-- d-head dihapus: brand NABLA & tombol X tidak perlu — tutup via
+           ESC / klik tab lain di bar atas (header sekarang tampil di
+           atas overlay lewat body.don-open) -->
+      <h2 class="d-title" data-i18n="donasi.title">DONASI</h2>
+
+      <div class="d-coins">
+        <button class="d-coin" data-coin="USDC" title="USDC">
+          <svg class="d-logo" viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="32" fill="#2775CA"/>
+            <circle cx="32" cy="32" r="25" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-dasharray="118 14"/>
+            <text x="32" y="43" font-size="30" font-weight="700" text-anchor="middle" fill="#fff" font-family="Inter, Segoe UI, sans-serif">$</text>
+          </svg>
+          <span class="d-coin-name">USDC</span>
+          <span class="d-net">Solana</span>
+          <span class="d-addr"><code class="d-addr-code"></code></span>
+        </button>
+
+        <button class="d-coin" data-coin="USDT" title="USDT">
+          <svg class="d-logo" viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="32" fill="#26A17B"/>
+            <text x="32" y="44.5" font-size="31" font-weight="700" text-anchor="middle" fill="#fff" font-family="Inter, Segoe UI, sans-serif">₮</text>
+          </svg>
+          <span class="d-coin-name">USDT</span>
+          <span class="d-net">TRC-20</span>
+          <span class="d-addr"><code class="d-addr-code"></code></span>
+        </button>
+
+        <button class="d-coin" data-coin="Monero" title="Monero">
+          <svg class="d-logo" viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="32" fill="#F26822"/>
+            <text x="32" y="40" font-size="26" font-weight="800" text-anchor="middle" fill="#fff" font-family="Inter, Segoe UI, sans-serif">M</text>
+            <path d="M20 47 h24 v5 h-24 z" fill="#fff" opacity="0.9"/>
+          </svg>
+          <span class="d-coin-name">MONERO</span>
+          <span class="d-net">XMR</span>
+          <span class="d-addr"><code class="d-addr-code"></code></span>
+        </button>
+      </div>
+
+      <div class="d-copytip" id="donCopyTip">✔ Alamat disalin</div>
+
+      <div class="d-text">
+        <!-- naskah donasi kini modular via i18n (kunci donasi.qa_* & donasi.note_*)
+             — teks di bawah cuma fallback; sunting di /i18n/<bahasa>.json -->
+        <p class="d-lead" data-i18n="donasi.lead">EEITSS! tunggu dulu! sebelum kamu ngira kita pake uang donasi untuk beli mobil McLaren, mari kita lihat faktanya:</p>
+        <p class="d-qa-q" data-i18n="donasi.qa_q">Kenapa Kita pakai mata uang crypto untuk nerima donasi?</p>
+        <p class="d-qa-a" data-i18n="donasi.qa_a">Karena donasi dalam bentuk itu memungkinkan siapapun, bisa mendukung kita tanpa terkendala birokrasi transfer bank yang sangat ribet atau mustahil, termasuk dari negara-negara yang terkena sanksi (contoh Russia). Banyak dari kalangan Aktivis dan Journalis juga memakai metode ini sebagai cara untuk menggalang dana secara anonim, mengirim uang tanpa khawatir dilacak.</p>
+
+        <!-- ===== PANEL AUDIT (collapsible, arrow ke bawah) =====
+             Form opsional buat donatur luar Indonesia: foto publik + identitas,
+             dikirim ke email pemilik web via /api/audit (SMTP di config.json).
+             Semua teks modular via kunci donasi.audit.* di /i18n. -->
+        <details class="d-audit" id="auditBox">
+          <summary>
+            <span data-i18n="donasi.audit.title">Verifikasi Donasi mu untuk transparansi (Opsional)</span>
+            <span class="chev" aria-hidden="true"></span>
+          </summary>
+          <div class="d-audit-in">
+            <p class="d-aud-intro" data-i18n="donasi.audit.intro">Tentang Transparansi: Pengisian form ini disarankan terutama untuk donatur yang berasal dari luar Indonesia. Ini opsional, tapi dilakukan untuk ningkatkan transparansi :)</p>
+            <p class="d-aud-warn" data-i18n="donasi.audit.warn">NOTE: Kami tidak menerima donasi untuk kepentingan politik!</p>
+            <p class="d-aud-invite" data-i18n="donasi.audit.invite">Kalau kamu udah donasi dan berasal dari luar Indonesia tapi belum di verifikasi, kamu bisa mengisi dan mengirim form berikut:</p>
+
+            <form id="auditForm" novalidate>
+              <div class="d-aud-row">
+                <label class="d-photo">
+                  <input type="file" id="auditPhoto" name="photo" accept="image/png,image/jpeg,image/webp" hidden>
+                  <span class="d-photo-circ" id="auditPhotoCirc">
+                    <img id="auditPhotoPrev" alt="" class="hidden">
+                    <span class="d-photo-txt" data-i18n="donasi.audit.photo">Publik Foto Kamu (File Upload)</span>
+                  </span>
+                </label>
+                <div class="d-aud-fields">
+                  <label><span class="lbl"><span data-i18n="donasi.audit.f_fullname">Nama Lengkap</span> *</span>
+                    <input id="aFullname" name="fullname" maxlength="200" required></label>
+                  <label><span class="lbl"><span data-i18n="donasi.audit.f_nickname">Nama Akrab/Panggilan</span> *</span>
+                    <input id="aNickname" name="nickname" maxlength="200" required></label>
+                  <label><span class="lbl" data-i18n="donasi.audit.f_human">Pengalaman Di bidang Kemanusiaan (Opsional)</span>
+                    <input id="aHuman" name="humanitarian" maxlength="2000"></label>
+                  <label><span class="lbl"><span data-i18n="donasi.audit.f_country">Asal Negara</span> *</span>
+                    <input id="aCountry" name="country" maxlength="200" required></label>
+                  <label><span class="lbl" data-i18n="donasi.audit.f_org">Nama Univ/Kota/Status/Pekerjaan (Opsional)</span>
+                    <input id="aOrg" name="orgstatus" maxlength="300"></label>
+                </div>
+              </div>
+
+              <label class="d-aud-chk">
+                <input type="checkbox" id="aPublic" name="public" value="ya">
+                <span data-i18n="donasi.audit.f_public">Apakah kamu ingin partisipasi dalam Audit publik/sosial? (Hasil Audit mu akan dibagikan ke publik selama 24 jam untuk transparansi publik)</span>
+              </label>
+
+              <button type="submit" class="primary d-aud-send" id="auditSend" data-i18n="donasi.audit.send">Kirim</button>
+              <p id="auditMsg" class="hint"></p>
+            </form>
+          </div>
+        </details>
+        <div class="d-note">
+          <p class="d-note-h" data-i18n="donasi.note_h">NOTE:</p>
+          <p class="d-note-b" data-i18n="donasi.note_b">Semua hasil donasi TIDAK akan dipakai untuk mengembangkan website ini. Melainkan, semua donasi akan kita bagikan kepada anak anak yang membutuhkan, kepada orang-orang dalam keadaan sulit namun memilih diam, dan juga komitmen di bidang Aktivisme Siber. Website ini hanyalah hasil dari hobi :)</p>
+        </div>
+      </div>
+
+      <div class="l-foot">
+        <span class="wm-kbd">ESC</span>
+        <span data-i18n="donasi.close">tutup</span>
+        <span class="l-tag">Nabla Workspace · Donasi</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FIELD SELECT (ala Battlefield) ============ -->
+<section id="fieldSel" class="panel-wrap active">
+  <div class="fsel">
+    <div class="fsel-cols">
+      <button class="fs-side" data-tab="math">
+        <span class="fs-art" style="background-image:url('/menu_screen/wm/wm_calculus.jpg')"></span>
+        <span class="fs-scrim"></span>
+        <span class="fs-cap">
+          <span class="fs-name">Matematika</span>
+          <span class="fs-sub">Kalkulus Multivariabel &middot; Grafik 3D</span>
+          <span class="fs-cta">Masuk &rarr;</span>
+        </span>
+      </button>
+      <button class="fs-side" data-tab="physics">
+        <span class="fs-art" style="background-image:url('/menu_screen/magnetic_field_cover.jpg')"></span>
+        <span class="fs-scrim"></span>
+        <span class="fs-cap">
+          <span class="fs-name">Fisika</span>
+          <span class="fs-sub">Electrodynamika &middot; Fluks Monte Carlo</span>
+          <span class="fs-cta">Masuk &rarr;</span>
+        </span>
+      </button>
+    </div>
+    <div class="fsel-divider"></div>
+    <div class="fs-topfade">
+      <div class="fsel-kicker">Nabla Workspace</div>
+      <h1 class="fsel-title"><span class="t1">PILIH</span> <span>BIDANG STUDIMU</span></h1>
+      <p class="fsel-sub">Setiap bidang tinggal lu masuk, nanti pindah lewat bar atas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MATH WAR STORIES ============ -->
+<section id="math" class="panel-wrap">
+  <div id="mathMenu" class="wmenu">
+    <div class="wm-bg" id="wmmBg0"></div>
+    <div class="wm-bg" id="wmmBg1"></div>
+    <div class="wm-scrim"></div>
+    <div class="wm-inner">
+      <!-- teks series ("Perangkat Fisika/Matematika") dihapus — posisi itu
+           dipakai tombol back arrow, jauh dari zona trigger bar-autohide -->
+      <div class="wm-head">
+        <button class="wm-back" id="mathBackBtn" type="button" title="Kembali ke menu sebelumnya (Esc)" aria-label="Kembali ke menu sebelumnya">&#8592;</button>
+      </div>
+      <div class="wm-grid" id="mathUmb">
+        <button class="wtile" data-umbrella="calculus"
+          data-img="/menu_screen/mc_calc.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/mc_calc.jpg" alt="Art integral ganda emas khas kalkulus">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulus</span>
+            <span class="wt-sub">1687 · Leibniz</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="algebra"
+          data-img="/menu_screen/new_math_menu/optimized/AljabarLinier.jpg" data-pos="50% 35%">
+          <img src="/menu_screen/new_math_menu/optimized/AljabarLinier.jpg" alt="Sampul art aljabar linier">
+          <span class="wt-cap">
+            <span class="wt-title">Aljabar Linear</span>
+            <span class="wt-sub">1858 · Cayley</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="ode"
+          data-img="/menu_screen/new_math_menu/optimized/DifferentialEquation.jpg" data-pos="50% 30%">
+          <img src="/menu_screen/new_math_menu/optimized/DifferentialEquation.jpg" alt="Sampul art persamaan diferensial">
+          <span class="wt-cap">
+            <span class="wt-title">Persamaan Diferensial</span>
+            <span class="wt-sub">1691 · Bernoulli</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="stats"
+          data-img="/menu_screen/new_math_menu/optimized/Statistics.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/new_math_menu/optimized/Statistics.jpg" alt="Sampul art statistika dan probabilitas">
+          <span class="wt-cap">
+            <span class="wt-title">Statistika & Probabilitas</span>
+            <span class="wt-sub">1654 · Pascal & Fermat</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="complex"
+          data-img="/menu_screen/new_math_menu/optimized/ComplexAnalysis.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/new_math_menu/optimized/ComplexAnalysis.jpg" alt="Sampul art analisis kompleks">
+          <span class="wt-cap">
+            <span class="wt-title">Analisis Kompleks</span>
+            <span class="wt-sub">1799 · Gauss</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="real"
+          data-img="/menu_screen/new_math_menu/RealAnalysis.jpeg" data-pos="50% 40%">
+          <img src="/menu_screen/new_math_menu/RealAnalysis.jpeg" alt="Sampul art analisis riil">
+          <span class="wt-cap">
+            <span class="wt-title">Analisis Riil</span>
+            <span class="wt-sub">1821 · Cauchy</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="discrete"
+          data-img="/menu_screen/new_math_menu/Cryptography.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/new_math_menu/Cryptography.jpg" alt="Sampul art matematika diskrit dan kriptografi">
+          <span class="wt-cap">
+            <span class="wt-title">Matematika Diskrit & Kripto</span>
+            <span class="wt-sub">1937 · Turing</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="info"
+          data-img="/menu_screen/new_math_menu/InformationTheory.jpeg" data-pos="50% 40%">
+          <img src="/menu_screen/new_math_menu/InformationTheory.jpeg" alt="Sampul art teori informasi">
+          <span class="wt-cap">
+            <span class="wt-title">Teori Informasi</span>
+            <span class="wt-sub">1948 · Shannon</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <!-- lapis kedua: pemilih alat per payung (data-umb = payung asal) -->
+      <div class="wm-grid wm-grid-tools hidden" id="mathToolsGrp" data-umb="calculus">
+        <button class="wtile" data-view="calc"
+          data-img="/menu_screen/mc_calc.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/mc_calc.jpg" alt="Art integral ganda emas Multivariable Calculus">
+          <span class="wt-cap">
+            <span class="wt-title">Multivariable Calculus</span>
+            <span class="wt-sub">1687 · Leibniz</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-view="graph"
+          data-img="/menu_screen/mc_graph.jpg" data-pos="50% 30%">
+          <img src="/menu_screen/mc_graph.jpg" alt="Wireframe permukaan paraboloid">
+          <span class="wt-cap">
+            <span class="wt-title">Grafik 3D</span>
+            <span class="wt-sub">1748 · Euler</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="integral"
+          data-img="/menu_screen/tools_card_art/integral.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/integral.jpg" alt="Naskah kalkulus Leibniz beserta sketsa diri">
+          <span class="wt-cap">
+            <span class="wt-title">Integral & Limit</span>
+            <span class="wt-sub">1665 · Newton</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="algebra">
+        <button class="wtile" data-tool="matrix"
+          data-img="/menu_screen/tools_card_art/matrix.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/matrix.jpg" alt="Engraving Melencolia I Durer dengan kubus ajaib">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Matriks</span>
+            <span class="wt-sub">1858 · Cayley</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="poly"
+          data-img="/menu_screen/tools_card_art/poly.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/poly.jpg" alt="Potret engraving Gerolamo Cardano penakar kubik">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Polinomial</span>
+            <span class="wt-sub">1545 · Cardano</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="smatrix"
+          data-img="/menu_screen/sim_card_art/smatrix.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/sim_card_art/smatrix.jpg" alt="Visualisasi transformasi matriks: persegi dan lingkaran terpetakan">
+          <span class="wt-cap">
+            <span class="wt-title">Sim Transformasi Matriks</span>
+            <span class="wt-sub">Simulasi · Aljabar Linier</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="ode">
+        <button class="wtile" data-tool="ode"
+          data-img="/menu_screen/tools_card_art/ode.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/ode.jpg" alt="Potret Leonhard Euler penemu metode numerik ODE">
+          <span class="wt-cap">
+            <span class="wt-title">Pemecah ODE</span>
+            <span class="wt-sub">1691 · Bernoulli</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="slorenz"
+          data-img="/menu_screen/sim_card_art/slorenz.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/sim_card_art/slorenz.jpg" alt="Atraktor Lorenz bentuk kupu-kupu">
+          <span class="wt-cap">
+            <span class="wt-title">Sim Atraktor Lorenz</span>
+            <span class="wt-sub">1963 · Lorenz</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="stats">
+        <button class="wtile" data-tool="stats"
+          data-img="/menu_screen/tools_card_art/stats.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/stats.jpg" alt="Potret engraving Pierre-Simon Laplace">
+          <span class="wt-cap">
+            <span class="wt-title">Statistika Deskriptif</span>
+            <span class="wt-sub">1890 · Pearson</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="swalk"
+          data-img="/menu_screen/sim_card_art/swalk.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/sim_card_art/swalk.jpg" alt="Lintasan random walk acak banyak partikel">
+          <span class="wt-cap">
+            <span class="wt-title">Sim Random Walk</span>
+            <span class="wt-sub">1905 · Einstein</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="complex">
+        <button class="wtile" data-tool="complex"
+          data-img="/menu_screen/tools_card_art/complex.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/complex.jpg" alt="Visualisasi bidang kompleks domain coloring">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Bilangan Kompleks</span>
+            <span class="wt-sub">1748 · Euler</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="real">
+        <button class="wtile" data-tool="taylor"
+          data-img="/menu_screen/tools_card_art/taylor.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/taylor.jpg" alt="Kurva sinus dan deret Taylor-nya">
+          <span class="wt-cap">
+            <span class="wt-title">Deret Taylor</span>
+            <span class="wt-sub">1715 · Taylor</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="sfourier"
+          data-img="/menu_screen/sim_card_art/sfourier.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/sim_card_art/sfourier.jpg" alt="Sintesis gelombang deret Fourier">
+          <span class="wt-cap">
+            <span class="wt-title">Sim Deret Fourier</span>
+            <span class="wt-sub">1822 · Fourier</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="discrete">
+        <button class="wtile" data-tool="modmath"
+          data-img="/menu_screen/tools_card_art/modmath.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/modmath.jpg" alt="Engraving Carl Friedrich Gauss 1828 karya Bendixen">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Modular</span>
+            <span class="wt-sub">1796 · Gauss</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="slogistic"
+          data-img="/menu_screen/sim_card_art/slogistic.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/sim_card_art/slogistic.jpg" alt="Diagram bifurkasi peta logistik">
+          <span class="wt-cap">
+            <span class="wt-title">Sim Peta Logistik</span>
+            <span class="wt-sub">1976 · May</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="info">
+        <button class="wtile" data-tool="entropy"
+          data-img="/menu_screen/tools_card_art/entropy.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/entropy.jpg" alt="Potret Ludwig Boltzmann peletak teori entropi">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Entropi</span>
+            <span class="wt-sub">1948 · Shannon</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-foot">
+        <div class="wm-hints"><span class="wm-kbd">ENTER</span> Masuk &nbsp;·&nbsp; <span class="wm-kbd">ESC</span> Kembali</div>
+        <div class="wm-tag">Nabla Workspace · War Stories</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KALKULATOR ============ -->
+<section id="calc" class="panel-wrap">
+  <div class="card">
+    <button class="wt-back" id="calcBack">◀ Pilih Alat</button>
+    <h2 data-i18n="calc.title">Kalkulator Multivariabel</h2>
+    <p class="wt-cattag" data-i18n="calc.cattag">Kalkulus · Field of Study</p>
+    <label data-i18n="calc.op">Operasi
+      <select id="op">
+        <option value="gradient">Gradien ∇f</option>
+        <option value="partial">Turunan parsial ∂f/∂x</option>
+        <option value="laplacian">Laplacian ∇²f</option>
+        <option value="hessian">Matriks Hessian</option>
+        <option value="directional">Turunan berarah</option>
+        <option value="divergence">Divergensi ∇·F</option>
+        <option value="curl">Curl ∇×F</option>
+        <option value="jacobian">Matriks Jacobian</option>
+      </select>
+    </label>
+
+    <div id="scalarIn">
+      <label>f(x, y, z) =
+        <math-field id="f" math-virtual-keyboard-policy="manual">x^2 y + \sin(z) y</math-field>
+      </label>
+    </div>
+    <div id="vectorIn" class="hidden">
+      <label>P(x,y,z) =
+        <math-field id="P" math-virtual-keyboard-policy="manual">x y</math-field>
+      </label>
+      <label>Q(x,y,z) =
+        <math-field id="Q" math-virtual-keyboard-policy="manual">y z</math-field>
+      </label>
+      <label>R(x,y,z) =
+        <math-field id="R" math-virtual-keyboard-policy="manual">z x</math-field>
+      </label>
+    </div>
+    <div id="partialIn" class="row hidden">
+      <label>Variabel
+        <select id="pvar"><option>x</option><option>y</option><option>z</option></select></label>
+      <label>Orde <input id="order" type="number" min="1" max="6" value="1"></label>
+    </div>
+    <div id="dirIn" class="row hidden">
+      <label>Arah u = (a, b, c)</label>
+      <input id="d0" value="1"><input id="d1" value="1"><input id="d2" value="0">
+    </div>
+
+    <div class="row">
+      <label data-i18n="calc.eval_point"><input type="checkbox" id="usePt"> Evaluasi di titik</label>
+      <input id="p0" value="1"><input id="p1" value="2"><input id="p2" value="3">
+    </div>
+    <button class="primary" id="runCalc" data-i18n="calc.run">Hitung</button>
+    <p class="hint" data-i18n="calc.hint">Input format LaTeX otomatis (seperti Desmos). Gunakan keyboard fisik atau on-screen keypad di bawah.</p>
+  </div>
+  <div class="card" id="result">
+    <h2 data-i18n="calc.result">Hasil</h2>
+    <div id="resultBody" class="muted">Belum ada perhitungan.</div>
+  </div>
+</section>
+
+<!-- ============ GRAFIK ============ -->
+<section id="graph" class="panel-wrap">
+  <div class="card side">
+    <button class="wt-back" id="graphBack">◀ Pilih Alat</button>
+    <h2 data-i18n="graph.title">Grafik 3D</h2>
+    <p class="wt-cattag" data-i18n="graph.cattag">Manifold 3D · Field of Study</p>
+    <label data-i18n="graph.type_label">Jenis
+      <select id="gtype">
+        <option value="surface">Permukaan z = f(x, y)</option>
+        <option value="field">Medan vektor F(x, y, z)</option>
+        <option value="curve">Kurva parametrik r(t)</option>
+      </select>
+    </label>
+
+    <div id="g-surface">
+      <label>z =
+        <math-field id="gf" math-virtual-keyboard-policy="manual">\sin(\sqrt{x^2+y^2})</math-field>
+      </label>
+      <div class="row"><label>x min <input id="xmin" value="-6"></label><label>x max <input id="xmax" value="6"></label></div>
+      <div class="row"><label>y min <input id="ymin" value="-6"></label><label>y max <input id="ymax" value="6"></label></div>
+      <label data-i18n="graph.show_grad" class="chk"><input type="checkbox" id="showGrad"> Tampilkan medan gradien (di bidang xy)</label>
+    </div>
+
+    <div id="g-field" class="hidden">
+      <label>P =
+        <math-field id="gP" math-virtual-keyboard-policy="manual">-y</math-field>
+      </label>
+      <label>Q =
+        <math-field id="gQ" math-virtual-keyboard-policy="manual">x</math-field>
+      </label>
+      <label>R =
+        <math-field id="gR" math-virtual-keyboard-policy="manual">0.3 z</math-field>
+      </label>
+      <div class="row"><label>min <input id="fmin" value="-2"></label><label>maks <input id="fmax" value="2"></label></div>
+      <label>Kerapatan <input id="fn" type="number" min="2" max="9" value="5"></label>
+    </div>
+
+    <div id="g-curve" class="hidden">
+      <label>x(t) =
+        <math-field id="cx" math-virtual-keyboard-policy="manual">\cos(t)</math-field>
+      </label>
+      <label>y(t) =
+        <math-field id="cy" math-virtual-keyboard-policy="manual">\sin(t)</math-field>
+      </label>
+      <label>z(t) =
+        <math-field id="cz" math-virtual-keyboard-policy="manual">\frac{t}{3}</math-field>
+      </label>
+      <div class="row"><label>t min <input id="tmin" value="0"></label><label>t maks <input id="tmax" value="18.85"></label></div>
+    </div>
+
+    <label data-i18n="graph.color_preset">Preset Warna
+      <select id="colorPreset">
+        <option value="gold">Golden</option>
+        <option value="viridis">Viridis</option>
+        <option value="plasma">Plasma Sunset</option>
+        <option value="rainbow">Rainbow</option>
+        <option value="neon">Cyberpunk</option>
+        <option value="coolwarm">Coolwarm</option>
+        <option value="desmos">Desmos</option>
+      </select>
+    </label>
+
+    <label data-i18n="graph.axes" class="chk" style="margin-top: 8px;">
+      <input type="checkbox" id="showAxesArrows" checked> Panah Sumbu Koordinat (X, Y, Z)
+    </label>
+
+    <button class="primary" id="runGraph" data-i18n="graph.run">Gambar</button>
+    <p id="graphMsg" class="hint"></p>
+  </div>
+  <div class="card plot"><div id="plot"></div></div>
+</section>
+
+<!-- ============ FISIKA (MONTE CARLO FLUX) ============ -->
+<section id="physics" class="panel-wrap">
+  <!-- ====== PHYSICS WAR STORIES — pilih bidang dulu, baru lab ====== -->
+  <div id="physMenu" class="wmenu">
+    <div class="wm-bg" id="wmBg0"></div>
+    <div class="wm-bg" id="wmBg1"></div>
+    <div class="wm-scrim"></div>
+    <div class="wm-inner">
+      <!-- teks series dihapus; tombol back arrow menempati posisinya.
+           Bar kategori (Klasik/Moderen/Semua) di kanan arrow — hanya
+           relevan di lapis payung, nyembunyi otomatis di lapis alat -->
+      <div class="wm-head">
+        <button class="wm-back" id="physBackBtn" type="button" title="Kembali ke menu sebelumnya (Esc)" aria-label="Kembali ke menu sebelumnya">&#8592;</button>
+        <div class="wm-cat" id="physCatBar">
+          <button class="cat-btn" type="button" data-phyfilter="classical"
+            data-i18n="menu.cat_classical">Fisika Klasik</button>
+          <button class="cat-btn" type="button" data-phyfilter="modern"
+            data-i18n="menu.cat_modern">Fisika Moderen</button>
+          <button class="cat-btn active" type="button" data-phyfilter="all"
+            data-i18n="menu.cat_all">Semua Bidang Fisika</button>
+        </div>
+      </div>
+      <div class="wm-grid" id="physUmb">
+        <button class="wtile" data-umbrella="electro" data-phycat="classical"
+          data-img="/menu_screen/magnetic_field_cover.jpg" data-pos="50% 42%">
+          <img src="/menu_screen/magnetic_field_cover.jpg" alt="Garis medan magnet bumi menahan angin matahari">
+          <span class="wt-cap">
+            <span class="wt-title">Elektrodinamika</span>
+            <span class="wt-sub">1865 · Maxwell</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="thermo" data-phycat="classical"
+          data-img="/menu_screen/solar_flare.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/solar_flare.jpg" alt="Solar flare, permukaan matahari yang menyala">
+          <span class="wt-cap">
+            <span class="wt-title">Thermodynamika</span>
+            <span class="wt-sub">1824 · Carnot</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="qm" data-phycat="modern"
+          data-img="/menu_screen/dim/dim_QM.png" data-pos="50% 45%">
+          <img src="/menu_screen/QM.png" alt="Persamaan Schrödinger di atas mesh gelombang fungsi keadaan biru">
+          <span class="wt-cap">
+            <span class="wt-title">Mekanika Kuantum</span>
+            <span class="wt-sub">1900 · Planck</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="relativity" data-phycat="modern"
+          data-img="/menu_screen/dim/dim_Relativity_Cover.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/Relativity%20Cover.jpg" alt="Cover art Relativitas pilihan pemilik">
+          <span class="wt-cap">
+            <span class="wt-title">Relativitas</span>
+            <span class="wt-sub">1905 · Einstein</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="newton" data-phycat="classical"
+          data-img="/menu_screen/dim/dim_NewtonianMechanics.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/NewtonianMechanics.jpg" alt="Cover art Mekanika Newton pilihan pemilik">
+          <span class="wt-cap">
+            <span class="wt-title">Mekanika Newton</span>
+            <span class="wt-sub">1687 · Newton</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="hydro" data-phycat="classical"
+          data-img="/menu_screen/dim/dim_Hydrodynamic.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/Hydrodynamic.jpg" alt="Cover art Hidrodinamika pilihan pemilik">
+          <span class="wt-cap">
+            <span class="wt-title">Hidrodinamika</span>
+            <span class="wt-sub">1738 · Bernoulli</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="gr" data-phycat="modern"
+          data-img="/menu_screen/GeneralRelativity.png" data-pos="50% 40%">
+          <img src="/menu_screen/GeneralRelativity.png" alt="Cover art Relativitas Umum pilihan pemilik">
+          <span class="wt-cap">
+            <span class="wt-title">Relativitas Umum</span>
+            <span class="wt-sub">1915 · Einstein</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-umbrella="wave" data-phycat="classical"
+          data-img="/menu_screen/dim/dim_wm_wave.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/wm/wm_wave.jpg" alt="Prisma memecahkan cahaya putih jadi pelangi">
+          <span class="wt-cap">
+            <span class="wt-title">Gelombang & Optika</span>
+            <span class="wt-sub">1678 · Huygens</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <!-- lapis kedua: pemilih alat per payung (data-umb = payung asal) -->
+      <div class="wm-grid wm-grid-tools hidden" id="physToolsGrp" data-umb="electro">
+        <button class="wtile" data-cat="ELECTRODINAMIKA"
+          data-img="/menu_screen/mc_mc_tool.jpg" data-pos="50% 42%">
+          <img src="/menu_screen/mc_mc_tool.jpg" alt="Jejak random-walk emas di sebaran sampling Monte Carlo">
+          <span class="wt-cap">
+            <span class="wt-title">Simulasi Monte Carlo</span>
+            <span class="wt-sub">1865 · Maxwell</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="es"
+          data-img="/menu_screen/tools_card_art/es.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/es.jpg" alt="Engraving neraca pilin eksperimen Coulomb">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Elektrostatika</span>
+            <span class="wt-sub">1785 · Coulomb</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="emind"
+          data-img="/menu_screen/tools_card_art/emind.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/emind.jpg" alt="Diagram interaksi ring induksi Faraday">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Induksi</span>
+            <span class="wt-sub">1831 · Faraday</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="thermo">
+        <button class="wtile" data-tool="thermo"
+          data-img="/menu_screen/tools_card_art/thermo.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/thermo.jpg" alt="Engraving mesin uap atmosferik Newcomen 1913">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Termodinamika</span>
+            <span class="wt-sub">1824 · Carnot</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="heatexp"
+          data-img="/menu_screen/tools_card_art/heatexp.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/heatexp.jpg" alt="Engraving dokter mengecek termometer pasien">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Kalor & Pemuaian</span>
+            <span class="wt-sub">1760 · Black</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="qm">
+        <button class="wtile" data-tool="qm"
+          data-img="/menu_screen/tools_card_art/qm.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/qm.jpg" alt="Lintasan Bohmian elektron pada celah ganda">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Kuantum</span>
+            <span class="wt-sub">1924 · de Broglie</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="sschrod"
+          data-img="/menu_screen/sim_card_art/sschrod.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/sim_card_art/sschrod.jpg" alt="Evolusi paket gelombang kuantum menabrak barrier">
+          <span class="wt-cap">
+            <span class="wt-title">Sim Paket Gelombang</span>
+            <span class="wt-sub">1926 · Schrödinger</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="relativity">
+        <button class="wtile" data-tool="rel"
+          data-img="/menu_screen/tools_card_art/rel.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/rel.jpg" alt="Potret Hermann Minkowski penata ruang-waktu">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Relativitas</span>
+            <span class="wt-sub">1905 · Einstein</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="newton">
+        <button class="wtile" data-tool="proj"
+          data-img="/menu_screen/tools_card_art/proj.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/proj.jpg" alt="Diagram lintasan gerak parabola peluru">
+          <span class="wt-cap">
+            <span class="wt-title">Simulasi Gerak Parabola</span>
+            <span class="wt-sub">1638 · Galileo</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="sdblpend"
+          data-img="/menu_screen/sim_card_art/sdblpend.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/sim_card_art/sdblpend.jpg" alt="Pendulum ganda chaotik">
+          <span class="wt-cap">
+            <span class="wt-title">Sim Pendulum Ganda</span>
+            <span class="wt-sub">Simulasi · Kaos</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="sdrag"
+          data-img="/menu_screen/sim_card_art/sdrag.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/sim_card_art/sdrag.jpg" alt="Proyektil dengan hambatan udara vs vakum">
+          <span class="wt-cap">
+            <span class="wt-title">Sim Proyektil + Drag</span>
+            <span class="wt-sub">Simulasi · Hambatan</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="hydro">
+        <button class="wtile" data-tool="hydro"
+          data-img="/menu_screen/tools_card_art/hydro.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/hydro.jpg" alt="Engraving potret Daniel Bernoulli">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Fluida</span>
+            <span class="wt-sub">1738 · Bernoulli</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="gr">
+        <button class="wtile" data-tool="schwartz"
+          data-img="/menu_screen/tools_card_art/schwartz.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/schwartz.jpg" alt="Cincin Einstein dari teleskop Hubble">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Schwarzschild</span>
+            <span class="wt-sub">1916 · Schwarzschild</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="skepler"
+          data-img="/menu_screen/sim_card_art/skepler.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/sim_card_art/skepler.jpg" alt="Orbit elips Kepler dua benda">
+          <span class="wt-cap">
+            <span class="wt-title">Sim Orbit Kepler</span>
+            <span class="wt-sub">1609 · Kepler</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-grid wm-grid-tools hidden" data-umb="wave">
+        <button class="wtile" data-tool="optics"
+          data-img="/menu_screen/tools_card_art/optics.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/optics.jpg" alt="Diagram kuno hukum sinus refraksi Wellcome">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Optik</span>
+            <span class="wt-sub">1621 · Snell</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="sslit"
+          data-img="/menu_screen/sim_card_art/sslit.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/sim_card_art/sslit.jpg" alt="Pola interferensi celah ganda">
+          <span class="wt-cap">
+            <span class="wt-title">Sim Celah Ganda</span>
+            <span class="wt-sub">1801 · Young</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+        <button class="wtile" data-tool="shm"
+          data-img="/menu_screen/tools_card_art/shm.jpg" data-pos="50% 40%">
+          <img src="/menu_screen/tools_card_art/shm.jpg" alt="Bandul Foucault di langit-langit museum">
+          <span class="wt-cap">
+            <span class="wt-title">Kalkulator Getaran Harmonis</span>
+            <span class="wt-sub">1656 · Huygens</span>
+            <span class="wt-dot"></span>
+          </span>
+        </button>
+      </div>
+      <div class="wm-foot">
+        <div class="wm-hints"><span class="wm-kbd">ENTER</span> Masuk Lab &nbsp;·&nbsp; <span class="wm-kbd">ESC</span> Kembali</div>
+        <div class="wm-tag">Nabla Workspace · Monte Carlo</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="physLab" class="phys-lab hidden">
+    <div class="pstack">
+    <div class="card">
+      <button class="wt-back" id="physBack">◀ Pilih Alat</button>
+      <h2 data-i18n="physlab.title">Lab Fisika, Fluks Listrik Monte Carlo</h2>
+      <p class="wt-cattag" id="physCatTag">Electrodynamika · Field of Study</p>
+
+      <label><span class="lbl" data-i18n="physlab.catalog">Katalog Simulasi</span>
+        <button class="help-tip" data-help="catalog">?</button>
+        <select id="pcat">
+          <option value="plate">Pelat Ombak sin(x²+y²) + Medan Seragam (Gauss klasik)</option>
+          <option value="wave">Permukaan Gelombang + Medan Vertikal</option>
+          <option value="point">Muatan Titik di Atas Pelat (bukti Gauss)</option>
+          <option value="parab">Cekungan Paraboloid + Medan Miring</option>
+          <option value="hill">Bukit Gaussian + Hujan Medan Vertikal</option>
+          <option value="custom">Kustom, isi manual / hasil AI</option>
+        </select>
+      </label>
+
+      <div class="sect">
+        <h3 data-i18n="physlab.h_surf">1 · Permukaan S, manifold z = f(x,y)
+          <button class="help-tip" data-help="surface">?</button></h3>
+        <label class="lbl">f(x,y) =</label>
+        <math-field id="pf" math-virtual-keyboard-policy="manual">0</math-field>
+        <details class="adv" id="advDomain">
+          <summary data-i18n="physlab.domain">Rentang Domain (m)
+            <button class="help-tip" data-help="domain">?</button>
+            <span class="chev"></span></summary>
+          <div class="row">
+            <label><span class="lbl" data-i18n="physlab.x_min">x min (m)</span><input id="px0" value="-2"></label>
+            <label><span class="lbl" data-i18n="physlab.x_max">x maks (m)</span><input id="px1" value="2"></label>
+          </div>
+          <div class="row">
+            <label><span class="lbl" data-i18n="physlab.y_min">y min (m)</span><input id="py0" value="-2"></label>
+            <label><span class="lbl" data-i18n="physlab.y_max">y maks (m)</span><input id="py1" value="2"></label>
+          </div>
+        </details>
+      </div>
+
+      <div class="sect">
+        <h3 data-i18n="physlab.h_field">2 · Medan Listrik E(x,y,z)
+          <button class="help-tip" data-help="field">?</button></h3>
+        <label><span class="lbl" data-i18n="physlab.field_type">Jenis medan</span>
+          <button class="help-tip" data-help="fieldmode">?</button>
+          <select id="fmode">
+            <option value="uniform">Seragam (uniform), kuat &amp; arah tetap</option>
+            <option value="point">Muatan titik (medan radial E = kQ/r²)</option>
+            <option value="custom">Rumus bebas, P,Q,R fungsi x,y,z</option>
+          </select>
+        </label>
+
+        <div id="u-in">
+          <div class="row">
+            <label><span class="lbl" data-i18n="physlab.e0">Kuat medan E₀ (N/C)</span>
+              <button class="help-tip" data-help="strength">?</button>
+              <input id="pe0" value="500"></label>
+          </div>
+          <label><span class="lbl" data-i18n="physlab.direction">Arah medan (arah flux)</span>
+            <button class="help-tip" data-help="direction">?</button>
+            <select id="pdir">
+              <option value="zplus">→ +z (ke atas, menembus permukaan)</option>
+              <option value="zminus">→ −z (ke bawah)</option>
+              <option value="xplus">→ +x</option>
+              <option value="xminus">→ −x</option>
+              <option value="yplus">→ +y</option>
+              <option value="yminus">→ −y</option>
+              <option value="custom">Arah bebas (komponen a,b,c)</option>
+            </select>
+          </label>
+        <details class="adv" id="advDir">
+          <summary>Komponen Arah Bebas (a, b, c)<span class="chev"></span></summary>
+          <div class="row hidden" id="dirCustom">
+            <label><span class="lbl">a</span><input id="pda" value="1"></label>
+            <label><span class="lbl">b</span><input id="pdb" value="1"></label>
+            <label><span class="lbl">c</span><input id="pdc" value="1"></label>
+          </div>
+        </details>
+        </div>
+
+        <div id="pt-in" class="hidden">
+          <div class="row">
+            <label><span class="lbl" data-i18n="physlab.charge_q">Muatan sumber Q (nC)</span>
+              <button class="help-tip" data-help="charge">?</button>
+              <input id="pq" value="5"></label>
+          </div>
+          <label><span class="lbl" data-i18n="physlab.charge_pos">Posisi muatan (x₀, y₀, z₀) meter</span>
+            <button class="help-tip" data-help="chargepos">?</button></label>
+          <div class="row">
+            <label><span class="lbl">x₀</span><input id="ppx" value="0"></label>
+            <label><span class="lbl">y₀</span><input id="ppy" value="0"></label>
+            <label><span class="lbl">z₀</span><input id="ppz" value="2"></label>
+          </div>
+        </div>
+
+        <details class="adv" id="advCustom">
+          <summary>Komponen Medan Bebas (P, Q, R)<span class="chev"></span></summary>
+          <div id="cu-in" class="hidden">
+            <label class="lbl" data-i18n="physlab.comp_field_unit">Komponen medan (satuan N/C)
+              <button class="help-tip" data-help="customfield">?</button></label>
+            <label><span class="lbl">P(x,y,z) =</span>
+              <math-field id="pP" math-virtual-keyboard-policy="manual">-y</math-field></label>
+            <label><span class="lbl">Q(x,y,z) =</span>
+              <math-field id="pQ" math-virtual-keyboard-policy="manual">x</math-field></label>
+            <label><span class="lbl">R(x,y,z) =</span>
+              <math-field id="pR" math-virtual-keyboard-policy="manual">1</math-field></label>
+          </div>
+        </details>
+
+        <label class="chk" style="margin-top:8px">
+          <input type="checkbox" id="pflip">
+          <span class="lbl" data-i18n="physlab.flip">Balik arah flux (pilih normal n̂ = −z)</span>
+          <button class="help-tip" data-help="flip">?</button>
+        </label>
+      </div>
+
+      <div class="sect">
+        <h3 data-i18n="physlab.h_mc">3 · Mesin Monte Carlo
+          <button class="help-tip" data-help="mc">?</button></h3>
+        <div class="row">
+          <label><span class="lbl" data-i18n="physlab.samples">Jumlah sampel N</span>
+            <button class="help-tip" data-help="samples">?</button>
+            <input id="pn" type="number" min="500" max="400000" value="100000"></label>
+          <label><span class="lbl" data-i18n="physlab.seed">Seed (angka acak)</span>
+            <button class="help-tip" data-help="seed">?</button>
+            <input id="pseed" placeholder="acak"></label>
+        </div>
+        <label class="chk"><input type="checkbox" id="pshowSamples" checked>
+          <span class="lbl" data-i18n="physlab.show_samples">Tampilkan titik sampel MC</span></label>
+        <label class="chk"><input type="checkbox" id="pshowCones" checked>
+          <span class="lbl" data-i18n="physlab.show_cones">Tampilkan vektor fluks lokal (kerucut)</span></label>
+        <label class="chk"><input type="checkbox" id="pai" checked>
+          <span class="lbl" data-i18n="physlab.ai_check">AI menafsirkan hasil simulasi (+ analogi dunia nyata) setiap selesai hitung</span></label>
+      </div>
+
+      <label><span class="lbl" data-i18n="graph.color_preset">Preset Warna</span>
+        <select id="ppreset"></select>
+      </label>
+
+      <button class="primary" id="runPhys" data-i18n="physlab.run">⚡ Jalankan Simulasi</button>
+      <p id="physMsg" class="hint"></p>
+    </div>
+
+    <details class="adv ai-card" id="advAI">
+      <summary data-i18n="physlab.ai_head">Konfigurasi Otomatis via AI
+        <button class="help-tip" data-help="ai">?</button>
+        <span class="chev"></span></summary>
+      <label><span class="lbl" data-i18n="physlab.ai_scenario">Deskripsi skenario bebas (id/en)</span>
+        <textarea id="aiText" rows="4" placeholder=""></textarea>
+      </label>
+      <label class="chk"><input type="checkbox" id="aiAutoRun" checked>
+        <span class="lbl" data-i18n="physlab.ai_autorun">Langsung jalankan simulasi setelah AI mengisi parameter</span></label>
+      <button class="primary" id="runAI">Susun Parameter dengan AI</button>
+      <p id="aiMsg" class="hint"></p>
+      <div id="aiSummary" class="ai-summary hidden"></div>
+    </details>
+  </div>
+
+  <div class="pcol">
+    <div class="card plot" id="physStat">
+      <div id="ppplot"></div>
+      <h2 data-i18n="physlab.result_head">Hasil Simulasi</h2>
+      <div id="physStatBody" class="muted">Belum ada simulasi.</div>
+      <div id="physInterp" class="ai-summary hidden"></div>
+    </div>
+  </div><!-- /physLab -->
+</section>
+
+<!-- ============ NABLA LAB (panel tool generik utk semua tool card baru) ============
+     Satu panel dipakai bareng: tools.js isikan form sesuai registry TOOLS,
+     hasil dirender rows/latex/plot. Back button & ESC balik ke lapis alat. -->
+<section id="tool" class="panel-wrap">
+  <div class="card">
+    <button class="wt-back" id="toolBack" data-i18n="calc.back">◀ Pilih Alat</button>
+    <h2 id="toolTitle">Tool</h2>
+    <p class="wt-cattag" id="toolCatTag">Field of Study</p>
+    <div id="toolForm"></div>
+    <button class="primary" id="toolRun" data-i18n="calc.run">Hitung</button>
+    <p id="toolMsg" class="hint"></p>
+  </div>
+  <div class="card" id="toolResultCard">
+    <h2 data-i18n="calc.result">Hasil</h2>
+    <div id="toolPlot" class="hidden" style="height:340px"></div>
+    <div id="toolResult" class="muted" data-i18n="calc.result_empty">Belum ada perhitungan.</div>
+    <!-- Contoh penggunaan tool (rendered tools.js), tombol 📋 salin LaTeX -->
+    <div id="toolUseBox" class="hidden"></div>
+  </div>
+</section>
+</main>
+
+<!-- Floating Keypad Toggle Button (Desmos style) -->
+<button id="keypadToggle" class="keypad-toggle-btn" title="Buka/Tutup Keyboard Desmos">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="4" width="20" height="16" rx="2"/>
+    <line x1="6" y1="8" x2="6.01" y2="8"/>
+    <line x1="10" y1="8" x2="10.01" y2="8"/>
+    <line x1="14" y1="8" x2="14.01" y2="8"/>
+    <line x1="18" y1="8" x2="18.01" y2="8"/>
+    <line x1="6" y1="12" x2="6.01" y2="12"/>
+    <line x1="10" y1="12" x2="10.01" y2="12"/>
+    <line x1="14" y1="12" x2="14.01" y2="12"/>
+    <line x1="18" y1="12" x2="18.01" y2="12"/>
+    <line x1="7" y1="16" x2="17" y2="16"/>
+  </svg>
+  <span>Keyboard</span>
+</button>
+
+<!-- Desmos Math Keypad Drawer -->
+<div id="mathKeypad" class="math-keypad collapsed">
+  <div class="keypad-header">
+    <div class="keypad-tabs">
+      <button class="kp-tab active" data-panel="main">123 / Kalkulus</button>
+      <button class="kp-tab" data-panel="functions">Fungsi (Functions)</button>
+    </div>
+    <div class="keypad-actions">
+      <span class="active-field-indicator">Input: <strong id="activeFieldName">f(x, y, z)</strong></span>
+      <button id="closeKeypad" class="keypad-close-btn" title="Tutup Keyboard">✕</button>
+    </div>
+  </div>
+
+  <div class="keypad-body">
+    <!-- PANEL 1: MAIN DESMOS KEYPAD -->
+    <div id="panel-main" class="kp-panel active">
+      <div class="kp-grid">
+        <!-- Row 1 -->
+        <button class="kbtn var" data-insert="x"><i>x</i></button>
+        <button class="kbtn var" data-insert="y"><i>y</i></button>
+        <button class="kbtn var" data-insert="z"><i>z</i></button>
+        <button class="kbtn op" data-cmd="power" title="Pangkat"><i>a</i><sup><i>b</i></sup></button>
+        <button class="kbtn num" data-insert="7">7</button>
+        <button class="kbtn num" data-insert="8">8</button>
+        <button class="kbtn num" data-insert="9">9</button>
+        <button class="kbtn op" data-cmd="fraction" title="Pecahan / Pembagian">÷</button>
+        <button class="kbtn fn" data-insert="\sin\left(#?\right)">sin</button>
+        <button class="kbtn fn" data-insert="\cos\left(#?\right)">cos</button>
+
+        <!-- Row 2 -->
+        <button class="kbtn var" data-insert="t"><i>t</i></button>
+        <button class="kbtn op" data-insert="(">(</button>
+        <button class="kbtn op" data-insert=")">)</button>
+        <button class="kbtn op" data-cmd="sqrt" title="Akar Kuadrat">√</button>
+        <button class="kbtn num" data-insert="4">4</button>
+        <button class="kbtn num" data-insert="5">5</button>
+        <button class="kbtn num" data-insert="6">6</button>
+        <button class="kbtn op" data-insert="*" title="Perkalian">×</button>
+        <button class="kbtn fn" data-insert="\tan\left(#?\right)">tan</button>
+        <button class="kbtn fn" data-insert="\exp\left(#?\right)">exp</button>
+
+        <!-- Row 3 -->
+        <button class="kbtn const" data-insert="\pi">π</button>
+        <button class="kbtn const" data-insert="e"><i>e</i></button>
+        <button class="kbtn op" data-cmd="abs" title="Nilai Mutlak">|<i>a</i>|</button>
+        <button class="kbtn op" data-insert=",">,</button>
+        <button class="kbtn num" data-insert="1">1</button>
+        <button class="kbtn num" data-insert="2">2</button>
+        <button class="kbtn num" data-insert="3">3</button>
+        <button class="kbtn op" data-insert="-" title="Pengurangan">−</button>
+        <button class="kbtn fn" data-insert="\ln\left(#?\right)">ln</button>
+        <button class="kbtn action del" data-cmd="deleteBackward" title="Backspace">⌫</button>
+
+        <!-- Row 4 -->
+        <button class="kbtn nav" data-cmd="moveToPreviousChar" title="Geser Kiri">←</button>
+        <button class="kbtn nav" data-cmd="moveToNextChar" title="Geser Kanan">→</button>
+        <button class="kbtn action clear" data-cmd="clear" title="Hapus Semua">AC</button>
+        <button class="kbtn op" data-insert="<">&lt;</button>
+        <button class="kbtn num" data-insert="0">0</button>
+        <button class="kbtn num" data-insert=".">.</button>
+        <button class="kbtn op" data-insert="=">=</button>
+        <button class="kbtn op" data-insert="+" title="Penjumlahan">+</button>
+        <button class="kbtn submit" id="kpSubmit">↵ Hitung</button>
+      </div>
+    </div>
+
+    <!-- PANEL 2: FUNCTIONS POPUP / TAB -->
+    <div id="panel-functions" class="kp-panel">
+      <div class="fn-categories">
+        <div class="fn-group">
+          <h4>Kalkulus & Vektor</h4>
+          <div class="fn-subgrid">
+            <button class="kbtn fn" data-cmd="def_int" title="Integral Tentu">∫_a^b</button>
+            <button class="kbtn fn" data-cmd="indef_int" title="Integral Tak Tentu">∫ dx</button>
+            <button class="kbtn fn" data-insert="\frac{d}{dx}\left(#?\right)">d/dx</button>
+            <button class="kbtn fn" data-insert="\frac{\partial}{\partial x}\left(#?\right)">∂/∂x</button>
+            <button class="kbtn fn" data-insert="\frac{\partial}{\partial y}\left(#?\right)">∂/∂y</button>
+            <button class="kbtn fn" data-insert="\nabla">∇</button>
+            <button class="kbtn fn" data-insert="\exp\left(#?\right)">exp</button>
+            <button class="kbtn fn" data-insert="\ln\left(#?\right)">ln</button>
+            <button class="kbtn fn" data-insert="\log\left(#?\right)">log</button>
+            <button class="kbtn fn" data-cmd="nroot">√[n]</button>
+          </div>
+        </div>
+
+        <div class="fn-group">
+          <h4>Trigonometri</h4>
+          <div class="fn-subgrid">
+            <button class="kbtn fn" data-insert="\sin\left(#?\right)">sin</button>
+            <button class="kbtn fn" data-insert="\cos\left(#?\right)">cos</button>
+            <button class="kbtn fn" data-insert="\tan\left(#?\right)">tan</button>
+            <button class="kbtn fn" data-insert="\csc\left(#?\right)">csc</button>
+            <button class="kbtn fn" data-insert="\sec\left(#?\right)">sec</button>
+            <button class="kbtn fn" data-insert="\cot\left(#?\right)">cot</button>
+          </div>
+        </div>
+
+        <div class="fn-group">
+          <h4>Invers & Hiperbolik</h4>
+          <div class="fn-subgrid">
+            <button class="kbtn fn" data-insert="\arcsin\left(#?\right)">arcsin</button>
+            <button class="kbtn fn" data-insert="\arccos\left(#?\right)">arccos</button>
+            <button class="kbtn fn" data-insert="\arctan\left(#?\right)">arctan</button>
+            <button class="kbtn fn" data-insert="\sinh\left(#?\right)">sinh</button>
+            <button class="kbtn fn" data-insert="\cosh\left(#?\right)">cosh</button>
+            <button class="kbtn fn" data-insert="\tanh\left(#?\right)">tanh</button>
+          </div>
+        </div>
+
+        <div class="fn-group">
+          <h4>Simbol Tambahan</h4>
+          <div class="fn-subgrid">
+            <button class="kbtn const" data-insert="\pi">π</button>
+            <button class="kbtn const" data-insert="\theta">θ</button>
+            <button class="kbtn const" data-insert="\phi">ϕ</button>
+            <button class="kbtn const" data-insert="\rho">ρ</button>
+            <button class="kbtn op" data-insert="\le">≤</button>
+            <button class="kbtn op" data-insert="\ge">≥</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- transisi 3D: murni GSAP di panel (perspektif + translateZ), gak
+     butuh overlay hitam — dunia lama mundur ke kedalaman, dunia baru
+     terbang masuk dari kejauhan. -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="/static/i18n.js"></script>
+<script src="/static/app.js"></script>
+<script src="/static/physics.js"></script>
+<script src="/static/menu.js"></script>
+<script src="/static/tools.js"></script>
+<script src="/static/donation.js"></script>
+<script src="/static/loading.js"></script>
+</body>
+</html>

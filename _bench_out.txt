@@ -1,0 +1,372 @@
+Traceback (most recent call last):
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 1408, in run_tool
+    return fn(data if isinstance(data, dict) else {})
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 565, in tool_integral
+    return _apply_opd(opd, d, d.get("mode", "def"))
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 510, in _apply_opd
+    if nested and atv != oo:
+                         ^^
+NameError: name 'oo' is not defined
+Traceback (most recent call last):
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 1408, in run_tool
+    return fn(data if isinstance(data, dict) else {})
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 565, in tool_integral
+    return _apply_opd(opd, d, d.get("mode", "def"))
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 510, in _apply_opd
+    if nested and atv != oo:
+                         ^^
+NameError: name 'oo' is not defined
+Traceback (most recent call last):
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 1408, in run_tool
+    return fn(data if isinstance(data, dict) else {})
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 565, in tool_integral
+    return _apply_opd(opd, d, d.get("mode", "def"))
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 510, in _apply_opd
+    if nested and atv != oo:
+                         ^^
+NameError: name 'oo' is not defined
+Traceback (most recent call last):
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 1408, in run_tool
+    return fn(data if isinstance(data, dict) else {})
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 565, in tool_integral
+    return _apply_opd(opd, d, d.get("mode", "def"))
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 510, in _apply_opd
+    if nested and atv != oo:
+                         ^^
+NameError: name 'oo' is not defined
+Traceback (most recent call last):
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 1408, in run_tool
+    return fn(data if isinstance(data, dict) else {})
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 565, in tool_integral
+    return _apply_opd(opd, d, d.get("mode", "def"))
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 510, in _apply_opd
+    if nested and atv != oo:
+                         ^^
+NameError: name 'oo' is not defined
+Traceback (most recent call last):
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 1408, in run_tool
+    return fn(data if isinstance(data, dict) else {})
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 565, in tool_integral
+    return _apply_opd(opd, d, d.get("mode", "def"))
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 510, in _apply_opd
+    if nested and atv != oo:
+                         ^^
+NameError: name 'oo' is not defined
+Traceback (most recent call last):
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 1408, in run_tool
+    return fn(data if isinstance(data, dict) else {})
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 565, in tool_integral
+    return _apply_opd(opd, d, d.get("mode", "def"))
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 510, in _apply_opd
+    if nested and atv != oo:
+                         ^^
+NameError: name 'oo' is not defined
+Traceback (most recent call last):
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 1408, in run_tool
+    return fn(data if isinstance(data, dict) else {})
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 565, in tool_integral
+    return _apply_opd(opd, d, d.get("mode", "def"))
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 510, in _apply_opd
+    if nested and atv != oo:
+                         ^^
+NameError: name 'oo' is not defined
+Traceback (most recent call last):
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 1408, in run_tool
+    return fn(data if isinstance(data, dict) else {})
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 565, in tool_integral
+    return _apply_opd(opd, d, d.get("mode", "def"))
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 510, in _apply_opd
+    if nested and atv != oo:
+                         ^^
+NameError: name 'oo' is not defined
+Traceback (most recent call last):
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 1408, in run_tool
+    return fn(data if isinstance(data, dict) else {})
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 565, in tool_integral
+    return _apply_opd(opd, d, d.get("mode", "def"))
+  File "G:\vektor-lab(1)\vektor-lab\mathlab.py", line 510, in _apply_opd
+    if nested and atv != oo:
+                         ^^
+NameError: name 'oo' is not defined
+===========================================
+BENCHMARK (E2E: conv ASLI + backend ASLI):
+===========================================
+OK  L01 [lim]     PASS           1/6
+OK  L01 [auto]    PASS           1/6
+OK  L02 [lim]     PASS           -1/6
+OK  L02 [auto]    PASS           -1/6
+OK  L03 [lim]     PASS           1/2
+OK  L03 [auto]    PASS           1/2
+OK  L04 [lim]     PASS           1/3
+OK  L04 [auto]    PASS           1/3
+OK  L05 [lim]     PASS           -1/3
+OK  L05 [auto]    PASS           -1/3
+OK  L06 [lim]     PASS           1/6
+OK  L06 [auto]    PASS           1/6
+OK  L07 [lim]     PASS           3/2
+OK  L07 [auto]    PASS           3/2
+OK  L08 [lim]     PASS           -1/3
+OK  L08 [auto]    PASS           -1/3
+OK  L09 [lim]     PASS           -1/12
+OK  L09 [auto]    PASS           -1/12
+OK  L10 [lim]     PASS           1
+OK  L10 [auto]    PASS           1
+OK  L11 [lim]     PASS           -E/2
+OK  L11 [auto]    PASS           -E/2
+OK  L12 [lim]     PASS           exp(-1/2)
+OK  L12 [auto]    PASS           exp(-1/2)
+OK  L13 [lim]     PASS           exp(6)
+OK  L13 [auto]    PASS           exp(6)
+OK  L14 [lim]     PASS           3/2
+OK  L14 [auto]    PASS           3/2
+OK  L15 [lim]     PASS           1/2
+OK  L15 [auto]    PASS           1/2
+OK  L16 [lim]     PASS           1
+OK  L16 [auto]    PASS           1
+OK  L17 [lim]     PASS           1
+OK  L17 [auto]    PASS           1
+OK  L18 [lim]     PASS           0
+OK  L18 [auto]    PASS           0
+OK  L19 [lim]     PASS           log(2)
+OK  L19 [auto]    PASS           log(2)
+OKw L20 [lim]     PASS-WARN      err.internal: Terjadi kesalahan internal saat menghitung —
+OKw L20 [auto]    PASS-WARN      err.internal: Terjadi kesalahan internal saat menghitung —
+OKw L21 [lim]     PASS-WARN      err.internal: Terjadi kesalahan internal saat menghitung —
+OKw L21 [auto]    PASS-WARN      err.internal: Terjadi kesalahan internal saat menghitung —
+OKw L22 [lim]     PASS-WARN      err.internal: Terjadi kesalahan internal saat menghitung —
+OKw L22 [auto]    PASS-WARN      err.internal: Terjadi kesalahan internal saat menghitung —
+OKw L23 [lim]     PASS-WARN      err.internal: Terjadi kesalahan internal saat menghitung —
+OKw L23 [auto]    PASS-WARN      err.internal: Terjadi kesalahan internal saat menghitung —
+OK  D01 [diff]    PASS           x**x*(log(x) + 1)
+OK  D01 [auto]    PASS           x**x*(log(x) + 1)
+OK  D02 [diff]    PASS           (2*x*cos(x**2) + 3*sin(x**2))*exp(3*x)
+OK  D02 [auto]    PASS           (2*x*cos(x**2) + 3*sin(x**2))*exp(3*x)
+OK  D03 [diff]    PASS           (x**4 + 5*x**2 - 2)/(x**2 + 1)**2
+OK  D03 [auto]    PASS           (x**4 + 5*x**2 - 2)/(x**2 + 1)**2
+OK  D04 [diff]    PASS           (2*x**(3/2) + 3*x**2/2 - 1/2)/(x**(5/2) + sq
+OK  D04 [auto]    PASS           (2*x**(3/2) + 3*x**2/2 - 1/2)/(x**(5/2) + sq
+OK  D05 [diff]    PASS           1/sqrt(1 - x**2)
+OK  D05 [auto]    PASS           1/sqrt(1 - x**2)
+OK  D06 [diff]    PASS           (x**2 + 1)**sin(x)*(2*x*sin(x)/(x**2 + 1) + 
+OK  D06 [auto]    PASS           (x**2 + 1)**sin(x)*(2*x*sin(x)/(x**2 + 1) + 
+OK  D07 [diff]    PASS           sin(x)*cos(x)/sqrt(sin(x)**2 + 1)
+OK  D07 [auto]    PASS           sin(x)*cos(x)/sqrt(sin(x)**2 + 1)
+OK  D08 [diff]    PASS           (x**2 - 4*x + 2)*exp(-x)
+OK  D08 [auto]    PASS           (x**2 - 4*x + 2)*exp(-x)
+OK  D09 [diff]    PASS           16*sin(2*x)
+OK  D09 [auto]    PASS           16*sin(2*x)
+OKw D10 [diff]    PASS-WARN      err.unknown_symbols: Simbol tidak dikenal: d, dx
+OKw D10 [auto]    PASS-WARN      err.unknown_symbols: Simbol tidak dikenal: d, dx
+OKw D11 [diff]    PASS-WARN      err.unknown_symbols: Simbol tidak dikenal: d, dx
+OKw D11 [auto]    PASS-WARN      err.unknown_symbols: Simbol tidak dikenal: d, dx
+OKw D12 [diff]    PASS-WARN      err.bound_invalid: Nilai batas/titik 'e' tidak valid — isi angk
+OKw D12 [auto]    PASS-WARN      err.bound_invalid: Nilai batas/titik 'e' tidak valid — isi angk
+OK  D13 [diff]    PASS           2*x*exp(-x**4)
+OK  D13 [auto]    PASS           2*x*exp(-x**4)
+OK  D14 [diff]    PASS           sin(x)/x
+OK  D14 [auto]    PASS           sin(x)/x
+OK  D15 [diff]    PASS           y*(2*x + cos(x*y))
+OK  D15 [auto]    PASS           y*(2*x + cos(x*y))
+OKw D16 [diff]    PASS-WARN      err.expr_parse: Ekspresi tidak bisa dipahami: Sympify of exp
+OKw D16 [auto]    PASS-WARN      err.expr_parse: Ekspresi tidak bisa dipahami: Sympify of exp
+OK  S01 [sum]     PASS           pi**2/6
+OK  S01 [auto]    PASS           pi**2/6
+OK  S02 [sum]     PASS           pi**4/90
+OK  S02 [auto]    PASS           pi**4/90
+OK  S03 [sum]     PASS           E
+OK  S03 [auto]    PASS           E
+OK  S04 [sum]     PASS           exp(2)
+OK  S04 [auto]    PASS           exp(2)
+OK  S05 [sum]     PASS           1
+OK  S05 [auto]    PASS           1
+OK  S06 [sum]     PASS           3/4
+OK  S06 [auto]    PASS           3/4
+OK  S07 [sum]     PASS           1/2
+OK  S07 [auto]    PASS           1/2
+OK  S08 [sum]     PASS           2
+OK  S08 [auto]    PASS           2
+OK  S09 [sum]     PASS           6
+OK  S09 [auto]    PASS           6
+OK  S10 [sum]     PASS           log(2)
+OK  S10 [auto]    PASS           log(2)
+OK  S11 [sum]     PASS           log(2)
+OK  S11 [auto]    PASS           log(2)
+OK  S12 [sum]     PASS           pi/4
+OK  S12 [auto]    PASS           pi/4
+OK  S13 [sum]     PASS           oo
+OK  S13 [auto]    PASS           oo
+OK  S14 [sum]     PASS           338350
+OK  S14 [auto]    PASS           338350
+OK  S15 [sum]     PASS           n**2*(n + 1)**2/4
+OK  S15 [auto]    PASS           n**2*(n + 1)**2/4
+OK  S16 [sum]     PASS           2*(2**n*n - 2**n + 1)
+OK  S16 [auto]    PASS           2*(2**n*n - 2**n + 1)
+OK  S17 [sum]     PASS           zoo
+OK  S17 [auto]    PASS           zoo
+OK  S18 [sum]     PASS           1024
+OK  S18 [auto]    PASS           1024
+OK  S19 [sum]     PASS           35
+OK  S19 [auto]    PASS           35
+OK  S20 [sum]     PASS           36
+OK  S20 [auto]    PASS           36
+OK  S21 [sum]     PASS           3628800
+OK  S21 [auto]    PASS           3628800
+OK  S22 [sum]     PASS           Product(1 - 1/n**2, (n, 2, oo))
+OK  S22 [auto]    PASS           Product(1 - 1/n**2, (n, 2, oo))
+OK  I01 [indef]   PASS           (x - 1)*exp(x) + C
+OK  I01 [auto]    PASS           (x - 1)*exp(x) + C
+OK  I02 [indef]   PASS           -x**2*cos(x) + 2*x*sin(x) + 2*cos(x) + C
+OK  I02 [auto]    PASS           -x**2*cos(x) + 2*x*sin(x) + 2*cos(x) + C
+OK  I03 [indef]   PASS           x*log(Abs(x)) - x + C
+OK  I03 [auto]    PASS           x*log(Abs(x)) - x + C
+OK  I04 [indef]   PASS           atan(x + 2) + C
+OK  I04 [auto]    PASS           atan(x + 2) + C
+OK  I05 [indef]   PASS           log(Abs(x - 1))/2 - log(Abs(x + 1))/2 + C
+OK  I05 [auto]    PASS           log(Abs(x - 1))/2 - log(Abs(x + 1))/2 + C
+OK  I06 [indef]   PASS           cos(x)**5/5 - cos(x)**3/3 + C
+OK  I06 [auto]    PASS           cos(x)**5/5 - cos(x)**3/3 + C
+OK  I07 [indef]   PASS           -sqrt(1 - x**2) + C
+OK  I07 [auto]    PASS           -sqrt(1 - x**2) + C
+OK  I08 [indef]   PASS           (sin(x) - cos(x))*exp(x)/2 + C
+OK  I08 [auto]    PASS           (sin(x) - cos(x))*exp(x)/2 + C
+OK  I09 [indef]   PASS           -log(Abs(sin(x) - 1))/4 + log(Abs(sin(x) + 1
+OK  I09 [auto]    PASS           -log(Abs(sin(x) - 1))/4 + log(Abs(sin(x) + 1
+OK  I10 [indef]   PASS           (x**2*atan(x) - x + atan(x))/2 + C
+OK  I10 [auto]    PASS           (x**2*atan(x) - x + atan(x))/2 + C
+OK  I11 [indef]   PASS           x - log(Abs(exp(x) + 1)) + C
+OK  I11 [auto]    PASS           x - log(Abs(exp(x) + 1)) + C
+OK  I12 [indef]   PASS           log(Abs(x**2 + 1))/2 - 1/(2*x**2 + 2) + C
+OK  I12 [auto]    PASS           log(Abs(x**2 + 1))/2 - 1/(2*x**2 + 2) + C
+OK  DI01 [def]    PASS           -2 + E
+OK  DI01 [auto]   PASS           -2 + E
+OK  DI02 [def]    PASS           pi/2
+OK  DI02 [auto]   PASS           pi/2
+OK  DI03 [def]    PASS           8/15
+OK  DI03 [auto]   PASS           8/15
+OK  DI04 [def]    PASS           -1
+OK  DI04 [auto]   PASS           -1
+OK  DI05 [def]    PASS           -2 + E
+OK  DI05 [auto]   PASS           -2 + E
+OK  DI06 [def]    PASS           pi
+OK  DI06 [auto]   PASS           pi
+OK  DI07 [def]    PASS           log(2)/2
+OK  DI07 [auto]   PASS           log(2)/2
+OK  DI08 [def]    PASS           pi/4
+OK  DI08 [auto]   PASS           pi/4
+OK  DI09 [def]    PASS           pi/8
+OK  DI09 [auto]   PASS           pi/8
+OK  DI10 [def]    PASS           0
+OK  DI10 [auto]   PASS           0
+OK  DI11 [def]    PASS           4
+OK  DI11 [auto]   PASS           4
+OK  DI12 [def]    PASS           Integral(log(sin(x)), (x, 0, pi/2))
+OK  DI12 [auto]   PASS           Integral(log(sin(x)), (x, 0, pi/2))
+OK  DI13 [def]    PASS           6
+OK  DI13 [auto]   PASS           6
+OK  DI14 [def]    PASS           1/2
+OK  DI14 [auto]   PASS           1/2
+OK  DI15 [def]    PASS           sqrt(2)*sqrt(pi)/2
+OK  DI15 [auto]   PASS           sqrt(2)*sqrt(pi)/2
+OK  DI16 [def]    PASS           sqrt(pi)
+OK  DI16 [auto]   PASS           sqrt(pi)
+OK  DI17 [def]    PASS           pi/2
+OK  DI17 [auto]   PASS           pi/2
+OK  DI18 [def]    PASS           pi/2
+OK  DI18 [auto]   PASS           pi/2
+OK  DI19 [def]    PASS           2
+OK  DI19 [auto]   PASS           2
+OK  DI20 [def]    PASS           oo
+OK  DI20 [auto]   PASS           oo
+OK  DI21 [def]    PASS           Si(3)
+OK  DI21 [auto]   PASS           Si(3)
+OK  DI22 [def]    PASS           Integral(x**x, (x, 0, 1))
+OK  DI22 [auto]   PASS           Integral(x**x, (x, 0, 1))
+OKw DI23 [def]    PASS-WARN      err.int_unsupported: Bentuk \iint, \iiint, atau \oint belum diduk
+OKw DI23 [auto]   PASS-WARN      err.int_unsupported: Bentuk \iint, \iiint, atau \oint belum diduk
+OKw DI24 [def]    PASS-WARN      err.int_unsupported: Bentuk \iint, \iiint, atau \oint belum diduk
+OKw DI24 [auto]   PASS-WARN      err.int_unsupported: Bentuk \iint, \iiint, atau \oint belum diduk
+OKw C01 [def]     PASS-WARN      err.unknown_symbols: Simbol tidak dikenal: dx
+OKw C01 [auto]    PASS-WARN      err.unknown_symbols: Simbol tidak dikenal: dx
+OK  C02 [diff]    PASS           x**2*exp(-x)
+OK  C02 [auto]    PASS           x**2*exp(-x)
+OKw C03 [indef]   PASS-WARN      err.unknown_symbols: Simbol tidak dikenal: dx
+OKw C03 [auto]    PASS-WARN      err.unknown_symbols: Simbol tidak dikenal: dx
+OK  C04 [diff]    PASS           x**2
+OK  C04 [auto]    PASS           x**2
+OK  C05 [sum]     PASS           77/60
+OK  C05 [auto]    PASS           77/60
+OK  C06 [def]     PASS           25/12
+OK  C06 [auto]    PASS           25/12
+OKw C07 [lim]     PASS-WARN      err.internal: Terjadi kesalahan internal saat menghitung —
+OKw C07 [auto]    PASS-WARN      err.internal: Terjadi kesalahan internal saat menghitung —
+OK  C08 [diff]    PASS           3*x**2 + 2*x + 1
+OK  C08 [auto]    PASS           3*x**2 + 2*x + 1
+OK  P01 [indef]   PASS           x/2 - sin(2*x)/4 + C
+OK  P01 [auto]    PASS           x/2 - sin(2*x)/4 + C
+OK  P02 [indef]   PASS           x/2 + sin(2*x)/4 + C
+OK  P02 [auto]    PASS           x/2 + sin(2*x)/4 + C
+OK  P03 [indef]   PASS           -x + tan(x) + C
+OK  P03 [auto]    PASS           -x + tan(x) + C
+OK  P04 [indef]   PASS           tan(x) + C
+OK  P04 [auto]    PASS           tan(x) + C
+OK  P05 [indef]   PASS           sin(x)**3/3 + C
+OK  P05 [auto]    PASS           sin(x)**3/3 + C
+OKw P06 [indef]   PASS-WARN      err.expr_parse: Ekspresi tidak bisa dipahami: 'FiniteSet' ob
+OKw P06 [auto]    PASS-WARN      err.expr_parse: Ekspresi tidak bisa dipahami: 'FiniteSet' ob
+OK  P07 [indef]   PASS           x/2 - sin(2*x)/4 + C
+OK  P07 [auto]    PASS           x/2 - sin(2*x)/4 + C
+OK  P08 [indef]   PASS           x/2 - sin(4*x)/8 + C
+OK  P08 [auto]    PASS           x/2 - sin(4*x)/8 + C
+OK  P09 [indef]   PASS           x*(log(Abs(x))**2 - 2*log(Abs(x)) + 2) + C
+OK  P09 [auto]    PASS           x*(log(Abs(x))**2 - 2*log(Abs(x)) + 2) + C
+OK  P10 [diff]    PASS           sin(2*x)
+OK  P10 [auto]    PASS           sin(2*x)
+OK  P11 [diff]    PASS           2*tan(x)/cos(x)**2
+OK  P11 [auto]    PASS           2*tan(x)/cos(x)**2
+OK  P12 [diff]    PASS           2*log(x)/x
+OK  P12 [auto]    PASS           2*log(x)/x
+OK  P13 [diff]    PASS           -3*sin(x)*cos(x)**2
+OK  P13 [auto]    PASS           -3*sin(x)*cos(x)**2
+OK  P14 [diff]    PASS           sinh(2*x)
+OK  P14 [auto]    PASS           sinh(2*x)
+OK  P15 [diff]    PASS           2*exp(sin(x)**2)*sin(x)*cos(x)
+OK  P15 [auto]    PASS           2*exp(sin(x)**2)*sin(x)*cos(x)
+OK  P16 [diff]    PASS           2*asin(x)/sqrt(1 - x**2)
+OK  P16 [auto]    PASS           2*asin(x)/sqrt(1 - x**2)
+OK  P17 [diff]    PASS           2*x*sin(2*x**2)
+OK  P17 [auto]    PASS           2*x*sin(2*x**2)
+OK  P18 [diff]    PASS           2*cos(2*x)
+OK  P18 [auto]    PASS           2*cos(2*x)
+OK  P19 [diff]    PASS           cos(2*x)
+OK  P19 [auto]    PASS           cos(2*x)
+OK  P20 [lim]     PASS           1
+OK  P20 [auto]    PASS           1
+OK  P21 [lim]     PASS           1
+OK  P21 [auto]    PASS           1
+OK  P22 [def]     PASS           pi/2
+OK  P22 [auto]    PASS           pi/2
+OK  P23 [def]     PASS           pi/16
+OK  P23 [auto]    PASS           pi/16
+OK  P24 [def]     PASS           2
+OK  P24 [auto]    PASS           2
+OK  P25 [sum]     PASS           2
+OK  P25 [auto]    PASS           2
+OK  P26 [auto]    PASS           1/4
+OK  P27 [auto]    PASS           1
+OK  P28 [auto]    PASS           pi/2
+OK  V01 [def]     PASS           pi/2
+OK  V01 [auto]    PASS           pi/2
+OK  V02 [def]     PASS           pi/2
+OK  V02 [auto]    PASS           pi/2
+OKw V03 [def]     PASS-WARN      err.expr_parse: Ekspresi tidak bisa dipahami: Sympify of exp
+OKw V03 [auto]    PASS-WARN      err.expr_parse: Ekspresi tidak bisa dipahami: Sympify of exp
+OK  V04 [def]     PASS           pi/2
+OK  V04 [auto]    PASS           pi/2
+OK  V05 [def]     PASS           pi/2
+OK  V05 [auto]    PASS           pi/2
+OK  V06 [def]     PASS           pi/2
+OK  V06 [auto]    PASS           pi/2
+OK  V07 [def]     PASS           pi/2
+OK  V07 [auto]    PASS           pi/2
+-------------------------------------------
+RINGKASAN: {'PASS': 247, 'PASS-WARN': 30}

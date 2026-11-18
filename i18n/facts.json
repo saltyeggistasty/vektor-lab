@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "order": [
+      "indonesia",
+      "english",
+      "melayu",
+      "russia",
+      "ukraina",
+      "irish",
+      "arab"
+    ],
+    "note": "Fakta unik negara untuk layar pemilih bahasa. Kunci luar = negara/backdrop; kunci dalam = bahasa (cycle terus bergantian dengan fade)."
+  },
+  "english": {
+    "indonesia": "Britannia, sosok perempuan pembawa trisula, jadi lambang Britania sejak zaman Romawi, dikenal sebagai simbol persatuan Britania Raya.",
+    "english": "Britannia, the trident-bearing figure, has been Britain's symbol since Roman times, known as a symbol of the United Kingdom's unity.",
+    "melayu": "Britannia, sosok pembawa trisula, menjadi lambang Britain sejak zaman Romawi, dikenali sebagai simbol perpaduan United Kingdom.",
+    "russia": "Британния, женщина с трезубцем, символ Британии со времён Рима, известная как символ единства Соединённого Королевства.",
+    "ukraina": "Британнія, жінка з тризубом, символ Британії з часів Риму, відома як символ єдності Сполученого Королівства.",
+    "irish": "Britannia, the trident-bearing figure, has been Britain's symbol since Roman times, known as a symbol of the United Kingdom's unity.",
+    "arab": "بريتانيا، المرأة حاملة الرمح ثلاثي الشعب، رمز بريطانيا منذ العصر الروماني، وتُعرف كرمز لوحدة المملكة المتحدة."
+  },
+  "indonesia": {
+    "indonesia": "Elang Jawa hidup hanya di Indonesia, burung pemangsa langka ini dijuluki burung Garuda.",
+    "english": "The Javan hawk-eagle lives only in Indonesia, and this rare bird of prey is nicknamed the Garuda bird.",
+    "melayu": "Elang Jawa hidup hanya di Indonesia, burung pemangsa yang langka ini digelarkan burung Garuda.",
+    "russia": "Яванский ястребиный орёл живёт только в Индонезии, эту редкую хищную птицу прозвали птицей Гарудой.",
+    "ukraina": "Яванський яструбиний орел живе лише в Індонезії, цього рідкісного хижого птаха прозвали птахом Гарудою.",
+    "irish": "The Javan hawk-eagle lives only in Indonesia, and this rare bird of prey is nicknamed the Garuda bird.",
+    "arab": "يعيش عقاب جافا في إندونيسيا فقط، وقد لُقّب هذا الطائر الجارح النادر بطائر الغارودا."
+  },
+  "melayu": {
+    "indonesia": "Nama Kuching di Sarawak dipercaya berasal dari kata 'kucing'.",
+    "english": "The name Kuching in Sarawak is believed to come from the word 'cat'.",
+    "melayu": "Nama Kuching di Sarawak dipercayai berasal daripada perkataan 'kucing'.",
+    "russia": "Считается, что название города Кучинг в Сараваке происходит от слова «кот».",
+    "ukraina": "Вважається, що назва міста Кучинг у Сараваку походить від слова «кіт».",
+    "irish": "The name Kuching in Sarawak is believed to come from the word for 'cat'.",
+    "arab": "يُعتقد أن اسم كوتشينغ في سراوق مشتق من كلمة «قطة»."
+  },
+  "russia": {
+    "indonesia": "Teman Selamanya. Karya Daniel Gerhatz\nRequest oleh Lisa.",
+    "english": "Friends Forever. A painting by Daniel Gerhatz\nRequested by Lisa.",
+    "melayu": "Kawan Selamanya. Karya Daniel Gerhatz\nPermintaan oleh Lisa.",
+    "russia": "Друзья навсегда. Картина Дэниела Герхаца\nПо просьбе Лизы.",
+    "ukraina": "Друзі назавжди. Картина Деніела Ґерхатца\nНа прохання Лізи.",
+    "irish": "Cairde Go Deo. Pictiúr le Daniel Gerhatz\nAr iarratas Lisa.",
+    "arab": "أصدقاء للأبد. لوحة دانيال جيرهاتز\nبناءً على طلب ليزا."
+  },
+  "ukraina": {
+    "indonesia": "Bunga matahari adalah simbol nasional Ukraina, dan simbol harapan selama perang Rusia-Ukraina.",
+    "english": "The sunflower is the national symbol of Ukraine, and a symbol of hope during the Russia-Ukraine war.",
+    "melayu": "Bunga matahari ialah simbol negara Ukraina, dan simbol harapan sepanjang perang Rusia-Ukraina.",
+    "russia": "Подсолнух является национальным символом Украины и символом надежды во время российско-украинской войны.",
+    "ukraina": "Соняшник є національним символом України і символом надії під час російсько-української війни.",
+    "irish": "The sunflower is the national symbol of Ukraine, and a symbol of hope during the Russia-Ukraine war.",
+    "arab": "زهرة عباد الشمس هي الرمز الوطني لأوكرانيا، ورمز الأمل خلال الحرب الروسية الأوكرانية."
+  },
+  "irish": {
+    "indonesia": "Irish Hare, hewan asli Irlandia.",
+    "english": "The Irish hare, native to Ireland.",
+    "melayu": "Hare Ireland, haiwan asli Ireland.",
+    "russia": "Ирландский заяц, коренной обитатель Ирландии.",
+    "ukraina": "Ірландський заєць, корінний мешканець Ірландії.",
+    "irish": "The Irish hare, native to Ireland.",
+    "arab": "أرنب أيرلندا، حيوان أصيل في أيرلندا."
+  },
+  "arab": {
+    "indonesia": "Lukisan 'Pelempar Bunga' karya Banksy di Bethlehem, Palestina, menjadi simbol perlawanan damai.",
+    "english": "Banksy's 'Flower Thrower' painting in Bethlehem, Palestine, has become a symbol of peaceful resistance.",
+    "melayu": "Lukisan 'Pelempar Bunga' karya Banksy di Bethlehem, Palestin, menjadi simbol perlawanan damai.",
+    "russia": "Картина Бэнкси «Закидатель цветов» в Вифлееме, Палестина, стала символом мирного сопротивления.",
+    "ukraina": "Картина Бенксі «Закидувач квітів» у Вифлеємі, Палестина, стала символом мирного опору.",
+    "irish": "Banksy's 'Flower Thrower' piece in Bethlehem, Palestine, has become a symbol of peaceful resistance.",
+    "arab": "لوحة «رامي الزهور» لبنكسي في بيت لحم، فلسطين، أصبحت رمزاً للمقاومة السلمية."
+  }
+}

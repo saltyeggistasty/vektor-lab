@@ -1,0 +1,540 @@
+﻿use: [
+"\\displaystyle\\int_0^{3}\\frac{\\sin x}{x}\\,dx \\approx 1.84865",
+"\\dfrac{d}{dx}\\,x^{3} = 3x^{2},\\quad \\left.\\dfrac{d}{dx}x^{3}\\right|_{x=2} = 12",
+"\\sum_{x=1}^{5}x^{2} = 55",
+"\\displaystyle\\int x^2\\,dx = \\tfrac{x^3}{3} + C",
+"e^{2\\ln 4} = 16",
+"\\displaystyle\\lim_{x\\to 0}\\frac{\\sin x}{x} = 1",
+],
+},
+matrix: {
+labels: { R: "" },
+---
+use: [
+"\\det\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix} = -2",
+"\\operatorname{rank}\\begin{pmatrix}1&1\\\\1&1\\end{pmatrix} = 1",
+"\\lambda\\,\\mathbf{v} = A\\,\\mathbf{v} \\;\\Rightarrow\\; \\begin{pmatrix}1&2\\\\3&4\\end{pmatrix},\\ \\lambda=-0.372,\\ 5.372",
+],
+},
+ode: {
+labels: { y: "" },
+inputs: [
+{ id: "eq", label: "tools.ode.eq", fb: "Persamaan diferensial", type: "mf", pre: "y'' + y = sin(x)" },
+{ id: "ics", label: "tools.ode.ic", fb: "Syarat awal (opsional)", ph: "y(0) = 1, y'(0) = 0" },
+---
+use: [
+"y'' + y = \\sin(x),\\quad y(0)=1,\\ y'(0)=0",
+"y' = x \\Rightarrow y = \\tfrac{x^2}{2} + C",
+"\\text{ode eksponensial:}\\; y' = -2y \\Rightarrow y = Ce^{-2x}",
+],
+},
+stats: {
+noRows: true,
+inputs: [
+{ id: "data", label: "tools.stats.data", fb: "Data (angka, pisah dengan koma/spasi)", type: "textarea", ph: "2, 4, 4, 5, 7" },
+],
+---
+use: [
+"\\text{data: } 2,\\,4,\\,4,\\,5,\\,7 \\Rightarrow \\bar{x} = 4.4,\\ \\sigma_s \\approx 1.8166",
+"\\tilde{x} = \\text{median} = 4",
+],
+},
+thermo: {
+labels: { P: "tools.thermo.p", V: "tools.thermo.v", N: "tools.thermo.n", T: "tools.thermo.t",
+eta: "tools.thermo.eta", eta_pct: "tools.thermo.eta" },
+inputs: [
+{ id: "mode", label: "tools.mode", fb: "Mode", type: "select", opts: [
+["ideal", "tools.thermo.ideal", "Hukum Gas Ideal (PV = nRT)"],
+---
+use: [
+"P\\,V = n\\,R\\,T \\;\\Rightarrow\\; V = \\dfrac{nRT}{P}",
+"\\eta_{\\text{Carnot}} = 1 - \\dfrac{T_c}{T_h} = 1 - \\dfrac{400}{600} \\approx 33.3\\%",
+],
+},
+qm: {
+labels: { lambda: "tools.quantum.wl", E_J: "tools.quantum.ej", E_eV: "tools.quantum.eev",
+KE_J: "tools.quantum.kej", KE_eV: "tools.quantum.kev" },
+inputs: [
+{ id: "mode", label: "tools.mode", fb: "Mode", type: "select", opts: [
+["debr", "tools.quantum.debr", "Panjang Gelombang de Broglie"],
+---
+use: [
+"\\lambda_{\\text{de Broglie}} = \\dfrac{h}{m\\,v}",
+"E = h\\,f = \\dfrac{h\\,c}{\\lambda}",
+"K\\!E_{\\max} = h f - \\varphi",
+],
+},
+es: {
+labels: { F: "tools.es.f", E: "tools.es.e", C: "tools.es.c" },
+inputs: [
+{ id: "mode", label: "tools.mode", fb: "Mode", type: "select", opts: [
+["coulomb", "tools.es.coulomb", "Gaya Coulomb"],
+---
+use: [
+"F = k_e\\,\\dfrac{q_1 q_2}{r^{2}}",
+"E = \\dfrac{k_e\\,q}{r^{2}}",
+"C = \\varepsilon_0\\,\\dfrac{A}{d}",
+],
+},
+rel: {
+labels: { gamma: "tools.rel.gamma", dt: "tools.rel.dt", L: "tools.rel.l",
+E: "tools.rel.e", E0: "tools.rel.e0", K: "tools.rel.k" },
+inputs: [
+{ id: "mode", label: "tools.mode", fb: "Mode", type: "select", opts: [
+---
+use: [
+"\\gamma = \\dfrac{1}{\\sqrt{1 - v^{2}/c^{2}}},\\quad v = 0.5c \\Rightarrow \\gamma \\approx 1.1547",
+"\\Delta t = \\gamma\\,\\Delta t_0,\\qquad L = \\dfrac{L_0}{\\gamma}",
+"E = \\gamma m_{0}c^{2},\\quad K = (\\gamma - 1)m_{0}c^{2}",
+],
+},
+proj: {
+labels: { x_max: "tools.proj.range", y_max: "tools.proj.hmax", t: "tools.proj.tof" },
+inputs: [
+{ id: "v0", label: "tools.proj.v0", fb: "Kecepatan awal v\u2080 (m/s)", ph: "20" },
+{ id: "angle", label: "tools.proj.angle", fb: "Sudut elevasi (derajat)", ph: "45" },
+---
+use: [
+"x_{\\max} = \\dfrac{v_0^{2}\\sin 2\\theta}{g}",
+"y_{\\max} = y_0 + \\dfrac{\\left(v_0\\sin\\theta\\right)^{2}}{2g}",
+],
+},
+hydro: {
+labels: { P_gauge: "tools.hydro.pg", P_abs: "tools.hydro.pa", v2: "tools.hydro.v2" },
+inputs: [
+{ id: "mode", label: "tools.mode", fb: "Mode", type: "select", opts: [
+["hstat", "tools.hydro.hstat", "Tekanan Hidrostatik"],
+["cont", "tools.hydro.cont", "Persamaan Kontinuitas"],
+---
+use: [
+"P_{\\text{gauge}} = \\rho\\,g\\,h",
+"A_1 v_1 = A_2 v_2",
+"P_1 + \\tfrac{1}{2}\\rho v_1^{2} + \\rho g h_1 = P_2 + \\tfrac{1}{2}\\rho v_2^{2} + \\rho g h_2",
+],
+},
+complex: {
+wide: true,
+labels: { abs: "tools.cplx.abs", arg_rad: "tools.cplx.argrad", arg_deg: "tools.cplx.argdeg",
+polar: "tools.cplx.polar", "z^n": "tools.cplx.zn", num: "tools.lbl_num" },
+inputs: [
+---
+use: [
+"|z| = \\sqrt{a^{2}+b^{2}},\\qquad \\theta = \\arctan\\dfrac{b}{a}",
+"z = r\\,e^{i\\theta}",
+"z^{1/n} = \\sqrt[n]{r}\\,e^{\\,i(\\theta + 2\\pi k)/n}",
+],
+},
+taylor: {
+labels: { poly: "" },
+inputs: [
+{ id: "expr", label: "tools.expr_fx", fb: "Fungsi f(x)", type: "mf", pre: "exp(x)" },
+{ id: "x0", label: "x\u2080", plain: true, ph: "0", def: "0" },
+---
+use: [
+"e^{x} \\approx 1 + x + \\dfrac{x^{2}}{2!} + \\dfrac{x^{3}}{3!}",
+"\\sin x \\approx x - \\dfrac{x^{3}}{3!} + \\dfrac{x^{5}}{5!}",
+],
+},
+modmath: {
+labels: { res: "tools.mod.res", inv: "tools.mod.inv", check: "tools.mod.check",
+gcd: "tools.mod.gcd", lcm: "tools.mod.lcm", prime: "tools.mod.prime",
+factor: "tools.mod.factor" },
+inputs: [
+{ id: "mode", label: "tools.mode", fb: "Mode", type: "select", opts: [
+---
+use: [
+"a^{b} \\bmod n:\\;\\; 2^{10} \\bmod 1000 = 24",
+"\\gcd(12,18) = 6,\\quad \\operatorname{lcm}(12,18) = 36",
+"97 \\text{ prima},\\;\\; 360 = 2^{3}\\cdot 3^{2}\\cdot 5",
+],
+},
+entropy: {
+labels: { H: "tools.ent.h", H_max: "tools.ent.hmax", red: "tools.ent.red", k: "tools.stats.n" },
+inputs: [
+{ id: "probs", label: "tools.ent.probs", fb: "Probabilitas (jumlah harus 1)", type: "textarea", ph: "0.5, 0.5" },
+],
+---
+use: [
+"H = -\\sum_{i} p_{i}\\,\\log_{2} p_{i}",
+"\\text{koin adil: } H = 1 \\text{ bit},\\quad H_{\\max} = \\log_{2} n",
+],
+},
+poly: {
+wide: true,
+labels: { R: "" },
+inputs: [
+{ id: "expr", label: "tools.poly.expr", fb: "Polinom p(x)", type: "mf", pre: "x^2 - 5x + 6" },
+{ id: "mode", label: "tools.mode", fb: "Mode", type: "select", opts: [
+---
+use: [
+"p(x) = x^{2} - 5x + 6 \\;\\Rightarrow\\; x_{1}=2,\\ x_{2}=3",
+"x^{2} - 5x + 6 = (x-2)(x-3)",
+"\\text{derajat bawah 12, koefisien boleh pecahan}",
+],
+},
+heatexp: {
+labels: { Q: "tools.heat.q", dir: "tools.heat.dir", dL: "tools.heat.dl" },
+inputs: [
+{ id: "mode", label: "tools.mode", fb: "Mode", type: "select", opts: [
+["heat", "tools.heat.heat", "Kalor (Q = m c \u0394T)"],
+---
+use: [
+"Q = m\\,c\\,\\Delta T",
+"\\Delta L = \\alpha\\,L_0\\,\\Delta T",
+"Q = m\\,L \\;\\text{(fase ubah tanpa suhu naik)}",
+],
+},
+schwartz: {
+labels: { rs: "tools.gr.rs", dil: "tools.gr.dil", dt_ratio: "tools.gr.dtratio",
+vesc: "tools.gr.vesc" },
+inputs: [
+{ id: "msun", label: "tools.gr.msun", fb: "Massa M (Matahari)", ph: "1" },
+---
+use: [
+"r_s = \\dfrac{2GM}{c^{2}}",
+"\\left(1 - \\dfrac{r_s}{r}\\right)^{-1} \\;\\text{faktor perlambatan waktu}",
+],
+},
+optics: {
+labels: { th2: "tools.opt.th2", crit: "tools.opt.crit", tir: "tools.opt.tir",
+di: "tools.opt.di", m: "tools.opt.m", kind: "tools.opt.kind", dy: "tools.opt.dy" },
+inputs: [
+{ id: "mode", label: "tools.mode", fb: "Mode", type: "select", opts: [
+["snell", "tools.opt.snell", "Hukum Snell"],
+---
+use: [
+"n_1\\sin\\theta_1 = n_2\\sin\\theta_2",
+"\\dfrac{1}{f} = \\dfrac{1}{d_o} + \\dfrac{1}{d_i}",
+"d\\,\\sin\\theta = m\\,\\lambda \\;\\text{(interferensi maksimum)}",
+],
+},
+shm: {
+labels: { T: "tools.shm.T", f: "tools.shm.f", omega: "tools.shm.omega", E: "tools.shm.E" },
+inputs: [
+{ id: "mode", label: "tools.mode", fb: "Mode", type: "select", opts: [
+["mass", "tools.shm.mass", "Pegas (m, k)"],
+---
+use: [
+"T = 2\\pi\\sqrt{\\dfrac{m}{k}}",
+"T = 2\\pi\\sqrt{\\dfrac{L}{g}} \\;\\text{(bandul sederhana)}",
+"E_{\\text{energi}} = \\tfrac{1}{2}kA^{2}",
+],
+},
+emind: {
+labels: { EMF: "tools.em.emf", V2: "tools.em.v2", kind: "tools.em.kind" },
+inputs: [
+{ id: "mode", label: "tools.mode", fb: "Mode", type: "select", opts: [
+["faraday", "tools.em.faraday", "Faraday (EMF = N d\u03a6/dt)"],
+---
+use: [
+"\\varepsilon = N\\,\\dfrac{d\\Phi}{dt}",
+"\\dfrac{V_1}{V_2} = \\dfrac{N_1}{N_2} \\;\\text{(trafo ideal)}",
+"\\varepsilon = B\\,v\\,L \\;\\text{(EMF gerak)}",
+],
+},
+
+/* ========================================================
+SIMULASI ADVANCED (simlab.py via /api/lab), 10 buah.
+Semua hasil plot = multi-trace; label row = kunci i18n
+grup sims.* (atau simbol LaTeX yang language-neutral). */
+---
+use: [
+"x_{k+1} = r\\,x_k(1-x_k),\\quad r = 2 \\Rightarrow x^{*} = \\tfrac{1}{2}",
+"r = 3.2 \\Rightarrow \\text{periode } 2,\\quad r > 3.5699 \\Rightarrow \\text{kacau}",
+"\\lambda = \\ln|r(1-2x)| > 0 \\Leftrightarrow \\text{kacau}",
+],
+},
+slorenz: {
+labels: { sigma: "\u03c3", rho: "\u03c1", beta: "\u03b2",
+t_end: "sims.lz_tend", state_max: "sims.lz_smax",
+regime: "sims.lg_regime", fp: "" },
+inputs: [
+---
+use: [
+"\\dot{x} = \\sigma(y-x),\\quad \\dot{y} = x(\\rho-z) - y,\\quad \\dot{z} = xy - \\beta z",
+"\\rho = 28 \\Rightarrow \\text{atraktor aneh},\\quad \\rho < 24.74 \\Rightarrow \\text{titik tetap}",
+],
+},
+sfourier: {
+labels: { L: "L", N: "N", a0: "a\u2080/2", a1: "a\u2081", b1: "b\u2081",
+a2: "a\u2082", b2: "b\u2082", a3: "a\u2083", b3: "b\u2083", series: "" },
+inputs: [
+{ id: "expr", label: "tools.expr_fx", fb: "Fungsi f(x)", type: "mf", pre: "x" },
+{ id: "L", label: "sims.fo_L", fb: "Setengah interval L", plain: true, ph: "3.141592653589793", def: "3.141592653589793" },
+---
+use: [
+"f(x) = x \\text{ di } [-\\pi,\\pi] \\Rightarrow b_n = \\dfrac{2(-1)^{n+1}}{n}",
+"x \\approx 2\\left(\\sin x - \\tfrac{\\sin 2x}{2} + \\tfrac{\\sin 3x}{3} - \\cdots\\right)",
+],
+},
+smatrix: {
+labels: { det: "\\det", trace: "\\mathrm{tr}", lam: "\\lambda",
+area: "sims.mx_area", kind: "sims.mx_kind" },
+matrixIn: true,
+inputs: [
+{ id: "matrix", label: "tools.matrix.in", fb: "Matriks", type: "mbuild",
+---
+use: [
+"\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix} = \\text{rotasi } 90^{\\circ},\\ \\det = 1",
+"\\det A = \\text{faktor skala luas},\\quad \\lambda = \\text{nilai eigen}",
+],
+},
+swalk: {
+labels: { n: "sims.w_n", steps: "sims.w_steps", seed: "sims.w_seed",
+rms: "sims.w_rms", rms_theory: "sims.w_rmsth",
+mean_x: "\u27e8x\u27e9", mean_y: "\u27e8y\u27e9", max_r: "sims.w_maxr" },
+inputs: [
+{ id: "n", label: "sims.w_n", fb: "Jumlah partikel", plain: true, ph: "120", def: "120" },
+---
+use: [
+"\\langle r^{2} \\rangle = n\\,\\ell^{2} \\Rightarrow \\text{RMS} = \\ell\\sqrt{n}",
+"\\text{difiusi: } \\langle x^{2} \\rangle = 2Dt",
+],
+},
+sdblpend: {
+labels: { E0: "E\u2080", E1: "E\u2081", drift: "sims.drift",
+flips: "sims.dp_flips", t_end: "sims.dp_tend" },
+inputs: [
+{ id: "view", label: "tools.mode", fb: "Tampilan", type: "select", opts: [
+["angles", "sims.dp_angles", "Sudut vs Waktu"],
+---
+use: [
+"\\ddot{\\theta}_1,\\ \\ddot{\\theta}_2 = \\text{RK4},\\quad \\Delta t = 0.002\\,\\text{s}",
+"\\dfrac{\\Delta E}{E} \\approx 10^{-7} \\;\\text{(konservasi)}",
+],
+},
+sdrag: {
+labels: { k: "k", range_drag: "sims.dr_rng", range_vac: "sims.dr_rngv",
+ratio: "sims.dr_ratio", h_max: "tools.proj.hmax",
+t_flight: "tools.proj.tof" },
+inputs: [
+{ id: "v0", label: "tools.proj.v0", fb: "Kecepatan awal v\u2080 (m/s)", ph: "30", def: "30" },
+---
+use: [
+"F_d = \\tfrac{1}{2}\\rho C_d A\\,v^{2}",
+"x_{\\text{vakum}} = \\dfrac{v_0^{2}\\sin 2\\theta}{g}",
+],
+},
+skepler: {
+labels: { a: "a", e: "e", r_per: "sims.ke_rper", r_ap: "sims.ke_rap",
+T_theory: "sims.ke_Tt", T_meas: "sims.ke_Tm",
+E: "E", drift: "sims.drift", visviva: "" },
+inputs: [
+{ id: "a", label: "sims.ke_a", fb: "Semi-mayor a", plain: true, ph: "1", def: "1" },
+---
+use: [
+"T = 2\\pi\\sqrt{\\dfrac{a^{3}}{\\mu}} \\;\\text{(Hukum III Kepler)}",
+"v^{2} = \\mu\\left(\\dfrac{2}{r} - \\dfrac{1}{a}\\right) \\;\\text{(vis-viva)}",
+],
+},
+sslit: {
+labels: { dy: "\\Delta y", formula: "", n_fringes: "sims.sl_nfr",
+y_env: "sims.sl_yenv", envmin: "" },
+inputs: [
+{ id: "lam", label: "tools.opt.lam", fb: "Panjang gelombang \u03bb (m)", ph: "500e-9", def: "500e-9" },
+{ id: "d", label: "tools.opt.d", fb: "Jarak celah d (m)", ph: "1e-4", def: "1e-4" },
+---
+use: [
+"I(y) = \\cos^{2}\\!\\left(\\dfrac{\\pi d y}{\\lambda L}\\right) \\cdot \\mathrm{sinc}^{2}\\!\\left(\\dfrac{\\pi a y}{\\lambda L}\\right)",
+"\\Delta y = \\dfrac{\\lambda L}{d}",
+],
+},
+sschrod: {
+labels: { norm0: "\u2016\u03c8\u2016\u2080", normT: "\u2016\u03c8\u2016(t)",
+drift: "sims.drift", E: "E", v_theory: "sims.qm_vth",
+v_meas: "sims.qm_vm", R_prob: "sims.qm_R",
+T_prob: "sims.qm_T", units: "" },
+inputs: [
+---
+use: [
+"i\\,\\dfrac{\\partial \\psi}{\\partial t} = -\\dfrac{1}{2}\\dfrac{\\partial^{2}\\psi}{\\partial x^{2}} + V(x)\\,\\psi",
+"\\hbar = m = 1,\\quad E = \\dfrac{k_0^{2}}{2},\\quad v = k_0",
+],
+},
+
+/* ========================================================
+ADVANCED GRAPHERS (graphlab.py validasi, graphers.js render)
+Interaksi (pan/zoom/drag/slider) 100% client-side. */
+gdomain: {
+labels: { map: "" },
+---
+use: ["f(z) = \\dfrac{1}{z}", "f(z) = z^{3} - 1", "f(z) = \\exp\\left(\\tfrac{1}{z}\\right)"],
+},
+gfractal: {
+labels: { note: "", iter: "graph.iter" },
+inputs: [
+{ id: "mode", label: "graph.mode", fb: "Mode", type: "select", opts: [
+["mandelbrot", "graph.m_mand", "Mandelbrot"],
+["julia", "graph.m_julia", "Julia"],
+["newton", "graph.m_newton", "Newton"],
+] },
+{ id: "iter", label: "graph.iter", fb: "Iterasi", type: "range", min: 20, max: 500, step: 10, def: "150" },
+---
+use: ["z_{n+1} = z_n^{2} + c", "c = -0.7269 + 0.1889i\\ \\text{(dendrite)}"],
+},
+gsurf3d: {
+labels: { note: "", n: "graph.n" },
+inputs: [
+{ id: "expr", label: "graph.expr_fxy", fb: "Fungsi f(x,y)", type: "mf", pre: "sin(x)*cos(2*y)" },
+{ id: "n", label: "graph.n", fb: "Resolusi grid", type: "range", min: 16, max: 60, step: 4, def: "40" },
+{ id: "px", label: "graph.px", fb: "x\u2080 titik singgung", type: "range", min: -4, max: 4, step: 0.1, def: "1" },
+{ id: "py", label: "graph.py", fb: "y\u2080 titik singgung", type: "range", min: -4, max: 4, step: 0.1, def: "1" },
+{ id: "range", label: "graph.range", fb: "Rentang sumbu", type: "range", min: 1, max: 10, step: 0.5, def: "4" },
+],
+---
+use: ["z = \\sin x\\,\\cos 2y", "\\text{bidang singgung: } z = f_0 + f_x\\Delta x + f_y\\Delta y"],
+},
+gfrenet: {
+labels: { note: "", n: "graph.n" },
+inputs: [
+{ id: "xt", label: "graph.xt", fb: "x(t)", type: "mf", pre: "3*cos(t)" },
+{ id: "yt", label: "graph.yt", fb: "y(t)", type: "mf", pre: "3*sin(t)" },
+{ id: "zt", label: "graph.zt", fb: "z(t)", type: "mf", pre: "t/2" },
+{ id: "tmax", label: "graph.tmax", fb: "t maksimum", type: "range", min: 1, max: 40, step: 0.5, def: "18" },
+{ id: "t", label: "graph.t", fb: "titik frame t", type: "range", min: 0.01, max: 40, step: 0.01, def: "2" },
+{ id: "n", label: "graph.n", fb: "Sampel kurva", type: "range", min: 50, max: 600, step: 25, def: "300" },
+---
+use: ["\\mathbf{T} = \\dfrac{\\mathbf{r}'}{\\|\\mathbf{r}'\\|},\\quad \\mathbf{B} = \\mathbf{T}\\times\\mathbf{N}"],
+},
+gtrans3d: {
+labels: { det: "det", note: "", morph: "graph.morph" },
+matrixIn: true,
+inputs: [
+{ id: "matrix", label: "tools.matrix.in", fb: "Matriks 3\u00d73", type: "mbuild",
+def: "1,0.5,0;0,1,0.3;0,0,1", build: { min: 3, max: 3 } },
+{ id: "morph", label: "graph.morph", fb: "Morph I \u2192 A", type: "range", min: 0, max: 1, step: 0.01, def: "1" },
+],
+hint: "graph.hint_gtrans3d",
+---
+use: ["A\\mathbf{i},\\ A\\mathbf{j},\\ A\\mathbf{k} = \\text{kolom } A", "\\det A = \\text{faktor volume}"],
+},
+gslope: {
+labels: { note: "", density: "graph.density" },
+inputs: [
+{ id: "expr", label: "graph.expr_fxy2", fb: "y' = f(x,y)", type: "mf", pre: "x - y" },
+{ id: "density", label: "graph.density", fb: "Kerapatan field", type: "range", min: 8, max: 40, step: 2, def: "20" },
+{ id: "xlo", label: "graph.xlo", fb: "x minimum", type: "range", min: -20, max: 0, step: 1, def: "-8" },
+{ id: "xhi", label: "graph.xhi", fb: "x maksimum", type: "range", min: 0, max: 20, step: 1, def: "8" },
+],
+hint: "graph.hint_gslope",
+---
+use: ["y' = x - y", "\\text{klik canvas} \\Rightarrow \\text{solusi RK4}"],
+},
+gdist: {
+labels: { n: "graph.w_n2", mean: "graph.mean" },
+inputs: [
+{ id: "dist", label: "graph.dist", fb: "Distribusi", type: "select", opts: [
+["normal", "graph.d_normal", "Normal"],
+["binomial", "graph.d_binom", "Binomial"],
+["poisson", "graph.d_poisson", "Poisson"],
+["exponential", "graph.d_expo", "Eksponensial"],
+["uniform", "graph.d_uniform", "Uniform"],
+---
+use: ["P(a \\le X \\le b) = \\text{area di bawah PDF}", "F(x) = P(X \\le x)"],
+},
+ggraphalgo: {
+labels: { note: "" },
+inputs: [
+{ id: "algo", label: "graph.algo", fb: "Algoritma", type: "select", opts: [
+["dijkstra", "graph.a_dijkstra", "Dijkstra"],
+["bfs", "graph.a_bfs", "BFS"],
+["dfs", "graph.a_dfs", "DFS"],
+["kruskal", "graph.a_kruskal", "MST (Kruskal)"],
+] },
+---
+use: ["\\text{drag node} \\Leftrightarrow \\text{recompute}"],
+},
+gfield: {
+labels: { note: "", n: "graph.w_n2", equip: "graph.equip" },
+inputs: [
+{ id: "n", label: "graph.w_n2", fb: "Jumlah muatan", type: "range", min: 1, max: 8, step: 1, def: "4" },
+{ id: "equip", label: "graph.equip", fb: "Garis ekipotensial", type: "range", min: 0, max: 40, step: 2, def: "18" },
+{ id: "seed", label: "sims.w_seed", fb: "Seed", type: "range", min: 0, max: 999, step: 1, def: "7" },
+],
+hint: "graph.hint_gfield",
+use: ["\\mathbf{E} = \\sum_i \\dfrac{k q_i}{r_i^{2}}\\hat{\\mathbf{r}}_i", "\\text{drag muatan merah/biru!}"],
+---
+use: ["\\mathbf{E} = \\sum_i \\dfrac{k q_i}{r_i^{2}}\\hat{\\mathbf{r}}_i", "\\text{drag muatan merah/biru!}"],
+},
+gpvcycle: {
+labels: { eta: "graph.eta", note: "", formula: "" },
+inputs: [
+{ id: "cycle", label: "graph.cycle", fb: "Siklus", type: "select", opts: [
+["carnot", "graph.c_carnot", "Carnot"],
+["otto", "graph.c_otto", "Otto"],
+["diesel", "graph.c_diesel", "Diesel"],
+] },
+{ id: "th", label: "graph.th", fb: "T panas (K)", type: "range", min: 100, max: 2000, step: 10, def: "600",
+---
+use: ["\\eta_{\\text{Carnot}} = 1 - \\dfrac{T_c}{T_h}", "\\eta_{\\text{Otto}} = 1 - r^{1-\\gamma}"],
+},
+gising: {
+labels: { note: "", size: "graph.size", temp: "graph.temp", speed: "graph.speed" },
+inputs: [
+{ id: "size", label: "graph.size", fb: "Ukuran lattice", type: "range", min: 16, max: 160, step: 8, def: "100" },
+{ id: "temp", label: "graph.temp", fb: "Temperatur T", type: "range", min: 0.05, max: 8, step: 0.01, def: "2.269" },
+{ id: "speed", label: "graph.speed", fb: "Kecepatan sweep", type: "range", min: 1, max: 60, step: 1, def: "30" },
+],
+hint: "graph.hint_gising",
+use: ["H = -J\\sum_{\\langle i,j \\rangle} s_i s_j", "T_c \\approx 2.269\\ J"],
+---
+use: ["H = -J\\sum_{\\langle i,j \\rangle} s_i s_j", "T_c \\approx 2.269\\ J"],
+},
+gminkowski: {
+labels: { gamma: "tools.rel.gamma" },
+inputs: [
+{ id: "v", label: "graph.v", fb: "Kecepatan frame v/c", type: "range", min: 0, max: 0.99, step: 0.01, def: "0.5" },
+],
+hint: "graph.hint_gminkowski",
+use: ["\\text{drag event} \\Rightarrow s^{2} = c^{2}t^{2} - x^{2}\\ \\text{invarian}"],
+},
+gfluid: {
+---
+use: ["\\text{drag event} \\Rightarrow s^{2} = c^{2}t^{2} - x^{2}\\ \\text{invarian}"],
+},
+gfluid: {
+labels: { note: "", size: "graph.size", visc: "graph.visc", diff: "graph.diff" },
+inputs: [
+{ id: "size", label: "graph.size", fb: "Resolusi grid", type: "range", min: 48, max: 192, step: 16, def: "128" },
+{ id: "visc", label: "graph.visc", fb: "Viskositas", type: "range", min: 0, max: 0.000001, step: 0.0000001, def: "0.0000002" },
+{ id: "diff", label: "graph.diff", fb: "Difusi tinta", type: "range", min: 0, max: 0.000001, step: 0.0000001, def: "0.00000005" },
+],
+hint: "graph.hint_gfluid",
+use: ["\\text{drag di canvas} \\Rightarrow \\text{injeksi tinta + kecepatan}"],
+---
+use: ["\\text{drag di canvas} \\Rightarrow \\text{injeksi tinta + kecepatan}"],
+},
+ggeodesic: {
+labels: { photon_sphere: "graph.photon", rs: "graph.rs", fate: "graph.fate",
+note: "", formula: "" },
+inputs: [
+{ id: "mode", label: "graph.mode", fb: "Mode", type: "select", opts: [
+["light", "graph.g_light", "Foton (b)"],
+["massive", "graph.g_massive", "Partikel (E, L)"],
+] },
+{ id: "b", label: "graph.b", fb: "Impact parameter b", type: "range", min: 1.05, max: 6, step: 0.01, def: "3",
+---
+use: ["\\dfrac{d^{2}u}{d\\varphi^{2}} = \\dfrac{3}{2}r_s u^{2} - u", "b < 1.5\\,r_s \\Rightarrow \\text{tertelan}"],
+},
+gray: {
+labels: { formula: "" },
+inputs: [
+{ id: "f1", label: "graph.f1", fb: "Fokus lensa 1 f\u2081 (px)", type: "range", min: -300, max: 300, step: 5, def: "150" },
+{ id: "f2", label: "graph.f2", fb: "Fokus lensa 2 f\u2082 (px)", type: "range", min: -300, max: 300, step: 5, def: "-150" },
+{ id: "d12", label: "graph.d12", fb: "Jarak antar lensa", type: "range", min: 40, max: 800, step: 10, def: "320" },
+{ id: "nray", label: "graph.nray", fb: "Jumlah sinar", type: "range", min: 3, max: 15, step: 1, def: "7" },
+],
+hint: "graph.hint_gray",
+---
+use: ["\\dfrac{1}{f} = \\dfrac{1}{d_o} + \\dfrac{1}{d_i}", "f_1 > 0\\ \\text{konveks},\\ f_2 < 0\\ \\text{konkaf}"],
+},
+};
+
+/* terjemahan nilai khusus (nilai verbal dari backend) */
+const VALUE_MAP = {
+tolak: "tools.es.repel", tarik: "tools.es.attract", nol: "tools.es.zero",
+serap: "tools.heat.dir_in", lepas: "tools.heat.dir_out",
+nyata: "tools.opt.real", maya: "tools.opt.virtual",
+ya: "tools.yes", bukan: "tools.no",
+/* nilai rezim/jenis dari simulasi (simlab.py) */
+---

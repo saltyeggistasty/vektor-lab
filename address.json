@@ -1,0 +1,21 @@
+{
+  "_READ_ME": "Ganti alamat di bawah dengan wallet milikmu. Field 'network' bebas (mis. 'Solana', 'TRC-20', 'Monero'). Jangan ubah nama key USDC/USDT/Monero.",
+  "USDC": {
+    "coin": "USDC",
+    "network": "Solana",
+    "address": "GANTI-DENGAN-ALAMAT-USDC-KAMU",
+    "color": "#2775CA"
+  },
+  "USDT": {
+    "coin": "USDT",
+    "network": "TRC-20",
+    "address": "GANTI-DENGAN-ALAMAT-USDT-KAMU",
+    "color": "#26A17B"
+  },
+  "Monero": {
+    "coin": "Monero",
+    "network": "XMR",
+    "address": "GANTI-DENGAN-ALAMAT-MONERO-KAMU (95 karakter)",
+    "color": "#F26822"
+  }
+}
